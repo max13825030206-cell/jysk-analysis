@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JYSK 餐具销售机会分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #f5efe6;
+    --clay: #c4a882;
+    --sage: #9aab8e;
+    --dusty-grape: #8b7d8c;
+    --pale-khaki: #c9c0a8;
+    --apple-green: #7d9b6a;
+    --brown: #6b4f3c;
+    --charcoal: #2c2c2c;
+    --cream: #faf7f0;
+    --warm-white: #fdfcfa;
+    --muted-gold: #baa67e;
+    --light-clay: #e8ddd0;
+    --tag-new: #7d9b6a;
+    --tag-sale: #c4704a;
+    --tag-edlp: #5b7a9e;
+    --bg-dot: rgba(154, 171, 142, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', -apple-system, sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* === Hero === */
+  .hero {
+    position: relative;
+    padding: 100px 40px 80px;
+    background: linear-gradient(165deg, #f5efe6 0%, #e8ddd0 40%, #d9cfc0 100%);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 300px at 10% 20%, rgba(154,171,142,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 400px at 90% 60%, rgba(139,125,140,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brown);
+    opacity: 0.6;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    color: var(--charcoal);
+    max-width: 700px;
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--brown);
+  }
+  .hero p {
+    font-size: 1.05rem;
+    color: rgba(44,44,44,0.7);
+    max-width: 560px;
+    font-weight: 300;
+    line-height: 1.8;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(107,79,60,0.12);
+  }
+  .hero-stat h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--charcoal);
+    line-height: 1.2;
+  }
+  .hero-stat p {
+    font-size: 0.8rem;
+    color: rgba(44,44,44,0.5);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* === Container === */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* === Section === */
+  .section {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(107,79,60,0.08);
+  }
+  .section:last-of-type { border-bottom: none; }
+
+  .section-header {
+    margin-bottom: 48px;
+  }
+  .section-number {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--brown);
+    opacity: 0.5;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 12px;
+  }
+  .section h2 + p {
+    color: rgba(44,44,44,0.6);
+    font-weight: 300;
+    max-width: 600px;
+  }
+
+  /* === Category Cards === */
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+  .category-card {
+    background: var(--warm-white);
+    border-radius: 16px;
+    padding: 32px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .category-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .category-card:nth-child(1)::before { background: var(--muted-gold); }
+  .category-card:nth-child(2)::before { background: var(--sage); }
+  .category-card:nth-child(3)::before { background: var(--dusty-grape); }
+  .category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(44,44,44,0.08);
+  }
+  .category-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .category-card .subtitle {
+    font-size: 0.8rem;
+    color: rgba(44,44,44,0.4);
+    margin-bottom: 20px;
+  }
+  .category-card .price-range {
+    font-size: 0.85rem;
+    color: var(--brown);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .category-card .count {
+    font-size: 0.8rem;
+    color: rgba(44,44,44,0.5);
+  }
+
+  /* === Product Grid with Images === */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+  .product-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--warm-white);
+    border-radius: 10px;
+    gap: 12px;
+    transition: background 0.2s;
+  }
+  .product-item:hover {
+    background: var(--light-clay);
+  }
+  .product-item .pthumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: var(--cream);
+    flex-shrink: 0;
+    border: 1px solid rgba(44,44,44,0.05);
+    transition: transform 0.2s ease;
+  }
+  .product-item .pthumb:hover {
+    transform: scale(2.5);
+    z-index: 10;
+    box-shadow: 0 4px 16px rgba(44,44,44,0.15);
+  }
+  .product-item .info {
+    flex: 1;
+    min-width: 0;
+  }
+  .product-item .name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    line-height: 1.4;
+  }
+  .product-item .series {
+    font-size: 0.7rem;
+    color: rgba(44,44,44,0.35);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .product-item .price {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--brown);
+    white-space: nowrap;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .product-item .price .old {
+    font-size: 0.75rem;
+    color: rgba(44,44,44,0.35);
+    text-decoration: line-through;
+    font-weight: 400;
+    margin-left: 6px;
+  }
+  .product-item .tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .product-item .tag {
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+  .tag-new { background: rgba(125,155,106,0.12); color: var(--tag-new); }
+  .tag-sale { background: rgba(196,112,74,0.12); color: var(--tag-sale); }
+  .tag-edlp { background: rgba(91,122,158,0.1); color: var(--tag-edlp); }
+  .tag-last { background: rgba(196,112,74,0.08); color: var(--tag-sale); }
+
+  /* === Chart / Visual === */
+  .chart-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .chart-box {
+    background: var(--warm-white);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  .chart-box h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 24px;
+    color: var(--charcoal);
+  }
+
+  .bar-chart { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-label {
+    font-size: 0.78rem;
+    width: 100px;
+    flex-shrink: 0;
+    text-align: right;
+    color: rgba(44,44,44,0.7);
+  }
+  .bar-track {
+    flex: 1;
+    height: 24px;
+    background: var(--light-clay);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+    position: relative;
+  }
+  .bar-fill span {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.72rem;
+    color: var(--warm-white);
+    font-weight: 500;
+  }
+  .bar-fill.gold { background: var(--muted-gold); }
+  .bar-fill.green { background: var(--sage); }
+  .bar-fill.purple { background: var(--dusty-grape); }
+
+  /* === Opportunity Cards === */
+  .opportunity-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .opportunity-card {
+    background: var(--warm-white);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  .opportunity-card:hover {
+    transform: translateY(-3px);
+  }
+  .opportunity-card .icon {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .opportunity-card h4 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .opportunity-card p {
+    font-size: 0.85rem;
+    color: rgba(44,44,44,0.6);
+    line-height: 1.7;
+  }
+  .opportunity-card .impact {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .impact-high { background: rgba(125,155,106,0.12); color: var(--tag-new); }
+  .impact-mid { background: rgba(196,112,74,0.1); color: var(--tag-sale); }
+
+  /* === Summary === */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .summary-card {
+    text-align: center;
+    padding: 36px 20px;
+    background: var(--warm-white);
+    border-radius: 16px;
+  }
+  .summary-card .number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    color: var(--brown);
+    line-height: 1.2;
+  }
+  .summary-card .desc {
+    font-size: 0.8rem;
+    color: rgba(44,44,44,0.5);
+    margin-top: 6px;
+  }
+
+  /* === Price Band with Images === */
+  .price-band-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .band-card {
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .band-card.economy {
+    background: rgba(154,171,142,0.1);
+    border: 1px solid rgba(154,171,142,0.2);
+  }
+  .band-card.mid {
+    background: rgba(186,166,126,0.1);
+    border: 1px solid rgba(186,166,126,0.2);
+  }
+  .band-card.premium {
+    background: rgba(139,125,140,0.1);
+    border: 1px solid rgba(139,125,140,0.2);
+  }
+  .band-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .band-card .band-range {
+    font-size: 0.8rem;
+    color: rgba(44,44,44,0.4);
+    margin-bottom: 16px;
+  }
+  .band-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(44,44,44,0.05);
+  }
+  .band-item:last-child { border-bottom: none; }
+  .band-item .thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--cream);
+    flex-shrink: 0;
+    border: 1px solid rgba(44,44,44,0.06);
+    transition: transform 0.2s ease;
+  }
+  .band-item .thumb:hover {
+    transform: scale(1.8);
+    z-index: 10;
+    box-shadow: 0 4px 16px rgba(44,44,44,0.15);
+  }
+  .band-item .info {
+    flex: 1;
+    min-width: 0;
+  }
+  .band-item .name {
+    font-size: 0.82rem;
+    color: rgba(44,44,44,0.75);
+    line-height: 1.3;
+  }
+  .band-item .price-tag {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--brown);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+  .band-item .price-tag .old {
+    font-size: 0.7rem;
+    color: rgba(44,44,44,0.3);
+    text-decoration: line-through;
+    margin-left: 4px;
+  }
+
+  /* === Trend Tags === */
+  .trend-tag {
+    display: inline-block;
+    font-size: 0.78rem;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin: 4px;
+    font-weight: 400;
+  }
+  .trend-tag.beige { background: rgba(196,168,130,0.15); color: var(--brown); }
+  .trend-tag.green { background: rgba(125,155,106,0.12); color: var(--apple-green); }
+  .trend-tag.grape { background: rgba(139,125,140,0.12); color: var(--dusty-grape); }
+  .trend-tag.khaki { background: rgba(201,192,168,0.2); color: #7a7056; }
+  .trend-tag.blue { background: rgba(91,122,158,0.1); color: var(--tag-edlp); }
+  .trend-tag.flower { background: rgba(186,166,126,0.12); color: #8a7a5a; }
+
+  /* === Star Rating === */
+  .star-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .star-rating .stars { color: var(--muted-gold); font-size: 0.85rem; }
+  .star-rating .label { font-size: 0.75rem; color: rgba(44,44,44,0.4); }
+
+  /* Footer */
+  .footer {
+    padding: 40px 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(44,44,44,0.3);
+    border-top: 1px solid rgba(107,79,60,0.06);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .category-grid, .chart-section, .opportunity-list, .summary-grid, .price-band-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero { padding: 60px 24px 50px; }
+    .container { padding: 0 24px; }
+    .section { padding: 50px 0; }
+    .hero-stats { flex-wrap: wrap; gap: 24px; }
+    .bar-label { width: 80px; font-size: 0.7rem; }
+  }
+  @media (max-width: 600px) {
+    .product-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- === HERO === -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Market Intelligence · July 2026</div>
+    <h1>JYSK 餐具<br><em>销售机会分析</em></h1>
+    <p>基于 JYSK UK 官网 Kitchen 品类全量产品数据的竞争格局与增长机会研究。覆盖 3 个子品类、40+ SKU，聚焦北欧餐具市场的定价策略、风格趋势与空白品类。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <h3>40+</h3>
+        <p>SKU 分析</p>
+      </div>
+      <div class="hero-stat">
+        <h3>£1.25 – £17.50</h3>
+        <p>价格带跨度</p>
+      </div>
+      <div class="hero-stat">
+        <h3>3</h3>
+        <p>子品类覆盖</p>
+      </div>
+      <div class="hero-stat">
+        <h3>8</h3>
+        <p>核心系列</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- === SECTION 1: 品类总览 === -->
+<div class="container">
+<section class="section">
+  <div class="section-header">
+    <div class="section-number">01</div>
+    <h2>品类总览</h2>
+    <p>JYSK UK 厨房餐具分为三大子品类，覆盖从日常饮用、餐桌摆盘到厨房收纳的全场景。</p>
+  </div>
+  <div class="category-grid">
+    <div class="category-card">
+      <h3>Drinking Glasses &amp; Mugs</h3>
+      <div class="subtitle">玻璃杯 · 马克杯 · 咖啡杯</div>
+      <div class="price-range">£1.50 – £9.00</div>
+      <div class="count">12 款产品 · 7 个系列</div>
+      <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:4px;">
+        <span class="tag tag-edlp">EDLP 为主</span>
+        <span class="tag tag-sale">1 款促销</span>
+      </div>
+    </div>
+    <div class="category-card">
+      <h3>Plates, Bowls &amp; Cutlery</h3>
+      <div class="subtitle">盘 · 碗 · 餐具套装</div>
+      <div class="price-range">£1.25 – £17.50</div>
+      <div class="count">20+ 款产品 · 10+ 个系列</div>
+      <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:4px;">
+        <span class="tag tag-edlp">EDLP 为主</span>
+        <span class="tag tag-sale">多款清仓</span>
+        <span class="tag tag-last">While stocks last</span>
+      </div>
+    </div>
+    <div class="category-card">
+      <h3>Kitchen Accessories</h3>
+      <div class="subtitle">配件 · 收纳 · 工具</div>
+      <div class="price-range">£2.50 – £11.00</div>
+      <div class="count">9 款产品 · 散件为主</div>
+      <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:4px;">
+        <span class="tag tag-new">新品</span>
+        <span class="tag tag-edlp">EDLP 为主</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- === SECTION 2: 价格带分布 === -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-number">02</div>
+    <h2>价格带分布</h2>
+    <p>JYSK 的定价策略清晰分层：经济线吸引流量，中端线做大营收，高端线树立品质标杆。</p>
+  </div>
+  <div class="price-band-grid">
+    <div class="band-card economy">
+      <h4>经济线</h4>
+      <div class="band-range">£1.25 – £5.00 · 主力走量</div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/250464" alt="EMIL花卉碗" loading="lazy">
+        <div class="info"><div class="name">EMIL 花卉碗 D10cm</div></div>
+        <div class="price-tag">£1.25</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271776" alt="FERDINAND玻璃杯" loading="lazy">
+        <div class="info"><div class="name">FERDINAND 玻璃杯 320ml</div></div>
+        <div class="price-tag">£1.50</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/235907" alt="FERDUS盘" loading="lazy">
+        <div class="info"><div class="name">FERDUS 盘 D19cm 灰色</div></div>
+        <div class="price-tag">£2.00 <span class="old">£3.00</span></div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/249628" alt="ELIAS盘" loading="lazy">
+        <div class="info"><div class="name">ELIAS 盘 D18cm</div></div>
+        <div class="price-tag">£2.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/250476" alt="EMIL马克杯" loading="lazy">
+        <div class="info"><div class="name">EMIL 马克杯 花卉 350ml</div></div>
+        <div class="price-tag">£2.25</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/261243" alt="GUNVALD玻璃杯" loading="lazy">
+        <div class="info"><div class="name">GUNVALD 玻璃杯 350ml</div></div>
+        <div class="price-tag">£2.50</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/249668" alt="HILMER马克杯" loading="lazy">
+        <div class="info"><div class="name">HILMER 玻璃马克杯 棕榈树</div></div>
+        <div class="price-tag">£2.50 <span class="old">£3.75</span></div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271690" alt="KJELD厨房纸架" loading="lazy">
+        <div class="info"><div class="name">KJELD 厨房纸架</div></div>
+        <div class="price-tag">£3.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/235868" alt="PETER保温水瓶" loading="lazy">
+        <div class="info"><div class="name">PETER 保温水瓶 450ml 黑色</div></div>
+        <div class="price-tag">£3.00 <span class="old">£5.00</span></div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/271650" alt="JIMMI玻璃杯" loading="lazy">
+        <div class="info"><div class="name">JIMMI 玻璃杯 260ml</div></div>
+        <div class="price-tag">£3.00</div>
+      </div>
+    </div>
+    <div class="band-card mid">
+      <h4>中端线</h4>
+      <div class="band-range">£5.00 – £10.00 · 品质升级</div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn2.jysk.com/getimage/wd3.medium/281659" alt="SIGVART砧板" loading="lazy">
+        <div class="info"><div class="name">SIGVART 砧板 金合欢木</div></div>
+        <div class="price-tag">£6.50</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/281682" alt="MALIK碗dusty grape" loading="lazy">
+        <div class="info"><div class="name">MALIK 碗 D16cm dusty grape</div></div>
+        <div class="price-tag">£6.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn2.jysk.com/getimage/wd3.medium/281688" alt="MALIK盘pale khaki" loading="lazy">
+        <div class="info"><div class="name">MALIK 盘 D21cm pale khaki 炻瓷</div></div>
+        <div class="price-tag">£6.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/281691" alt="MALIK盘natural" loading="lazy">
+        <div class="info"><div class="name">MALIK 盘 D27cm 自然色 炻瓷</div></div>
+        <div class="price-tag">£8.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235867" alt="VICTOR碗" loading="lazy">
+        <div class="info"><div class="name">VICTOR 碗 D20cm beige</div></div>
+        <div class="price-tag">£6.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235513" alt="JENSEN碗" loading="lazy">
+        <div class="info"><div class="name">JENSEN 碗 D22cm 白色</div></div>
+        <div class="price-tag">£5.50</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn2.jysk.com/getimage/wd3.medium/271779" alt="MATHIAS茶叶盒" loading="lazy">
+        <div class="info"><div class="name">MATHIAS 茶叶盒 天然木</div></div>
+        <div class="price-tag">£9.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/281676" alt="NOR碗pale khaki" loading="lazy">
+        <div class="info"><div class="name">NOR 碗 D19cm pale khaki</div></div>
+        <div class="price-tag">£9.50</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/274801" alt="TORRE酒杯" loading="lazy">
+        <div class="info"><div class="name">TORRE 酒杯 430ml 2只装</div></div>
+        <div class="price-tag">£9.00</div>
+      </div>
+    </div>
+    <div class="band-card premium">
+      <h4>高端线</h4>
+      <div class="band-range">£10.00 – £17.50 · 品质标杆</div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/281626" alt="UNO研磨器" loading="lazy">
+        <div class="info"><div class="name">UNO 胡椒盐研磨器</div></div>
+        <div class="price-tag">£11.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271759" alt="SIGURD碗" loading="lazy">
+        <div class="info"><div class="name">SIGURD 碗 D24cm 浅绿</div></div>
+        <div class="price-tag">£13.50</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/281679" alt="NOR碗dusty grape" loading="lazy">
+        <div class="info"><div class="name">NOR 碗 D25cm dusty grape</div></div>
+        <div class="price-tag">£15.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/249588" alt="ODD碗" loading="lazy">
+        <div class="info"><div class="name">ODD 碗 D30cm 彩色</div></div>
+        <div class="price-tag">£15.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271620" alt="SUNE蛋糕架" loading="lazy">
+        <div class="info"><div class="name">SUNE 蛋糕架 D28cm 白色</div></div>
+        <div class="price-tag">£15.00</div>
+      </div>
+      <div class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271762" alt="SIGURD大碗" loading="lazy">
+        <div class="info"><div class="name">SIGURD 碗 D30cm 浅绿</div></div>
+        <div class="price-tag">£17.50</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- === SECTION 3: 核心系列 === -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-number">03</div>
+    <h2>核心系列分析</h2>
+    <p>JYSK 的餐具以系列化方式运营，跨品类复用设计语言，最大化 SKU 效率和品牌识别。</p>
+  </div>
+  <div class="chart-section" style="margin-bottom:40px;">
+    <div class="chart-box">
+      <h4>系列产品数分布</h4>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">EMIL</div><div class="bar-track"><div class="bar-fill gold" style="width:100%"><span>5 款</span></div></div></div>
+        <div style="display:flex; gap:6px; padding:4px 0 10px 110px; flex-wrap:wrap;">
+          <img src="https://cdn4.jysk.com/getimage/wd3.medium/250464" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="EMIL碗" loading="lazy" title="EMIL 花卉碗">
+          <img src="https://cdn1.jysk.com/getimage/wd3.medium/250468" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="EMIL碗大" loading="lazy" title="EMIL 花卉碗 D16cm">
+          <img src="https://cdn2.jysk.com/getimage/wd3.medium/250472" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="EMIL分餐盘" loading="lazy" title="EMIL 分餐盘">
+          <img src="https://cdn3.jysk.com/getimage/wd3.medium/250476" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="EMIL马克杯" loading="lazy" title="EMIL 马克杯">
+        </div>
+        <div class="bar-row"><div class="bar-label">FERDUS</div><div class="bar-track"><div class="bar-fill green" style="width:80%"><span>4 款</span></div></div></div>
+        <div style="display:flex; gap:6px; padding:4px 0 10px 110px; flex-wrap:wrap;">
+          <img src="https://cdn4.jysk.com/getimage/wd3.medium/235907" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="FERDUS盘灰" loading="lazy" title="FERDUS 盘 D19cm 灰">
+          <img src="https://cdn1.jysk.com/getimage/wd3.medium/235856" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="FERDUS盘米" loading="lazy" title="FERDUS 盘 D19cm beige">
+          <img src="https://cdn2.jysk.com/getimage/wd3.medium/235857" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="FERDUS盘米大" loading="lazy" title="FERDUS 盘 D27cm beige">
+          <img src="https://cdn3.jysk.com/getimage/wd3.medium/242254" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="FERDUS碗" loading="lazy" title="FERDUS 碗 D15cm beige">
+        </div>
+        <div class="bar-row"><div class="bar-label">MALIK</div><div class="bar-track"><div class="bar-fill purple" style="width:80%"><span>4 款</span></div></div></div>
+        <div style="display:flex; gap:6px; padding:4px 0 10px 110px; flex-wrap:wrap;">
+          <img src="https://cdn1.jysk.com/getimage/wd3.medium/281682" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="MALIK dusty grape" loading="lazy" title="MALIK 碗 dusty grape">
+          <img src="https://cdn2.jysk.com/getimage/wd3.medium/281685" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="MALIK apple green" loading="lazy" title="MALIK 碗 apple green">
+          <img src="https://cdn2.jysk.com/getimage/wd3.medium/281688" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="MALIK pale khaki" loading="lazy" title="MALIK 盘 pale khaki">
+          <img src="https://cdn3.jysk.com/getimage/wd3.medium/281691" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="MALIK natural" loading="lazy" title="MALIK 盘 natural">
+        </div>
+        <div class="bar-row"><div class="bar-label">ELIAS</div><div class="bar-track"><div class="bar-fill gold" style="width:60%"><span>3 款</span></div></div></div>
+        <div style="display:flex; gap:6px; padding:4px 0 10px 110px; flex-wrap:wrap;">
+          <img src="https://cdn1.jysk.com/getimage/wd3.medium/249628" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="ELIAS盘小" loading="lazy" title="ELIAS 盘 D18cm">
+          <img src="https://cdn3.jysk.com/getimage/wd3.medium/249620" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="ELIAS碗" loading="lazy" title="ELIAS 碗 D24cm">
+          <img src="https://cdn2.jysk.com/getimage/wd3.medium/249632" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="ELIAS盘大" loading="lazy" title="ELIAS 盘 D28cm">
+        </div>
+        <div class="bar-row"><div class="bar-label">GUNVALD</div><div class="bar-track"><div class="bar-fill green" style="width:40%"><span>2 款</span></div></div></div>
+        <div style="display:flex; gap:6px; padding:4px 0 10px 110px; flex-wrap:wrap;">
+          <img src="https://cdn4.jysk.com/getimage/wd3.medium/261243" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="GUNVALD玻璃杯" loading="lazy" title="GUNVALD 玻璃杯">
+          <img src="https://cdn2.jysk.com/getimage/wd3.medium/282033" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="GUNVALD酒杯" loading="lazy" title="GUNVALD 酒杯">
+        </div>
+        <div class="bar-row"><div class="bar-label">NOR</div><div class="bar-track"><div class="bar-fill purple" style="width:40%"><span>2 款</span></div></div></div>
+        <div style="display:flex; gap:6px; padding:4px 0 10px 110px; flex-wrap:wrap;">
+          <img src="https://cdn3.jysk.com/getimage/wd3.medium/281676" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="NOR pale khaki" loading="lazy" title="NOR 碗 D19cm">
+          <img src="https://cdn4.jysk.com/getimage/wd3.medium/281679" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="NOR dusty grape" loading="lazy" title="NOR 碗 D25cm">
+        </div>
+        <div class="bar-row"><div class="bar-label">SIGURD</div><div class="bar-track"><div class="bar-fill gold" style="width:40%"><span>2 款</span></div></div></div>
+        <div style="display:flex; gap:6px; padding:4px 0 10px 110px; flex-wrap:wrap;">
+          <img src="https://cdn1.jysk.com/getimage/wd3.medium/271759" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="SIGURD碗小" loading="lazy" title="SIGURD 碗 D24cm">
+          <img src="https://cdn4.jysk.com/getimage/wd3.medium/271762" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="SIGURD碗大" loading="lazy" title="SIGURD 碗 D30cm">
+        </div>
+        <div class="bar-row"><div class="bar-label">DETMER</div><div class="bar-track"><div class="bar-fill green" style="width:40%"><span>2 款</span></div></div></div>
+        <div style="display:flex; gap:6px; padding:4px 0 10px 110px; flex-wrap:wrap;">
+          <img src="https://cdn1.jysk.com/getimage/wd3.medium/259944" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="DETMER浓缩杯" loading="lazy" title="DETMER 浓缩杯">
+          <img src="https://cdn1.jysk.com/getimage/wd3.medium/271715" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid rgba(44,44,44,0.06)" alt="DETMER咖啡杯" loading="lazy" title="DETMER 咖啡杯">
+        </div>
+      </div>
+    </div>
+    <div class="chart-box">
+      <h4>价格带 · SKU 密度</h4>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">£1-2</div><div class="bar-track"><div class="bar-fill gold" style="width:55%"><span>6 款</span></div></div></div>
+        <div class="bar-row"><div class="bar-label">£2-3</div><div class="bar-track"><div class="bar-fill green" style="width:70%"><span>8 款</span></div></div></div>
+        <div class="bar-row"><div class="bar-label">£3-5</div><div class="bar-track"><div class="bar-fill purple" style="width:60%"><span>7 款</span></div></div></div>
+        <div class="bar-row"><div class="bar-label">£5-10</div><div class="bar-track"><div class="bar-fill gold" style="width:70%"><span>8 款</span></div></div></div>
+        <div class="bar-row"><div class="bar-label">£10-17.5</div><div class="bar-track"><div class="bar-fill green" style="width:50%"><span>6 款</span></div></div></div>
+      </div>
+      <p style="margin-top:20px; font-size:0.82rem; color:rgba(44,44,44,0.5);">价格带分布均匀，说明 JYSK 用全价格带覆盖不同客层，而非单一低价策略。</p>
+    </div>
+  </div>
+</section>
+
+<!-- === SECTION 4: 产品清单 === -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-number">04</div>
+    <h2>全产品清单</h2>
+    <p>以下为本次分析覆盖的所有产品，按子品类分组，含价格与促销标识。</p>
+  </div>
+
+  <h3 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin-bottom:20px; color:var(--brown);">🥂 Drinking Glasses &amp; Mugs</h3>
+  <div class="product-grid">
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271776" alt="" loading="lazy"><div class="info"><div class="name">FERDINAND 玻璃杯 320ml 透明</div><div class="series">FERDINAND</div></div><div class="price">£1.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/250476" alt="" loading="lazy"><div class="info"><div class="name">EMIL 马克杯 350ml 花卉</div><div class="series">EMIL · 花卉系列</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£2.25</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/259944" alt="" loading="lazy"><div class="info"><div class="name">DETMER 浓缩杯 110ml 米色</div><div class="series">DETMER · 炻瓷</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£2.25</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/261243" alt="" loading="lazy"><div class="info"><div class="name">GUNVALD 玻璃杯 350ml 棕色</div><div class="series">GUNVALD</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£2.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/249668" alt="" loading="lazy"><div class="info"><div class="name">HILMER 玻璃马克杯 320ml 棕榈树</div><div class="series">HILMER · 限量</div><div class="tags"><span class="tag tag-sale">-33%</span></div></div><div class="price">£2.50 <span class="old">£3.75</span></div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271805" alt="" loading="lazy"><div class="info"><div class="name">ALF 马克杯 400ml 蓝白</div><div class="series">ALF · 蓝白系列</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271715" alt="" loading="lazy"><div class="info"><div class="name">DETMER 咖啡杯 220ml 米色 炻瓷</div><div class="series">DETMER · 炻瓷</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/271650" alt="" loading="lazy"><div class="info"><div class="name">JIMMI 玻璃杯 260ml</div><div class="series">JIMMI</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.00</div></div>
+    <div class="product-item"><div class="info"><div class="name">ISAK 玻璃杯 300ml dusty grape</div><div class="series">ISAK</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.25</div></div>
+    <div class="product-item"><div class="info"><div class="name">ISAK 玻璃杯 300ml pale khaki</div><div class="series">ISAK</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.25</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn2.jysk.com/getimage/wd3.medium/282033" alt="" loading="lazy"><div class="info"><div class="name">GUNVALD 酒杯 430ml 棕色</div><div class="series">GUNVALD</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.50</div></div>
+    <div class="product-item"><div class="info"><div class="name">SVERRE 马克杯 400ml 炻瓷</div><div class="series">SVERRE</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.50</div></div>
+    <div class="product-item"><div class="info"><div class="name">MELVIN 马克杯 370ml dusty grape</div><div class="series">MELVIN</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.75</div></div>
+    <div class="product-item"><div class="info"><div class="name">TORRE 玻璃杯 420ml 2只装</div><div class="series">TORRE</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£4.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/274801" alt="" loading="lazy"><div class="info"><div class="name">TORRE 酒杯 430ml 2只装</div><div class="series">TORRE</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£9.00</div></div>
+  </div>
+
+  <h3 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin:40px 0 20px; color:var(--brown);">🍽️ Plates, Bowls &amp; Cutlery</h3>
+  <div class="product-grid">
+    <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/250464" alt="" loading="lazy"><div class="info"><div class="name">EMIL 碗 D10cm 花卉</div><div class="series">EMIL · 花卉系列</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£1.25</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/249628" alt="" loading="lazy"><div class="info"><div class="name">ELIAS 盘 D18cm</div><div class="series">ELIAS</div><div class="tags"><span class="tag tag-last">While stocks last</span></div></div><div class="price">£2.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/235907" alt="" loading="lazy"><div class="info"><div class="name">FERDUS 盘 D19cm 灰色</div><div class="series">FERDUS</div><div class="tags"><span class="tag tag-sale">-33%</span></div></div><div class="price">£2.00 <span class="old">£3.00</span></div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/249620" alt="" loading="lazy"><div class="info"><div class="name">ELIAS 碗 D24cm</div><div class="series">ELIAS</div><div class="tags"><span class="tag tag-sale">-69%</span></div></div><div class="price">£2.50 <span class="old">£8.00</span></div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/271773" alt="" loading="lazy"><div class="info"><div class="name">BERTIL 碗 D9cm</div><div class="series">BERTIL</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£2.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn2.jysk.com/getimage/wd3.medium/271767" alt="" loading="lazy"><div class="info"><div class="name">BERTIL 盘 D10cm</div><div class="series">BERTIL</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£2.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn2.jysk.com/getimage/wd3.medium/249632" alt="" loading="lazy"><div class="info"><div class="name">ELIAS 盘 D28cm</div><div class="series">ELIAS</div><div class="tags"><span class="tag tag-last">While stocks last</span></div></div><div class="price">£3.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/242254" alt="" loading="lazy"><div class="info"><div class="name">FERDUS 碗 D15cm beige</div><div class="series">FERDUS</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235856" alt="" loading="lazy"><div class="info"><div class="name">FERDUS 盘 D19cm beige</div><div class="series">FERDUS</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/250468" alt="" loading="lazy"><div class="info"><div class="name">EMIL 碗 D16cm 花卉</div><div class="series">EMIL · 花卉系列</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271805" alt="" loading="lazy"><div class="info"><div class="name">ALF 碗 D15cm 蓝白</div><div class="series">ALF</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/249584" alt="" loading="lazy"><div class="info"><div class="name">MAK 碗 D18cm 彩色</div><div class="series">MAK</div><div class="tags"><span class="tag tag-sale">-13%</span></div></div><div class="price">£3.50 <span class="old">£4.00</span></div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn2.jysk.com/getimage/wd3.medium/235857" alt="" loading="lazy"><div class="info"><div class="name">FERDUS 盘 D27cm beige</div><div class="series">FERDUS</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£4.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235908" alt="" loading="lazy"><div class="info"><div class="name">FERDUS 盘 D27cm grey</div><div class="series">FERDUS</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£4.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn2.jysk.com/getimage/wd3.medium/250472" alt="" loading="lazy"><div class="info"><div class="name">EMIL 分餐盘 花卉</div><div class="series">EMIL · 花卉系列</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£4.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235513" alt="" loading="lazy"><div class="info"><div class="name">JENSEN 碗 D22cm 白色</div><div class="series">JENSEN</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£5.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235867" alt="" loading="lazy"><div class="info"><div class="name">VICTOR 碗 D20cm beige</div><div class="series">VICTOR</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£6.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/281682" alt="" loading="lazy"><div class="info"><div class="name">MALIK 碗 D16cm dusty grape</div><div class="series">MALIK</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£6.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn2.jysk.com/getimage/wd3.medium/281685" alt="" loading="lazy"><div class="info"><div class="name">MALIK 碗 D16cm apple green</div><div class="series">MALIK</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£6.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn2.jysk.com/getimage/wd3.medium/281688" alt="" loading="lazy"><div class="info"><div class="name">MALIK 盘 D21cm pale khaki</div><div class="series">MALIK · 炻瓷</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£6.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/281691" alt="" loading="lazy"><div class="info"><div class="name">MALIK 盘 D27cm 自然色 炻瓷</div><div class="series">MALIK · 炻瓷</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£8.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/281676" alt="" loading="lazy"><div class="info"><div class="name">NOR 碗 D19cm pale khaki</div><div class="series">NOR</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£9.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271759" alt="" loading="lazy"><div class="info"><div class="name">SIGURD 碗 D24cm 浅绿</div><div class="series">SIGURD</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£13.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/281679" alt="" loading="lazy"><div class="info"><div class="name">NOR 碗 D25cm dusty grape</div><div class="series">NOR</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£15.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/249588" alt="" loading="lazy"><div class="info"><div class="name">ODD 碗 D30cm 彩色</div><div class="series">ODD</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£15.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271762" alt="" loading="lazy"><div class="info"><div class="name">SIGURD 碗 D30cm 浅绿</div><div class="series">SIGURD</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£17.50</div></div>
+  </div>
+
+  <h3 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin:40px 0 20px; color:var(--brown);">🔪 Kitchen Accessories</h3>
+  <div class="product-grid">
+    <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/281630" alt="" loading="lazy"><div class="info"><div class="name">GEIR 隔热垫 D15cm beige</div><div class="series">GEIR · 新品</div><div class="tags"><span class="tag tag-new">New</span></div></div><div class="price">£2.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271690" alt="" loading="lazy"><div class="info"><div class="name">KJELD 厨房纸架</div><div class="series">KJELD</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/235868" alt="" loading="lazy"><div class="info"><div class="name">PETER 保温水瓶 450ml 黑色</div><div class="series">PETER</div><div class="tags"><span class="tag tag-sale">-40%</span></div></div><div class="price">£3.00 <span class="old">£5.00</span></div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn2.jysk.com/getimage/wd3.medium/281659" alt="" loading="lazy"><div class="info"><div class="name">SIGVART 砧板 金合欢木</div><div class="series">SIGVART · 天然木</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£6.50</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn2.jysk.com/getimage/wd3.medium/271779" alt="" loading="lazy"><div class="info"><div class="name">MATHIAS 茶叶盒 天然木</div><div class="series">MATHIAS · 天然木</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£9.00</div></div>
+    <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/281626" alt="" loading="lazy"><div class="info"><div class="name">UNO 胡椒盐研磨器</div><div class="series">UNO · 新品</div><div class="tags"><span class="tag tag-new">New</span></div></div><div class="price">£11.00</div></div>
+  </div>
+</section>
+
+<!-- === SECTION 5: 风格趋势 === -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-number">05</div>
+    <h2>风格趋势总结</h2>
+    <p>从 JYSK 现有品类中可以提炼出清晰的设计语言体系。</p>
+  </div>
+  <div style="display:grid; grid-template-columns:2fr 1fr; gap:32px;">
+    <div>
+      <div style="margin-bottom:24px;">
+        <h4 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.1rem; margin-bottom:12px;">🎨 主色调</h4>
+        <div>
+          <span class="trend-tag beige">Beige 米色 — 基底色</span>
+          <span class="trend-tag green">Apple Green 苹果绿 — 清新感</span>
+          <span class="trend-tag grape">Dusty Grape 淡紫灰 — 高级感</span>
+          <span class="trend-tag khaki">Pale Khaki 浅卡其 — 自然风</span>
+          <span class="trend-tag blue">Blue/White 蓝白 — 经典北欧</span>
+          <span class="trend-tag flower">Floral 花卉 — 装饰语言</span>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.1rem; margin-bottom:12px;">🧱 核心材质</h4>
+        <div>
+          <span class="trend-tag beige">Stoneware 炻瓷 — 质感担当</span>
+          <span class="trend-tag green">Acacia 金合欢木 — 自然元素</span>
+          <span class="trend-tag grape">Glass 玻璃 — 日常线主力</span>
+          <span class="trend-tag khaki">Natural 自然色釉 — 北欧核心</span>
+        </div>
+      </div>
+      <div style="margin-top:24px;">
+        <h4 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.1rem; margin-bottom:12px;">📐 设计策略洞察</h4>
+        <ul style="list-style:none; padding:0;">
+          <li style="padding:8px 0; border-bottom:1px solid rgba(44,44,44,0.06); font-size:0.88rem; color:rgba(44,44,44,0.7);">✦ 同系列跨品类复用设计元素（EMIL 花卉从碗延伸到马克杯和分餐盘）</li>
+          <li style="padding:8px 0; border-bottom:1px solid rgba(44,44,44,0.06); font-size:0.88rem; color:rgba(44,44,44,0.7);">✦ 低端用清仓/折扣引流（ELIAS -69%、FERDUS -33%），高端用 EDLP 稳定价格预期</li>
+          <li style="padding:8px 0; border-bottom:1px solid rgba(44,44,44,0.06); font-size:0.88rem; color:rgba(44,44,44,0.7);">✦ 自然色系 + 炻瓷 = 北欧风品质感的成本效率组合</li>
+          <li style="padding:8px 0; font-size:0.88rem; color:rgba(44,44,44,0.7);">✦ Summer Sale 期间用大幅折扣清理库存，为秋季新品腾空间</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:var(--warm-white); border-radius:16px; padding:28px;">
+      <h4 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1rem; margin-bottom:16px;">⭐ 竞争力评级</h4>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div><div class="star-rating"><span class="stars">★★★★★</span><span class="label">EDLP 价格竞争力</span></div></div>
+        <div><div class="star-rating"><span class="stars">★★★★☆</span><span class="label">风格一致性</span></div></div>
+        <div><div class="star-rating"><span class="stars">★★★★☆</span><span class="label">SKU 效率 / 系列复用</span></div></div>
+        <div><div class="star-rating"><span class="stars">★★★☆☆</span><span class="label">品类完整度</span></div></div>
+        <div><div class="star-rating"><span class="stars">★★★☆☆</span><span class="label">高端产品线深度</span></div></div>
+        <div><div class="star-rating"><span class="stars">★★★☆☆</span><span class="label">季节性新品节奏</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- === SECTION 6: 机会分析 === -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-number">06</div>
+    <h2>销售机会与开发方向</h2>
+    <p>基于品类覆盖、价格带分布和竞争格局的综合判断。</p>
+  </div>
+  <div class="opportunity-list">
+    <div class="opportunity-card">
+      <span class="icon">🫖</span>
+      <h4>茶具套装品类空白</h4>
+      <p>JYSK 有 DETMER 浓缩杯/咖啡杯和 MATHIAS 茶叶盒，但缺少完整的茶壶+杯碟套装。这是中端价位（£15-25）的明显缺口，尤其在英国市场茶具需求稳定。</p>
+      <span class="impact impact-high">高潜力</span>
+    </div>
+    <div class="opportunity-card">
+      <span class="icon">🧈</span>
+      <h4>早餐/黄油小件</h4>
+      <p>黄油盘、奶盅、糖罐、蛋杯等早餐场景小件完全缺失。这类产品单价低（£2-5）、毛利率高，且是建立「一站式厨房品牌」认知的必要品类。</p>
+      <span class="impact impact-high">高潜力</span>
+    </div>
+    <div class="opportunity-card">
+      <span class="icon">🍶</span>
+      <h4>炻瓷系列延伸</h4>
+      <p>MALIK 和 DETMER 已证明炻瓷 stoneware 的接受度。建议在同一材质体系下增加水壶、沙拉碗、烘焙碟等跨场景单品，做强「炻瓷矩阵」。</p>
+      <span class="impact impact-mid">中潜力</span>
+    </div>
+    <div class="opportunity-card">
+      <span class="icon">🎄</span>
+      <h4>季节性/限量系列</h4>
+      <p>目前仅有 HILMER 棕榈树马克杯作为季节限定。圣诞节、春季花卉、秋季大地色等季节性主题系列能创造紧迫感、拉动复购，且适合做 gift set 组合。</p>
+      <span class="impact impact-high">高潜力</span>
+    </div>
+    <div class="opportunity-card">
+      <span class="icon">📦</span>
+      <h4>Gift Set 礼盒化</h4>
+      <p>现有产品以散卖为主。将 EMIL 花卉碗+马克杯+分餐盘打包为 gift set，单价可从 £7.50 提升至 £10-12，客单价提升 30-50%。适合节日送礼场景。</p>
+      <span class="impact impact-high">高潜力</span>
+    </div>
+    <div class="opportunity-card">
+      <span class="icon">🪵</span>
+      <h4>天然木系列扩展</h4>
+      <p>SIGVART 砧板和 MATHIAS 茶叶盒是天然木系列的仅有两款。增加木制沙拉碗、面包板、餐具架，可形成完整的「自然厨房」子品牌线，与北欧风高度契合。</p>
+      <span class="impact impact-mid">中潜力</span>
+    </div>
+    <div class="opportunity-card">
+      <span class="icon">🔪</span>
+      <h4>厨房工具加深</h4>
+      <p>砧板、隔热垫、研磨器已有，但缺少量杯、搅拌碗、滤网、开瓶器等基本工具。这些产品单价低、频次高，是提升连带购买率的利器。</p>
+      <span class="impact impact-mid">中潜力</span>
+    </div>
+    <div class="opportunity-card">
+      <span class="icon">🌍</span>
+      <h4>高端线品牌化</h4>
+      <p>SIGURD 和 NOR 系列已经占据 £13.50-17.50 价格段，但缺少明确的「高端子品牌」叙事。建议用独立命名和专属包装强化品质感知，切入 gift / 婚庆市场。</p>
+      <span class="impact impact-mid">中潜力</span>
+    </div>
+  </div>
+</section>
+
+<!-- === SECTION 7: 关键结论 === -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-number">07</div>
+    <h2>关键结论</h2>
+  </div>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="number">£1.25</div>
+      <div class="desc">最低价格点<br>市场最低档</div>
+    </div>
+    <div class="summary-card">
+      <div class="number">£2-5</div>
+      <div class="desc">核心价格带<br>主力走量区间</div>
+    </div>
+    <div class="summary-card">
+      <div class="number">70%</div>
+      <div class="desc">EDLP 占比<br>稳定定价策略</div>
+    </div>
+    <div class="summary-card">
+      <div class="number">8</div>
+      <div class="desc">机会品类<br>可开发的空白方向</div>
+    </div>
+  </div>
+  <div style="margin-top:40px; padding:28px; background:var(--warm-white); border-radius:16px; border-left:3px solid var(--muted-gold);">
+    <h4 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.1rem; margin-bottom:12px;">🎯 行动建议</h4>
+    <ol style="padding-left:20px; display:flex; flex-direction:column; gap:10px;">
+      <li style="font-size:0.88rem; color:rgba(44,44,44,0.7);"><strong style="color:var(--charcoal);">短期（1-2月）</strong>：补充早餐小件（黄油盘、奶盅、蛋杯），利用现有炻瓷供应链，开发成本低、见效快。</li>
+      <li style="font-size:0.88rem; color:rgba(44,44,44,0.7);"><strong style="color:var(--charcoal);">中期（3-6月）</strong>：推出 EMIL 花卉系列 gift set 礼盒，配合圣诞节档期；上线茶具套装填补品类空白。</li>
+      <li style="font-size:0.88rem; color:rgba(44,44,44,0.7);"><strong style="color:var(--charcoal);">长期（6-12月）</strong>：建立 SIGURD/NOR 高端子品牌叙事，布局季节性主题系列，形成「日常平价 + 季节限定 + 高端送礼」三级产品矩阵。</li>
+    </ol>
+  </div>
+</section>
+
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>数据来源：JYSK UK 官网 · 采集日期 2026-07-27 · 分析仅供内部参考</p>
+    <p style="margin-top:4px;">HER System × 小熊 · JYSK Kitchen Market Intelligence</p>
+  </div>
+</footer>
+
+</body>
+</html>
