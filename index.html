@@ -195,6 +195,73 @@
     font-size: 0.8rem;
     color: rgba(44,44,44,0.5);
   }
+  .category-card .filter-btn {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 0.7rem;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(44,44,44,0.1);
+    background: transparent;
+    color: rgba(44,44,44,0.5);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    letter-spacing: 0.03em;
+  }
+  .category-card .filter-btn:hover {
+    background: var(--charcoal);
+    color: var(--warm-white);
+    border-color: var(--charcoal);
+  }
+  .category-card .filter-btn.active {
+    background: var(--charcoal);
+    color: var(--warm-white);
+    border-color: var(--charcoal);
+  }
+  .product-item.filter-hidden {
+    display: none !important;
+  }
+  .product-section-heading.filter-hidden {
+    display: none !important;
+  }
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(44,44,44,0.06);
+  }
+  .filter-tag {
+    font-size: 0.75rem;
+    padding: 5px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(44,44,44,0.1);
+    background: transparent;
+    color: rgba(44,44,44,0.5);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+  }
+  .filter-tag:hover {
+    border-color: var(--charcoal);
+    color: var(--charcoal);
+  }
+  .filter-tag.active {
+    background: var(--charcoal);
+    color: var(--warm-white);
+    border-color: var(--charcoal);
+  }
+  .filter-tag.clear-all {
+    border-color: rgba(196,112,74,0.2);
+    color: var(--tag-sale);
+  }
+  .filter-tag.clear-all:hover {
+    background: rgba(196,112,74,0.08);
+    border-color: var(--tag-sale);
+  }
 
   /* === Product Grid with Images === */
   .product-grid {
@@ -653,7 +720,7 @@
     <p>JYSK UK's kitchenware is divided into three subcategories, covering everything from daily drinking and dining to kitchen storage.</p>
   </div>
   <div class="category-grid">
-    <div class="category-card">
+    <div class="category-card" data-filter="glasses">
       <h3>Drinking Glasses &amp; Mugs</h3>
       <div class="subtitle">Glasses · Mugs · Coffee Cups</div>
       <div class="price-range">£1.50 – £9.00</div>
@@ -662,8 +729,9 @@
         <span class="tag tag-edlp">Mostly EDLP</span>
         <span class="tag tag-sale">1 on sale</span>
       </div>
+      <button class="filter-btn" data-filter="glasses">🔍 View products</button>
     </div>
-    <div class="category-card">
+    <div class="category-card" data-filter="plates">
       <h3>Plates, Bowls &amp; Cutlery</h3>
       <div class="subtitle">Plates · Bowls · Cutlery</div>
       <div class="price-range">£1.25 – £17.50</div>
@@ -673,8 +741,9 @@
         <span class="tag tag-sale">Clearance items</span>
         <span class="tag tag-last">While stocks last</span>
       </div>
+      <button class="filter-btn" data-filter="plates">🔍 View products</button>
     </div>
-    <div class="category-card">
+    <div class="category-card" data-filter="accessories">
       <h3>Kitchen Accessories</h3>
       <div class="subtitle">Accessories · Storage · Tools</div>
       <div class="price-range">£2.50 – £11.00</div>
@@ -683,6 +752,7 @@
         <span class="tag tag-new">New</span>
         <span class="tag tag-edlp">Mostly EDLP</span>
       </div>
+      <button class="filter-btn" data-filter="accessories">🔍 View products</button>
     </div>
   </div>
 </section>
@@ -1043,15 +1113,23 @@
 </section>
 
 <!-- === SECTION 4: Full Product List === -->
-<section class="section">
+<section class="section" id="productListSection">
   <div class="section-header">
     <div class="section-number">04</div>
     <h2>Full Product List</h2>
     <p>All products covered in this analysis, grouped by subcategory with prices and promotion tags.</p>
   </div>
 
-  <h3 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin-bottom:20px; color:var(--brown);">🥂 Drinking Glasses &amp; Mugs</h3>
-  <div class="product-grid">
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-tag active" data-filter="all">All Products</button>
+    <button class="filter-tag" data-filter="glasses">🥂 Drinking Glasses &amp; Mugs</button>
+    <button class="filter-tag" data-filter="plates">🍽️ Plates, Bowls &amp; Cutlery</button>
+    <button class="filter-tag" data-filter="accessories">🔪 Kitchen Accessories</button>
+    <button class="filter-tag clear-all" data-filter="all">✕ Clear filter</button>
+  </div>
+
+  <h3 class="product-section-heading" data-filter-section="glasses" style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin-bottom:20px; color:var(--brown);">🥂 Drinking Glasses &amp; Mugs</h3>
+  <div class="product-grid" data-filter-group="glasses">
     <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271776" alt="" loading="lazy"><div class="info"><div class="name">FERDINAND Drinking Glass 320ml Clear</div><div class="series">FERDINAND</div></div><div class="price">£1.50</div></div>
     <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/250476" alt="" loading="lazy"><div class="info"><div class="name">EMIL Mug 350ml Floral</div><div class="series">EMIL · Floral Series</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£2.25</div></div>
     <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/259944" alt="" loading="lazy"><div class="info"><div class="name">DETMER Espresso Cup 110ml Beige</div><div class="series">DETMER · Stoneware</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£2.25</div></div>
@@ -1069,8 +1147,8 @@
     <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/274801" alt="" loading="lazy"><div class="info"><div class="name">TORRE Wine Glass 430ml Set of 2</div><div class="series">TORRE</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£9.00</div></div>
   </div>
 
-  <h3 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin:40px 0 20px; color:var(--brown);">🍽️ Plates, Bowls &amp; Cutlery</h3>
-  <div class="product-grid">
+  <h3 class="product-section-heading" data-filter-section="plates" style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin:40px 0 20px; color:var(--brown);">🍽️ Plates, Bowls &amp; Cutlery</h3>
+  <div class="product-grid" data-filter-group="plates">
     <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/250464" alt="" loading="lazy"><div class="info"><div class="name">EMIL Floral Bowl D10cm</div><div class="series">EMIL · Floral Series</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£1.25</div></div>
     <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/249628" alt="" loading="lazy"><div class="info"><div class="name">ELIAS Plate D18cm</div><div class="series">ELIAS</div><div class="tags"><span class="tag tag-last">While stocks last</span></div></div><div class="price">£2.00</div></div>
     <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/235907" alt="" loading="lazy"><div class="info"><div class="name">FERDUS Plate D19cm Grey</div><div class="series">FERDUS</div><div class="tags"><span class="tag tag-sale">-33%</span></div></div><div class="price">£2.00 <span class="old">£3.00</span></div></div>
@@ -1099,8 +1177,8 @@
     <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271762" alt="" loading="lazy"><div class="info"><div class="name">SIGURD Bowl D30cm Light Green</div><div class="series">SIGURD</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£17.50</div></div>
   </div>
 
-  <h3 style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin:40px 0 20px; color:var(--brown);">🔪 Kitchen Accessories</h3>
-  <div class="product-grid">
+  <h3 class="product-section-heading" data-filter-section="accessories" style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin:40px 0 20px; color:var(--brown);">🔪 Kitchen Accessories</h3>
+  <div class="product-grid" data-filter-group="accessories">
     <div class="product-item"><img class="pthumb" src="https://cdn1.jysk.com/getimage/wd3.medium/281630" alt="" loading="lazy"><div class="info"><div class="name">GEIR Trivet D15cm Beige</div><div class="series">GEIR · New</div><div class="tags"><span class="tag tag-new">New</span></div></div><div class="price">£2.50</div></div>
     <div class="product-item"><img class="pthumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271690" alt="" loading="lazy"><div class="info"><div class="name">KJELD Kitchen Roll Holder</div><div class="series">KJELD</div><div class="tags"><span class="tag tag-edlp">EDLP</span></div></div><div class="price">£3.00</div></div>
     <div class="product-item"><img class="pthumb" src="https://cdn3.jysk.com/getimage/wd3.medium/235868" alt="" loading="lazy"><div class="info"><div class="name">PETER Thermal Bottle 450ml Black</div><div class="series">PETER</div><div class="tags"><span class="tag tag-sale">-40%</span></div></div><div class="price">£3.00 <span class="old">£5.00</span></div></div>
@@ -1265,5 +1343,61 @@
   </div>
 </footer>
 
+<script>
+(function() {
+  const filterBtns = document.querySelectorAll('.filter-tag');
+  const categoryBtns = document.querySelectorAll('.filter-btn');
+  const sections = document.querySelectorAll('.product-section-heading');
+  const grids = document.querySelectorAll('.product-grid[data-filter-group]');
+
+  function applyFilter(filter) {
+    // Update filter bar buttons
+    filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+
+    // Update category card buttons
+    categoryBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+
+    // Show/hide sections
+    sections.forEach(s => {
+      if (filter === 'all') {
+        s.classList.remove('filter-hidden');
+      } else {
+        s.classList.toggle('filter-hidden', s.dataset.filterSection !== filter);
+      }
+    });
+
+    // Show/hide product grids
+    grids.forEach(g => {
+      if (filter === 'all') {
+        g.classList.remove('filter-hidden');
+      } else {
+        g.classList.toggle('filter-hidden', g.dataset.filterGroup !== filter);
+      }
+    });
+
+    // Scroll to product list section
+    if (filter !== 'all') {
+      const listSection = document.getElementById('productListSection');
+      if (listSection) listSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // Filter bar clicks
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      applyFilter(this.dataset.filter);
+    });
+  });
+
+  // Category card "View products" clicks
+  categoryBtns.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      applyFilter(this.dataset.filter);
+    });
+  });
+})();
+</script>
 </body>
 </html>
