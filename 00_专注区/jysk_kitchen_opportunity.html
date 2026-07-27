@@ -746,7 +746,7 @@
         <span class="tag tag-edlp">Mostly EDLP</span>
         <span class="tag tag-sale">1 on sale</span>
       </div>
-      <button class="filter-btn" data-filter="glasses">🔍 View products</button>
+      <button class="filter-btn" data-filter="glasses" onclick="filterProducts('glasses')">🔍 View products</button>
     </div>
     <div class="category-card" data-filter="plates">
       <h3>Plates, Bowls &amp; Cutlery</h3>
@@ -758,7 +758,7 @@
         <span class="tag tag-sale">Clearance items</span>
         <span class="tag tag-last">While stocks last</span>
       </div>
-      <button class="filter-btn" data-filter="plates">🔍 View products</button>
+      <button class="filter-btn" data-filter="plates" onclick="filterProducts('plates')">🔍 View products</button>
     </div>
     <div class="category-card" data-filter="accessories">
       <h3>Kitchen Accessories</h3>
@@ -770,7 +770,7 @@
         <span class="tag tag-edlp">Mostly EDLP</span>
         <span class="tag tag-sale">1 on sale</span>
       </div>
-      <button class="filter-btn" data-filter="accessories">🔍 View products</button>
+      <button class="filter-btn" data-filter="accessories" onclick="filterProducts('accessories')">🔍 View products</button>
     </div>
   </div>
 </section>
@@ -1175,11 +1175,11 @@
   </div>
 
   <div class="filter-bar" id="filterBar">
-    <button class="filter-tag active" data-filter="all">All Products</button>
-    <button class="filter-tag" data-filter="glasses">🥂 Drinking Glasses &amp; Mugs</button>
-    <button class="filter-tag" data-filter="plates">🍽️ Plates, Bowls &amp; Cutlery</button>
-    <button class="filter-tag" data-filter="accessories">🔪 Kitchen Accessories</button>
-    <button class="filter-tag clear-all" data-filter="all">✕ Clear filter</button>
+    <button class="filter-tag active" data-filter="all" onclick="filterProducts('all')">All Products</button>
+    <button class="filter-tag" data-filter="glasses" onclick="filterProducts('glasses')">🥂 Drinking Glasses &amp; Mugs</button>
+    <button class="filter-tag" data-filter="plates" onclick="filterProducts('plates')">🍽️ Plates, Bowls &amp; Cutlery</button>
+    <button class="filter-tag" data-filter="accessories" onclick="filterProducts('accessories')">🔪 Kitchen Accessories</button>
+    <button class="filter-tag clear-all" data-filter="all" onclick="filterProducts('all')">✕ Clear filter</button>
   </div>
 
   <h3 class="product-section-heading" data-filter-section="glasses" style="font-family:'DM Serif Display',serif; font-weight:400; font-size:1.2rem; margin-bottom:20px; color:var(--brown);">🥂 Drinking Glasses &amp; Mugs</h3>
@@ -1406,70 +1406,35 @@
 </footer>
 
 <script>
-(function() {
-  const filterBtns = document.querySelectorAll('.filter-tag');
-  const categoryBtns = document.querySelectorAll('.filter-btn');
-  const sections = document.querySelectorAll('.product-section-heading');
-  const grids = document.querySelectorAll('.product-grid[data-filter-group]');
-
-  function applyFilter(filter) {
-    // Update filter bar buttons
-    filterBtns.forEach(function(b) {
-      if (b.dataset.filter === filter) b.classList.add('active');
-      else b.classList.remove('active');
-    });
-
-    // Update category card buttons
-    categoryBtns.forEach(function(b) {
-      if (b.dataset.filter === filter) b.classList.add('active');
-      else b.classList.remove('active');
-    });
-
-    // Show/hide section headings
-    sections.forEach(function(s) {
-      if (filter === 'all') {
-        s.classList.remove('filter-hidden');
-      } else if (s.dataset.filterSection === filter) {
-        s.classList.remove('filter-hidden');
-      } else {
-        s.classList.add('filter-hidden');
-      }
-    });
-
-    // Show/hide product grids
-    grids.forEach(function(g) {
-      if (filter === 'all') {
-        g.classList.remove('filter-hidden');
-      } else if (g.dataset.filterGroup === filter) {
-        g.classList.remove('filter-hidden');
-      } else {
-        g.classList.add('filter-hidden');
-      }
-    });
-
-    // Scroll to product list section
-    if (filter !== 'all') {
-      var listSection = document.getElementById('productListSection');
-      if (listSection) listSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+function filterProducts(filter) {
+  // Update filter bar buttons
+  document.querySelectorAll('.filter-tag').forEach(function(b) {
+    if (b.getAttribute('data-filter') === filter) b.classList.add('active');
+    else b.classList.remove('active');
+  });
+  // Update category card buttons
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    if (b.getAttribute('data-filter') === filter) b.classList.add('active');
+    else b.classList.remove('active');
+  });
+  // Show/hide section headings
+  document.querySelectorAll('.product-section-heading').forEach(function(s) {
+    if (filter === 'all') { s.classList.remove('filter-hidden'); }
+    else if (s.getAttribute('data-filter-section') === filter) { s.classList.remove('filter-hidden'); }
+    else { s.classList.add('filter-hidden'); }
+  });
+  // Show/hide product grids
+  document.querySelectorAll('.product-grid[data-filter-group]').forEach(function(g) {
+    if (filter === 'all') { g.classList.remove('filter-hidden'); }
+    else if (g.getAttribute('data-filter-group') === filter) { g.classList.remove('filter-hidden'); }
+    else { g.classList.add('filter-hidden'); }
+  });
+  // Scroll to product list
+  if (filter !== 'all') {
+    var el = document.getElementById('productListSection');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-
-  // Filter bar clicks
-  filterBtns.forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      applyFilter(this.dataset.filter);
-    });
-  });
-
-  // Category card "View products" clicks
-  categoryBtns.forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      applyFilter(this.dataset.filter);
-    });
-  });
-})();
+}
 </script>
 </body>
 </html>
