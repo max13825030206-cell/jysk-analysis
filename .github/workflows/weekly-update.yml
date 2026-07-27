@@ -1,0 +1,131 @@
+name: Weekly JYSK Data Update
+
+on:
+  schedule:
+    # 每周五 UTC 6:00 = 北京时间 14:00
+    - cron: '0 6 * * 5'
+  workflow_dispatch:  # 支持手动触发
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install agent-browser
+        run: |
+          npm install -g agent-browser
+          agent-browser install
+
+      - name: Scrape JYSK Kitchen products
+        run: |
+          mkdir -p _data
+
+          # ====== Drinking Glasses & Mugs ======
+          agent-browser open "https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs" > /dev/null 2>&1
+          agent-browser wait --load networkidle > /dev/null 2>&1
+          agent-browser eval --stdin <<'EVALEOF' > _data/drinking.json 2>/dev/null
+          var items = [];
+          document.querySelectorAll('[class*="product"], [class*="item"], [class*="grid"] > div, [class*="list"] > div').forEach(function(el) {
+            var allText = el.textContent.trim();
+            if (allText.length < 20 || allText.length > 600) return;
+            var nameEl = el.querySelector('h3, .name, [class*="title"]');
+            if (!nameEl) return;
+            var name = nameEl.textContent.trim();
+            var priceEl = el.querySelector('[class*="price"]');
+            var price = priceEl ? priceEl.textContent.trim().replace(/\s+/g, ' ') : '';
+            var imgEl = el.querySelector('img');
+            var img = imgEl ? imgEl.src : '';
+            var linkEl = el.querySelector('a');
+            var href = linkEl ? linkEl.href.split('?')[0] : '';
+            items.push({n:name, p:price, i:img, u:href});
+          });
+          var seen = {};
+          var unique = items.filter(function(x) {
+            var k = x.n + '|' + x.p;
+            if (seen[k]) return false;
+            seen[k] = true;
+            return true;
+          });
+          console.log(JSON.stringify(unique));
+EVALEOF
+          agent-browser close > /dev/null 2>&1
+
+          # ====== Plates, Bowls & Cutlery ======
+          agent-browser open "https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery" > /dev/null 2>&1
+          agent-browser wait --load networkidle > /dev/null 2>&1
+          agent-browser eval --stdin <<'EVALEOF' > _data/plates.json 2>/dev/null
+          var items = [];
+          document.querySelectorAll('[class*="product"], [class*="item"], [class*="grid"] > div, [class*="list"] > div').forEach(function(el) {
+            var allText = el.textContent.trim();
+            if (allText.length < 20 || allText.length > 600) return;
+            var nameEl = el.querySelector('h3, .name, [class*="title"]');
+            if (!nameEl) return;
+            var name = nameEl.textContent.trim();
+            var priceEl = el.querySelector('[class*="price"]');
+            var price = priceEl ? priceEl.textContent.trim().replace(/\s+/g, ' ') : '';
+            var imgEl = el.querySelector('img');
+            var img = imgEl ? imgEl.src : '';
+            var linkEl = el.querySelector('a');
+            items.push({n:name, p:price, i:img, u:linkEl ? linkEl.href.split('?')[0] : ''});
+          });
+          var seen = {};
+          var unique = items.filter(function(x) {
+            var k = x.n + '|' + x.p;
+            if (seen[k]) return false;
+            seen[k] = true;
+            return true;
+          });
+          console.log(JSON.stringify(unique));
+EVALEOF
+          agent-browser close > /dev/null 2>&1
+
+          # ====== Kitchen Accessories ======
+          agent-browser open "https://jysk.co.uk/homeware/kitchen/kitchen-accessories" > /dev/null 2>&1
+          agent-browser wait --load networkidle > /dev/null 2>&1
+          agent-browser eval --stdin <<'EVALEOF' > _data/accessories.json 2>/dev/null
+          var items = [];
+          document.querySelectorAll('[class*="product"], [class*="item"], [class*="grid"] > div, [class*="list"] > div').forEach(function(el) {
+            var allText = el.textContent.trim();
+            if (allText.length < 20 || allText.length > 600) return;
+            var nameEl = el.querySelector('h3, .name, [class*="title"]');
+            if (!nameEl) return;
+            var name = nameEl.textContent.trim();
+            var priceEl = el.querySelector('[class*="price"]');
+            var price = priceEl ? priceEl.textContent.trim().replace(/\s+/g, ' ') : '';
+            var imgEl = el.querySelector('img');
+            var img = imgEl ? imgEl.src : '';
+            var linkEl = el.querySelector('a');
+            items.push({n:name, p:price, i:img, u:linkEl ? linkEl.href.split('?')[0] : ''});
+          });
+          var seen = {};
+          var unique = items.filter(function(x) {
+            var k = x.n + '|' + x.p;
+            if (seen[k]) return false;
+            seen[k] = true;
+            return true;
+          });
+          console.log(JSON.stringify(unique));
+EVALEOF
+          agent-browser close > /dev/null 2>&1
+
+      - name: Generate updated HTML
+        run: node .github/scripts/generate-page.mjs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages
+          force_orphan: true
