@@ -372,17 +372,21 @@
   .featured-col:nth-child(2) h4 { border-color: var(--sage); color: var(--apple-green); }
   .featured-col:nth-child(3) h4 { border-color: var(--dusty-grape); color: var(--dusty-grape); }
   .featured-card {
+    display: block;
     background: var(--warm-white);
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: 16px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border: 1px solid rgba(44,44,44,0.06);
+    text-decoration: none;
+    color: inherit;
   }
   .featured-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 24px rgba(44,44,44,0.08);
   }
+  .featured-card:hover .body .name { text-decoration: underline; }
   .featured-card img {
     width: 100%;
     height: 160px;
@@ -596,8 +600,16 @@
     gap: 12px;
     padding: 8px 0;
     border-bottom: 1px solid rgba(44,44,44,0.05);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+    border-radius: 6px;
+    margin: 0 -6px;
+    padding: 8px 6px;
   }
   .band-item:last-child { border-bottom: none; }
+  .band-item:hover { background: rgba(44,44,44,0.03); }
+  .band-item:hover .name { text-decoration: underline; }
   .band-item .thumb {
     width: 48px;
     height: 48px;
@@ -774,7 +786,7 @@
     <div class="featured-col">
       <h4>🏆 Bestsellers</h4>
 
-      <div class="featured-card">
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-emil-d10xh3cm-flowers" target="_blank" class="featured-card">
         <img src="https://cdn4.jysk.com/getimage/wd3.medium/250464" alt="EMIL floral bowl" loading="lazy">
         <div class="body">
           <div class="name">EMIL Floral Bowl D10cm</div>
@@ -784,9 +796,9 @@
           </div>
           <div class="reason">JYSK's largest series. Floral motif runs across bowls, mugs &amp; platters. Highest recognition, lowest price point, volume driver.</div>
         </div>
-      </div>
+      </a>
 
-      <div class="featured-card">
+      <a href="https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs/drinking-glass-ferdinand-320ml-clear" target="_blank" class="featured-card">
         <img src="https://cdn1.jysk.com/getimage/wd3.medium/271776" alt="FERDINAND glass" loading="lazy">
         <div class="body">
           <div class="name">FERDINAND Drinking Glass 320ml</div>
@@ -796,9 +808,9 @@
           </div>
           <div class="reason">Lowest price in the Drinks category. Classic clear glass, stable EDLP supply, everyday volume driver.</div>
         </div>
-      </div>
+      </a>
 
-      <div class="featured-card">
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-ferdus-d15cm-beige" target="_blank" class="featured-card">
         <img src="https://cdn3.jysk.com/getimage/wd3.medium/242254" alt="FERDUS bowl" loading="lazy">
         <div class="body">
           <div class="name">FERDUS Bowl D15cm beige</div>
@@ -808,14 +820,14 @@
           </div>
           <div class="reason">Second largest series (4 items). Grey/beige dual colours + dual sizes, stoneware texture, stable EDLP pricing.</div>
         </div>
-      </div>
+      </a>
     </div>
 
     <!-- New Arrivals -->
     <div class="featured-col">
       <h4>🆕 New Arrivals</h4>
 
-      <div class="featured-card">
+      <a href="https://jysk.co.uk/homeware/kitchen/kitchen-accessories/trivet-geir-d15cm-beige" target="_blank" class="featured-card">
         <img src="https://cdn1.jysk.com/getimage/wd3.medium/281630" alt="GEIR trivet" loading="lazy">
         <div class="body">
           <div class="name">GEIR Trivet D15cm beige</div>
@@ -825,9 +837,9 @@
           </div>
           <div class="reason">Tagged "New" on JYSK's site. Beige round silicone trivet, very low entry price, testing the kitchen accessory market.</div>
         </div>
-      </div>
+      </a>
 
-      <div class="featured-card">
+      <a href="https://jysk.co.uk/homeware/kitchen/kitchen-accessories/salt-and-pepper-grinder-uno-d6xh15cm" target="_blank" class="featured-card">
         <img src="https://cdn4.jysk.com/getimage/wd3.medium/281626" alt="UNO grinder" loading="lazy">
         <div class="body">
           <div class="name">UNO Salt &amp; Pepper Grinder</div>
@@ -837,9 +849,9 @@
           </div>
           <div class="reason">Highest unit price new arrival in Kitchen Accessories. Wood + ceramic grinder, testing the premium kitchen tool segment.</div>
         </div>
-      </div>
+      </a>
 
-      <div class="featured-card">
+      <a href="https://jysk.co.uk/homeware/kitchen/kitchen-accessories/kitchen-roll-holder-kjeld-d13xh32cm" target="_blank" class="featured-card">
         <img src="https://cdn4.jysk.com/getimage/wd3.medium/271690" alt="KJELD holder" loading="lazy">
         <div class="body">
           <div class="name">KJELD Kitchen Roll Holder</div>
@@ -849,14 +861,14 @@
           </div>
           <div class="reason">New kitchen storage category. Very low price point, forms the basic kitchen accessory matrix alongside GEIR.</div>
         </div>
-      </div>
+      </a>
     </div>
 
     <!-- Top Rated -->
     <div class="featured-col">
       <h4>⭐ Top Rated</h4>
 
-      <div class="featured-card">
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-nor-d19xh7cm-pale-khaki" target="_blank" class="featured-card">
         <img src="https://cdn3.jysk.com/getimage/wd3.medium/281676" alt="NOR bowl" loading="lazy">
         <div class="body">
           <div class="name">NOR Bowl D19cm pale khaki</div>
@@ -866,9 +878,9 @@
           </div>
           <div class="reason">Stoneware material, matte pale khaki glaze. Strong Scandinavian design. Mid-range quality benchmark.</div>
         </div>
-      </div>
+      </a>
 
-      <div class="featured-card">
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/plate-malik-d21cm-pale-khaki-stoneware" target="_blank" class="featured-card">
         <img src="https://cdn2.jysk.com/getimage/wd3.medium/281688" alt="MALIK plate" loading="lazy">
         <div class="body">
           <div class="name">MALIK Plate D21cm pale khaki stoneware</div>
@@ -878,9 +890,9 @@
           </div>
           <div class="reason">MALIK series: 4 items covering bowls + plates. Matte glaze + natural tones. Best quality-to-price ratio at £6-8.</div>
         </div>
-      </div>
+      </a>
 
-      <div class="featured-card">
+      <a href="https://jysk.co.uk/homeware/kitchen/kitchen-accessories/tea-box-mathias-w16xl23xh9cm-natural" target="_blank" class="featured-card">
         <img src="https://cdn2.jysk.com/getimage/wd3.medium/271779" alt="MATHIAS tea box" loading="lazy">
         <div class="body">
           <div class="name">MATHIAS Tea Box natural wood</div>
@@ -890,7 +902,7 @@
           </div>
           <div class="reason">Natural wood material, rustic Scandinavian look. Complements the stoneware series for a natural kitchen style.</div>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -906,139 +918,139 @@
     <div class="band-card economy">
       <h4>Economy</h4>
       <div class="band-range">£1.25 – £5.00 · Volume driver</div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/250464" alt="EMIL花卉碗" loading="lazy">
-        <div class="info"><div class="name">EMIL 花卉碗 D10cm</div></div>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-emil-d10xh3cm-flowers" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/250464" alt="EMIL floral bowl" loading="lazy">
+        <div class="info"><div class="name">EMIL Floral Bowl D10cm</div></div>
         <div class="price-tag">£1.25</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271776" alt="FERDINAND玻璃杯" loading="lazy">
-        <div class="info"><div class="name">FERDINAND 玻璃杯 320ml</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs/drinking-glass-ferdinand-320ml-clear" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271776" alt="FERDINAND glass" loading="lazy">
+        <div class="info"><div class="name">FERDINAND Drinking Glass 320ml</div></div>
         <div class="price-tag">£1.50</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/235907" alt="FERDUS盘" loading="lazy">
-        <div class="info"><div class="name">FERDUS 盘 D19cm 灰色</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/plate-ferdus-d19cm-grey" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/235907" alt="FERDUS plate grey" loading="lazy">
+        <div class="info"><div class="name">FERDUS Plate D19cm Grey</div></div>
         <div class="price-tag">£2.00 <span class="old">£3.00</span></div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/249628" alt="ELIAS盘" loading="lazy">
-        <div class="info"><div class="name">ELIAS 盘 D18cm</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/plate-elias-d18cm" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/249628" alt="ELIAS plate" loading="lazy">
+        <div class="info"><div class="name">ELIAS Plate D18cm</div></div>
         <div class="price-tag">£2.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/250476" alt="EMIL马克杯" loading="lazy">
-        <div class="info"><div class="name">EMIL 马克杯 花卉 350ml</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs/mug-emil-d8xh10cm-350-ml-flowers" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/250476" alt="EMIL mug" loading="lazy">
+        <div class="info"><div class="name">EMIL Mug Floral 350ml</div></div>
         <div class="price-tag">£2.25</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/261243" alt="GUNVALD玻璃杯" loading="lazy">
-        <div class="info"><div class="name">GUNVALD 玻璃杯 350ml</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs/drinking-glass-gunvald-350ml-brown" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/261243" alt="GUNVALD glass" loading="lazy">
+        <div class="info"><div class="name">GUNVALD Drinking Glass 350ml</div></div>
         <div class="price-tag">£2.50</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/249668" alt="HILMER马克杯" loading="lazy">
-        <div class="info"><div class="name">HILMER 玻璃马克杯 棕榈树</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs/mug-hilmer-d8xh9cm-320ml-glass-palm-tree" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/249668" alt="HILMER mug" loading="lazy">
+        <div class="info"><div class="name">HILMER Glass Mug Palm Tree</div></div>
         <div class="price-tag">£2.50 <span class="old">£3.75</span></div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271690" alt="KJELD厨房纸架" loading="lazy">
-        <div class="info"><div class="name">KJELD 厨房纸架</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/kitchen-accessories/kitchen-roll-holder-kjeld-d13xh32cm" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271690" alt="KJELD holder" loading="lazy">
+        <div class="info"><div class="name">KJELD Kitchen Roll Holder</div></div>
         <div class="price-tag">£3.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/235868" alt="PETER保温水瓶" loading="lazy">
-        <div class="info"><div class="name">PETER 保温水瓶 450ml 黑色</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/kitchen-accessories/thermal-drinking-bottle-peter-450ml-black" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/235868" alt="PETER bottle" loading="lazy">
+        <div class="info"><div class="name">PETER Thermal Bottle 450ml Black</div></div>
         <div class="price-tag">£3.00 <span class="old">£5.00</span></div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/271650" alt="JIMMI玻璃杯" loading="lazy">
-        <div class="info"><div class="name">JIMMI 玻璃杯 260ml</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs/drinking-glass-jimmi-d7xh11cm-260ml" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/271650" alt="JIMMI glass" loading="lazy">
+        <div class="info"><div class="name">JIMMI Drinking Glass 260ml</div></div>
         <div class="price-tag">£3.00</div>
-      </div>
+      </a>
     </div>
     <div class="band-card mid">
       <h4>Mid-Range</h4>
       <div class="band-range">£5.00 – £10.00 · Quality upgrade</div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn2.jysk.com/getimage/wd3.medium/281659" alt="SIGVART砧板" loading="lazy">
-        <div class="info"><div class="name">SIGVART 砧板 金合欢木</div></div>
+      <a href="https://jysk.co.uk/homeware/kitchen/kitchen-accessories/cutting-board-sigvart-w17xl26cm-acacia" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn2.jysk.com/getimage/wd3.medium/281659" alt="SIGVART board" loading="lazy">
+        <div class="info"><div class="name">SIGVART Cutting Board Acacia</div></div>
         <div class="price-tag">£6.50</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/281682" alt="MALIK碗dusty grape" loading="lazy">
-        <div class="info"><div class="name">MALIK 碗 D16cm dusty grape</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-malik-d16xh6cm-dusty-grape" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/281682" alt="MALIK bowl dusty grape" loading="lazy">
+        <div class="info"><div class="name">MALIK Bowl D16cm Dusty Grape</div></div>
         <div class="price-tag">£6.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn2.jysk.com/getimage/wd3.medium/281688" alt="MALIK盘pale khaki" loading="lazy">
-        <div class="info"><div class="name">MALIK 盘 D21cm pale khaki 炻瓷</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/plate-malik-d21cm-pale-khaki-stoneware" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn2.jysk.com/getimage/wd3.medium/281688" alt="MALIK plate pale khaki" loading="lazy">
+        <div class="info"><div class="name">MALIK Plate D21cm Pale Khaki</div></div>
         <div class="price-tag">£6.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/281691" alt="MALIK盘natural" loading="lazy">
-        <div class="info"><div class="name">MALIK 盘 D27cm 自然色 炻瓷</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/plate-malik-d27cm-natural-stoneware" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/281691" alt="MALIK plate natural" loading="lazy">
+        <div class="info"><div class="name">MALIK Plate D27cm Natural</div></div>
         <div class="price-tag">£8.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235867" alt="VICTOR碗" loading="lazy">
-        <div class="info"><div class="name">VICTOR 碗 D20cm beige</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-victor-d20cm-beige" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235867" alt="VICTOR bowl" loading="lazy">
+        <div class="info"><div class="name">VICTOR Bowl D20cm Beige</div></div>
         <div class="price-tag">£6.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235513" alt="JENSEN碗" loading="lazy">
-        <div class="info"><div class="name">JENSEN 碗 D22cm 白色</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-jensen-d22xh4cm-white" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/235513" alt="JENSEN bowl" loading="lazy">
+        <div class="info"><div class="name">JENSEN Bowl D22cm White</div></div>
         <div class="price-tag">£5.50</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn2.jysk.com/getimage/wd3.medium/271779" alt="MATHIAS茶叶盒" loading="lazy">
-        <div class="info"><div class="name">MATHIAS 茶叶盒 天然木</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/kitchen-accessories/tea-box-mathias-w16xl23xh9cm-natural" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn2.jysk.com/getimage/wd3.medium/271779" alt="MATHIAS tea box" loading="lazy">
+        <div class="info"><div class="name">MATHIAS Tea Box Natural Wood</div></div>
         <div class="price-tag">£9.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/281676" alt="NOR碗pale khaki" loading="lazy">
-        <div class="info"><div class="name">NOR 碗 D19cm pale khaki</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-nor-d19xh7cm-pale-khaki" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn3.jysk.com/getimage/wd3.medium/281676" alt="NOR bowl pale khaki" loading="lazy">
+        <div class="info"><div class="name">NOR Bowl D19cm Pale Khaki</div></div>
         <div class="price-tag">£9.50</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/274801" alt="TORRE酒杯" loading="lazy">
-        <div class="info"><div class="name">TORRE 酒杯 430ml 2只装</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs/wine-glass-torre-h24cm-430ml-2pcs-pk" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/274801" alt="TORRE wine glasses" loading="lazy">
+        <div class="info"><div class="name">TORRE Wine Glass 430ml Set of 2</div></div>
         <div class="price-tag">£9.00</div>
-      </div>
+      </a>
     </div>
     <div class="band-card premium">
       <h4>Premium</h4>
       <div class="band-range">£10.00 – £17.50 · Quality benchmark</div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/281626" alt="UNO研磨器" loading="lazy">
-        <div class="info"><div class="name">UNO 胡椒盐研磨器</div></div>
+      <a href="https://jysk.co.uk/homeware/kitchen/kitchen-accessories/salt-and-pepper-grinder-uno-d6xh15cm" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/281626" alt="UNO grinder" loading="lazy">
+        <div class="info"><div class="name">UNO Salt &amp; Pepper Grinder</div></div>
         <div class="price-tag">£11.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271759" alt="SIGURD碗" loading="lazy">
-        <div class="info"><div class="name">SIGURD 碗 D24cm 浅绿</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-sigurd-d24xh7cm-light-green" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn1.jysk.com/getimage/wd3.medium/271759" alt="SIGURD bowl" loading="lazy">
+        <div class="info"><div class="name">SIGURD Bowl D24cm Light Green</div></div>
         <div class="price-tag">£13.50</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/281679" alt="NOR碗dusty grape" loading="lazy">
-        <div class="info"><div class="name">NOR 碗 D25cm dusty grape</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-nor-d25xh10cm-dusty-grape" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/281679" alt="NOR bowl dusty grape" loading="lazy">
+        <div class="info"><div class="name">NOR Bowl D25cm Dusty Grape</div></div>
         <div class="price-tag">£15.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/249588" alt="ODD碗" loading="lazy">
-        <div class="info"><div class="name">ODD 碗 D30cm 彩色</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-odd-d30xh9cm-multi-coloured" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/249588" alt="ODD bowl" loading="lazy">
+        <div class="info"><div class="name">ODD Bowl D30cm Multi-Coloured</div></div>
         <div class="price-tag">£15.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271620" alt="SUNE蛋糕架" loading="lazy">
-        <div class="info"><div class="name">SUNE 蛋糕架 D28cm 白色</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271620" alt="SUNE cake stand" loading="lazy">
+        <div class="info"><div class="name">SUNE Cake Stand D28cm White</div></div>
         <div class="price-tag">£15.00</div>
-      </div>
-      <div class="band-item">
-        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271762" alt="SIGURD大碗" loading="lazy">
-        <div class="info"><div class="name">SIGURD 碗 D30cm 浅绿</div></div>
+      </a>
+      <a href="https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery/bowl-sigurd-d30xh9cm-light-green" target="_blank" class="band-item">
+        <img class="thumb" src="https://cdn4.jysk.com/getimage/wd3.medium/271762" alt="SIGURD big bowl" loading="lazy">
+        <div class="info"><div class="name">SIGURD Bowl D30cm Light Green</div></div>
         <div class="price-tag">£17.50</div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
