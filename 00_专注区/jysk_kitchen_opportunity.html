@@ -1414,38 +1414,48 @@
 
   function applyFilter(filter) {
     // Update filter bar buttons
-    filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+    filterBtns.forEach(function(b) {
+      if (b.dataset.filter === filter) b.classList.add('active');
+      else b.classList.remove('active');
+    });
 
     // Update category card buttons
-    categoryBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+    categoryBtns.forEach(function(b) {
+      if (b.dataset.filter === filter) b.classList.add('active');
+      else b.classList.remove('active');
+    });
 
-    // Show/hide sections
-    sections.forEach(s => {
+    // Show/hide section headings
+    sections.forEach(function(s) {
       if (filter === 'all') {
         s.classList.remove('filter-hidden');
+      } else if (s.dataset.filterSection === filter) {
+        s.classList.remove('filter-hidden');
       } else {
-        s.classList.toggle('filter-hidden', s.dataset.filterSection !== filter);
+        s.classList.add('filter-hidden');
       }
     });
 
     // Show/hide product grids
-    grids.forEach(g => {
+    grids.forEach(function(g) {
       if (filter === 'all') {
         g.classList.remove('filter-hidden');
+      } else if (g.dataset.filterGroup === filter) {
+        g.classList.remove('filter-hidden');
       } else {
-        g.classList.toggle('filter-hidden', g.dataset.filterGroup !== filter);
+        g.classList.add('filter-hidden');
       }
     });
 
     // Scroll to product list section
     if (filter !== 'all') {
-      const listSection = document.getElementById('productListSection');
+      var listSection = document.getElementById('productListSection');
       if (listSection) listSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
   // Filter bar clicks
-  filterBtns.forEach(btn => {
+  filterBtns.forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
       applyFilter(this.dataset.filter);
@@ -1453,7 +1463,7 @@
   });
 
   // Category card "View products" clicks
-  categoryBtns.forEach(btn => {
+  categoryBtns.forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
       applyFilter(this.dataset.filter);
