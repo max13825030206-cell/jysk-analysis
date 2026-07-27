@@ -279,6 +279,89 @@
   .tag-edlp { background: rgba(91,122,158,0.1); color: var(--tag-edlp); }
   .tag-last { background: rgba(196,112,74,0.08); color: var(--tag-sale); }
 
+  /* === Featured Picks === */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .featured-col h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .featured-col:nth-child(1) h4 { border-color: var(--muted-gold); color: #8a7a5a; }
+  .featured-col:nth-child(2) h4 { border-color: var(--sage); color: var(--apple-green); }
+  .featured-col:nth-child(3) h4 { border-color: var(--dusty-grape); color: var(--dusty-grape); }
+  .featured-card {
+    background: var(--warm-white);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(44,44,44,0.06);
+  }
+  .featured-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(44,44,44,0.08);
+  }
+  .featured-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: var(--cream);
+    display: block;
+  }
+  .featured-card .body {
+    padding: 14px 16px 16px;
+  }
+  .featured-card .body .name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .featured-card .body .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .featured-card .body .price {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--brown);
+  }
+  .featured-card .body .price .old {
+    font-size: 0.78rem;
+    color: rgba(44,44,44,0.3);
+    text-decoration: line-through;
+    font-weight: 400;
+    margin-left: 6px;
+  }
+  .featured-card .body .badge {
+    font-size: 0.6rem;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+  .featured-card .body .reason {
+    font-size: 0.72rem;
+    color: rgba(44,44,44,0.4);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  .featured-card .badge.b-hot { background: rgba(186,166,126,0.15); color: #8a7a5a; }
+  .featured-card .badge.b-new { background: rgba(125,155,106,0.12); color: var(--tag-new); }
+  .featured-card .badge.b-top { background: rgba(139,125,140,0.12); color: var(--dusty-grape); }
+
   /* === Chart / Visual === */
   .chart-section {
     display: grid;
@@ -518,7 +601,7 @@
 
   /* Responsive */
   @media (max-width: 900px) {
-    .category-grid, .chart-section, .opportunity-list, .summary-grid, .price-band-grid {
+    .category-grid, .chart-section, .opportunity-list, .summary-grid, .price-band-grid, .featured-grid {
       grid-template-columns: 1fr;
     }
     .hero { padding: 60px 24px 50px; }
@@ -599,6 +682,139 @@
       <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:4px;">
         <span class="tag tag-new">新品</span>
         <span class="tag tag-edlp">EDLP 为主</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- === SECTION 1b: 高手推荐 === -->
+<section class="section">
+  <div class="section-header">
+    <div class="section-number">✦</div>
+    <h2>热销 · 新品 · 口碑之选</h2>
+    <p>基于系列规模、折扣力度、New 标签和设计辨识度的综合筛选。JYSK 官网未直接标注 Best Seller 与评分，以下为分析推断。</p>
+  </div>
+  <div class="featured-grid">
+    <!-- 热销推荐 -->
+    <div class="featured-col">
+      <h4>🏆 热销推荐</h4>
+
+      <div class="featured-card">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/250464" alt="EMIL花卉碗" loading="lazy">
+        <div class="body">
+          <div class="name">EMIL 花卉碗 D10cm</div>
+          <div class="meta">
+            <div class="price">£1.25</div>
+            <span class="badge b-hot">🔥 全系列 5 款</span>
+          </div>
+          <div class="reason">EMIL 是 JYSK 最大系列，花卉图案贯穿碗/马克杯/分餐盘，识别度最高，价格最低，走量款</div>
+        </div>
+      </div>
+
+      <div class="featured-card">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/271776" alt="FERDINAND" loading="lazy">
+        <div class="body">
+          <div class="name">FERDINAND 玻璃杯 320ml</div>
+          <div class="meta">
+            <div class="price">£1.50</div>
+            <span class="badge b-hot">🧊 最高性价比</span>
+          </div>
+          <div class="reason">Drinking类最低价，透明经典款，EDLP 稳定供货，日常走量主力</div>
+        </div>
+      </div>
+
+      <div class="featured-card">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/242254" alt="FERDUS碗" loading="lazy">
+        <div class="body">
+          <div class="name">FERDUS 碗 D15cm beige</div>
+          <div class="meta">
+            <div class="price">£3.00</div>
+            <span class="badge b-hot">🎨 4色可选</span>
+          </div>
+          <div class="reason">FERDUS 系列是第二大系列（4款），灰/米双色+双尺寸，炻瓷质感，EDLP 定价稳定</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新品上架 -->
+    <div class="featured-col">
+      <h4>🆕 新品上架</h4>
+
+      <div class="featured-card">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/281630" alt="GEIR隔热垫" loading="lazy">
+        <div class="body">
+          <div class="name">GEIR 隔热垫 D15cm beige</div>
+          <div class="meta">
+            <div class="price">£2.50</div>
+            <span class="badge b-new">🆕 New</span>
+          </div>
+          <div class="reason">JYSK 官网标记 New，米色圆形硅胶隔热垫，极低价格入局，测试市场对厨房小件的反应</div>
+        </div>
+      </div>
+
+      <div class="featured-card">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/281626" alt="UNO研磨器" loading="lazy">
+        <div class="body">
+          <div class="name">UNO 胡椒盐研磨器</div>
+          <div class="meta">
+            <div class="price">£11.00</div>
+            <span class="badge b-new">🆕 New</span>
+          </div>
+          <div class="reason">Kitchen Accessories 最高单价新品，木+陶瓷研磨器，试探高端厨房工具细分市场</div>
+        </div>
+      </div>
+
+      <div class="featured-card">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/271690" alt="KJELD厨房纸架" loading="lazy">
+        <div class="body">
+          <div class="name">KJELD 厨房纸架</div>
+          <div class="meta">
+            <div class="price">£3.00</div>
+            <span class="badge b-new">🧪 新品类测试</span>
+          </div>
+          <div class="reason">厨房收纳新品类，定价极低，配合 GEIR 构成厨房配件基础矩阵</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 口碑品质之选 -->
+    <div class="featured-col">
+      <h4>⭐ 口碑品质之选</h4>
+
+      <div class="featured-card">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/281676" alt="NOR碗" loading="lazy">
+        <div class="body">
+          <div class="name">NOR 碗 D19cm pale khaki</div>
+          <div class="meta">
+            <div class="price">£9.50</div>
+            <span class="badge b-top">⭐ 高质感</span>
+          </div>
+          <div class="reason">炻瓷 stoneware 材质，哑光浅卡其色釉面，北欧风设计感强，中端价位品质标杆</div>
+        </div>
+      </div>
+
+      <div class="featured-card">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/281688" alt="MALIK盘" loading="lazy">
+        <div class="body">
+          <div class="name">MALIK 盘 D21cm pale khaki 炻瓷</div>
+          <div class="meta">
+            <div class="price">£6.00</div>
+            <span class="badge b-top">⭐ 性价比之王</span>
+          </div>
+          <div class="reason">MALIK 系列4款覆盖碗+盘、哑光釉+自然色系，£6-8 的价格段中品质最均衡的系列</div>
+        </div>
+      </div>
+
+      <div class="featured-card">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/271779" alt="MATHIAS茶叶盒" loading="lazy">
+        <div class="body">
+          <div class="name">MATHIAS 茶叶盒 天然木</div>
+          <div class="meta">
+            <div class="price">£9.00</div>
+            <span class="badge b-top">🌿 自然美学</span>
+          </div>
+          <div class="reason">天然木材质，质朴北欧风，与炻瓷系列形成材质互补，适合打造自然厨房风格</div>
+        </div>
       </div>
     </div>
   </div>
