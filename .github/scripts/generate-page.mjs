@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 
 const DATA_DIR = '_data';
+const PREV_DIR = '_data_prev';
 const OUT_DIR = '_site';
 
 if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
@@ -9,23 +10,91 @@ if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
 function loadJSON(file) {
   const path = `${DATA_DIR}/${file}`;
   if (!existsSync(path)) return [];
-  try {
-    return JSON.parse(readFileSync(path, 'utf-8'));
-  } catch {
-    return [];
-  }
+  try { return JSON.parse(readFileSync(path, 'utf-8')); } catch { return []; }
+}
+function loadPrevJSON(file) {
+  const path = `${PREV_DIR}/${file}`;
+  if (!existsSync(path)) return [];
+  try { return JSON.parse(readFileSync(path, 'utf-8')); } catch { return []; }
 }
 
 const drinking = loadJSON('drinking.json');
 const plates = loadJSON('plates.json');
 const accessories = loadJSON('accessories.json');
 
-// Build lookup maps for images
+const prevDrinking = loadPrevJSON('drinking.json');
+const prevPlates = loadPrevJSON('plates.json');
+const prevAccessories = loadPrevJSON('accessories.json');
+
+// Read prev date
+let prevDate = '';
+const datePath = `${PREV_DIR}/scrape-date.txt`;
+if (existsSync(datePath)) {
+  prevDate = readFileSync(datePath, 'utf-8').trim();
+}
+
+const allCurrent = [...drinking, ...plates, ...accessories];
+const allPrev = [...prevDrinking, ...prevPlates, ...prevAccessories];
+
+// Build lookup maps
 const imgMap = {};
-[...drinking, ...plates, ...accessories].forEach(p => {
-  if (p.i && p.n) imgMap[p.n.trim()] = p.i;
+allCurrent.forEach(p => { if (p.i && p.n) imgMap[p.n.trim()] = p.i; });
+
+function normalizeName(name) {
+  return name.replace(/EVERYDAY LOW PRICE|New|-\d+%|While stocks last/g, '').trim().toLowerCase();
+}
+function extractPrice(text) {
+  const m = text.match(/£[\d.]+/);
+  return m ? parseFloat(m[0].replace('£','')) : null;
+}
+
+// Build comparison maps
+const prevMap = {};
+allPrev.forEach(p => {
+  const key = normalizeName(p.n);
+  prevMap[key] = { price: extractPrice(p.p), raw: p };
+});
+const currMap = {};
+allCurrent.forEach(p => {
+  const key = normalizeName(p.n);
+  currMap[key] = { price: extractPrice(p.p), raw: p };
 });
 
+// Compute diffs
+const newProducts = [];
+const removedProducts = [];
+const priceChanges = [];
+
+for (const [key, curr] of Object.entries(currMap)) {
+  if (!prevMap[key]) {
+    newProducts.push({ name: key, price: curr.price, raw: curr.raw });
+  } else if (prevMap[key].price !== null && curr.price !== null && prevMap[key].price !== curr.price) {
+    priceChanges.push({
+      name: key,
+      oldPrice: prevMap[key].price,
+      newPrice: curr.price,
+      raw: curr.raw
+    });
+  }
+}
+for (const [key, prev] of Object.entries(prevMap)) {
+  if (!currMap[key]) {
+    removedProducts.push({ name: key, price: prev.price });
+  }
+}
+
+// --- Helper: product count diff bar ---
+function countDiff(current, previous, label) {
+  const delta = current - previous;
+  const hasPrev = previous > 0;
+  if (!hasPrev) return `<span style="color:rgba(44,44,44,0.4);">${current} SKU (首次)</span>`;
+  if (delta === 0) return `<span style="color:rgba(44,44,44,0.4);">${current} SKU (不变)</span>`;
+  const sign = delta > 0 ? '+' : '';
+  const color = delta > 0 ? 'var(--tag-new)' : '#c4704a';
+  return `${current} SKU <span style="color:${color};font-weight:600;">(${sign}${delta})</span>`;
+}
+
+// --- Build HTML ---
 const weekNum = getWeekNumber(new Date());
 const today = new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 
@@ -56,19 +125,93 @@ function buildProductHTML(items, filterFn) {
     if (isEdlp) tags += '<span class="tag tag-edlp">EDLP</span>';
     if (isSale) tags += '<span class="tag tag-sale">Sale</span>';
     if (isLast) tags += '<span class="tag tag-last">清仓</span>';
-
     const name = p.n.replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2').replace(/([a-z])([A-Z])/g, '$1 $2');
-
     return `<div class="product-item">${imgTag(p.n)}<div class="info"><div class="name">${name}</div>${tags ? `<div class="tags">${tags}</div>` : ''}</div><div class="price">${current} ${old}</div></div>`;
   }).join('\n    ');
 }
 
+// --- Weekly Changes Section ---
+let changesHTML = '';
+const hasPrev = prevDrinking.length > 0 || prevPlates.length > 0 || prevAccessories.length > 0;
+
+if (hasPrev) {
+  changesHTML = `
+  <section class="section">
+    <div class="section-header">
+      <div class="section-number">📊</div>
+      <h2>Weekly Changes</h2>
+      <p>对比 ${prevDate} → ${today} 的变化。绿色 = 新增，红色 = 下架，蓝色 = 价格变动。</p>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:32px;">
+      <div style="background:var(--warm-white);border-radius:14px;padding:22px;text-align:center;border-top:3px solid var(--tag-new);">
+        <div style="font-size:2rem;font-weight:700;color:var(--tag-new);">+${newProducts.length}</div>
+        <div style="font-size:0.8rem;color:rgba(44,44,44,0.5);margin-top:4px;">新增产品</div>
+      </div>
+      <div style="background:var(--warm-white);border-radius:14px;padding:22px;text-align:center;border-top:3px solid #c4704a;">
+        <div style="font-size:2rem;font-weight:700;color:#c4704a;">-${removedProducts.length}</div>
+        <div style="font-size:0.8rem;color:rgba(44,44,44,0.5);margin-top:4px;">下架产品</div>
+      </div>
+      <div style="background:var(--warm-white);border-radius:14px;padding:22px;text-align:center;border-top:3px solid var(--tag-edlp);">
+        <div style="font-size:2rem;font-weight:700;color:var(--tag-edlp);">${priceChanges.length}</div>
+        <div style="font-size:0.8rem;color:rgba(44,44,44,0.5);margin-top:4px;">价格变动</div>
+      </div>
+    </div>`;
+
+  if (newProducts.length > 0) {
+    changesHTML += `
+    <div style="margin-bottom:24px;">
+      <h4 style="color:var(--tag-new);margin-bottom:12px;">🆕 新增 (${newProducts.length})</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${newProducts.map(p => `<span style="font-size:0.8rem;padding:6px 12px;background:rgba(125,155,106,0.08);border-radius:8px;color:var(--tag-new);">${p.name} ${p.price !== null ? '· £'+p.price.toFixed(2) : ''}</span>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (removedProducts.length > 0) {
+    changesHTML += `
+    <div style="margin-bottom:24px;">
+      <h4 style="color:#c4704a;margin-bottom:12px;">🗑️ 下架 (${removedProducts.length})</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${removedProducts.map(p => `<span style="font-size:0.8rem;padding:6px 12px;background:rgba(196,112,74,0.06);border-radius:8px;color:#c4704a;text-decoration:line-through;text-decoration-color:rgba(196,112,74,0.2);">${p.name}</span>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (priceChanges.length > 0) {
+    changesHTML += `
+    <div>
+      <h4 style="color:var(--tag-edlp);margin-bottom:12px;">💰 价格变动 (${priceChanges.length})</h4>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        ${priceChanges.map(p => {
+          const diff = p.newPrice - p.oldPrice;
+          const sign = diff > 0 ? '+' : '';
+          const color = diff > 0 ? '#c4704a' : 'var(--tag-new)';
+          return `<div style="display:flex;align-items:center;gap:12px;font-size:0.82rem;padding:8px 12px;background:var(--warm-white);border-radius:8px;">
+            <span style="color:var(--charcoal);font-weight:500;">${p.name}</span>
+            <span style="color:rgba(44,44,44,0.35);text-decoration:line-through;">£${p.oldPrice.toFixed(2)}</span>
+            <span style="color:rgba(44,44,44,0.35);">→</span>
+            <span style="color:${color};font-weight:600;">£${p.newPrice.toFixed(2)}</span>
+            <span style="font-size:0.7rem;color:${color};">(${sign}£${Math.abs(diff).toFixed(2)})</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (newProducts.length === 0 && removedProducts.length === 0 && priceChanges.length === 0) {
+    changesHTML += `<div style="text-align:center;padding:40px;color:rgba(44,44,44,0.35);">✅ 本周无变化 — 产品线与上周完全一致</div>`;
+  }
+
+  changesHTML += `</section>`;
+}
+
+// --- Full HTML ---
 const html = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JYSK 餐具销售机会分析 · ${today}</title>
+<title>JYSK 餐具数据看板 · ${today}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -113,7 +256,7 @@ const html = `<!DOCTYPE html>
   }
   .hero h1 em { font-style: italic; color: var(--brown); }
   .hero p { font-size: 1.05rem; color: rgba(44,44,44,0.7); max-width: 560px; font-weight: 300; line-height: 1.8; }
-  .hero-stats { display: flex; gap: 48px; margin-top: 48px; padding-top: 40px; border-top: 1px solid rgba(107,79,60,0.12); }
+  .hero-stats { display: flex; gap: 48px; margin-top: 48px; padding-top: 40px; border-top: 1px solid rgba(107,79,60,0.12); flex-wrap: wrap; }
   .hero-stat h3 { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--charcoal); }
   .hero-stat p { font-size: 0.8rem; color: rgba(44,44,44,0.5); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 4px; }
 
@@ -147,12 +290,9 @@ const html = `<!DOCTYPE html>
   .product-item .pthumb {
     width: 44px; height: 44px; border-radius: 6px; object-fit: cover;
     background: var(--cream); flex-shrink: 0; border: 1px solid rgba(44,44,44,0.05);
-    transition: transform 0.2s ease;
   }
-  .product-item .pthumb:hover { transform: scale(2.5); z-index: 10; box-shadow: 0 4px 16px rgba(44,44,44,0.15); }
   .product-item .info { flex: 1; min-width: 0; }
   .product-item .name { font-size: 0.85rem; font-weight: 500; color: var(--charcoal); line-height: 1.4; }
-  .product-item .series { font-size: 0.7rem; color: rgba(44,44,44,0.35); letter-spacing: 0.05em; margin-top: 2px; }
   .product-item .price { font-size: 0.9rem; font-weight: 500; color: var(--brown); white-space: nowrap; text-align: right; flex-shrink: 0; }
   .product-item .price .old { font-size: 0.75rem; color: rgba(44,44,44,0.35); text-decoration: line-through; font-weight: 400; margin-left: 6px; }
   .product-item .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
@@ -174,7 +314,6 @@ const html = `<!DOCTYPE html>
     .hero { padding: 60px 24px 50px; }
     .container { padding: 0 24px; }
     .section { padding: 50px 0; }
-    .hero-stats { flex-wrap: wrap; gap: 24px; }
   }
   @media (max-width: 600px) {
     .product-grid { grid-template-columns: 1fr; }
@@ -186,44 +325,47 @@ const html = `<!DOCTYPE html>
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-label">Market Intelligence · Updated ${today} · ${weekNum}</div>
-    <h1>JYSK 餐具<br><em>销售机会分析</em></h1>
-    <p>基于 JYSK UK 官网 Kitchen 品类实时数据的竞争格局与增长机会研究。每周五自动更新。</p>
+    <h1>JYSK 餐具<br><em>数据看板</em></h1>
+    <p>基于 JYSK UK 官网 Kitchen 品类实时数据的每周追踪。每周五自动更新，对比展示新增、下架与价格变动。</p>
     <div class="hero-stats">
-      <div class="hero-stat"><h3>${drinking.length + plates.length + accessories.length}</h3><p>SKU</p></div>
-      <div class="hero-stat"><h3>£1.25 – £17.50</h3><p>价格带</p></div>
+      <div class="hero-stat"><h3>${drinking.length + plates.length + accessories.length}</h3><p>当前 SKU</p></div>
+      <div class="hero-stat"><h3>£${minPrice(allCurrent)} – £${maxPrice(allCurrent)}</h3><p>价格带</p></div>
       <div class="hero-stat"><h3>3</h3><p>子品类</p></div>
       <div class="hero-stat"><h3>${weekNum}</h3><p>本周</p></div>
+      ${hasPrev ? `<div class="hero-stat"><h3 style="color:${newProducts.length>0?'var(--tag-new)':'rgba(44,44,44,0.3)'}">${newProducts.length>0?'+'+newProducts.length:'0'}</h3><p>本周新增</p></div>` : ''}
     </div>
-    <div class="update-badge">⏰ 自动更新 · 每周五 14:00 BST</div>
+    <div class="update-badge">⏰ 自动更新 · 每周五 14:00 CST</div>
   </div>
 </section>
 
 <div class="container">
 
+${changesHTML}
+
 <section class="section">
   <div class="section-header">
     <div class="section-number">01</div>
     <h2>品类总览</h2>
-    <p>JYSK UK 厨房餐具分为三大子品类，覆盖从日常饮用、餐桌摆盘到厨房收纳的全场景。</p>
+    <p>JYSK UK 厨房餐具分为三大子品类，覆盖从日常饮用、餐桌摆盘到厨房收纳的全场景。数据更新于 ${today}。</p>
   </div>
   <div class="category-grid">
     <div class="category-card">
       <h3>Drinking Glasses &amp; Mugs</h3>
       <div class="subtitle">玻璃杯 · 马克杯 · 咖啡杯</div>
-      <div class="price-range">£1.50 – £9.00</div>
-      <div class="count">${drinking.length} 款产品</div>
+      <div class="price-range">£${minPrice(drinking)} – £${maxPrice(drinking)}</div>
+      <div class="count">${countDiff(drinking.length, prevDrinking.length, '款产品')}</div>
     </div>
     <div class="category-card">
       <h3>Plates, Bowls &amp; Cutlery</h3>
       <div class="subtitle">盘 · 碗 · 餐具套装</div>
-      <div class="price-range">£1.25 – £17.50</div>
-      <div class="count">${plates.length} 款产品</div>
+      <div class="price-range">£${minPrice(plates)} – £${maxPrice(plates)}</div>
+      <div class="count">${countDiff(plates.length, prevPlates.length, '款产品')}</div>
     </div>
     <div class="category-card">
       <h3>Kitchen Accessories</h3>
       <div class="subtitle">配件 · 收纳 · 工具</div>
-      <div class="price-range">£2.50 – £11.00</div>
-      <div class="count">${accessories.length} 款产品</div>
+      <div class="price-range">£${minPrice(accessories)} – £${maxPrice(accessories)}</div>
+      <div class="count">${countDiff(accessories.length, prevAccessories.length, '款产品')}</div>
     </div>
   </div>
 </section>
@@ -257,6 +399,7 @@ const html = `<!DOCTYPE html>
   <div class="container">
     <p>数据来源：JYSK UK 官网 · 每周五自动更新 · 分析仅供内部参考</p>
     <p style="margin-top:4px;">HER System × 小熊 · JYSK Kitchen Market Intelligence</p>
+    ${prevDate ? `<p style="margin-top:4px;">上次数据：${prevDate} → 本次：${today}</p>` : ''}
   </div>
 </footer>
 
@@ -264,4 +407,24 @@ const html = `<!DOCTYPE html>
 </html>`;
 
 writeFileSync(`${OUT_DIR}/index.html`, html, 'utf-8');
-console.log(`✅ Page generated: ${OUT_DIR}/index.html (${drinking.length + plates.length + accessories.length} products)`);
+console.log(`✅ Page generated: ${OUT_DIR}/index.html (${allCurrent.length} products, ${newProducts.length} new, ${removedProducts.length} removed, ${priceChanges.length} price changes)`);
+
+// === Helpers ===
+function minPrice(items) {
+  if (!items.length) return '—';
+  let min = Infinity;
+  items.forEach(p => {
+    const m = p.p.match(/£[\d.]+/g);
+    if (m) m.forEach(v => { const n = parseFloat(v.replace('£','')); if (n < min) min = n; });
+  });
+  return min === Infinity ? '—' : min.toFixed(2);
+}
+function maxPrice(items) {
+  if (!items.length) return '—';
+  let max = -Infinity;
+  items.forEach(p => {
+    const m = p.p.match(/£[\d.]+/g);
+    if (m) m.forEach(v => { const n = parseFloat(v.replace('£','')); if (n > max) max = n; });
+  });
+  return max === Infinity ? '—' : max.toFixed(2);
+}

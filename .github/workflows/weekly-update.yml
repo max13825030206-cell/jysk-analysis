@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for diff
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -27,11 +29,18 @@ jobs:
           npm install -g agent-browser
           agent-browser install
 
-      - name: Scrape JYSK Kitchen products
+      - name: Backup previous data for comparison
+        run: |
+          mkdir -p _data_prev
+          if [ -f _data/drinking.json ]; then cp _data/drinking.json _data_prev/; fi
+          if [ -f _data/plates.json ]; then cp _data/plates.json _data_prev/; fi
+          if [ -f _data/accessories.json ]; then cp _data/accessories.json _data_prev/; fi
+          # Save the date of last scrape
+          if [ -f _data/scrape-date.txt ]; then cp _data/scrape-date.txt _data_prev/; fi
+
+      - name: Scrape JYSK Kitchen products — Drinking Glasses & Mugs
         run: |
           mkdir -p _data
-
-          # ====== Drinking Glasses & Mugs ======
           agent-browser open "https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs" > /dev/null 2>&1
           agent-browser wait --load networkidle > /dev/null 2>&1
           agent-browser eval --stdin <<'EVALEOF' > _data/drinking.json 2>/dev/null
@@ -61,7 +70,8 @@ jobs:
 EVALEOF
           agent-browser close > /dev/null 2>&1
 
-          # ====== Plates, Bowls & Cutlery ======
+      - name: Scrape JYSK Kitchen products — Plates, Bowls & Cutlery
+        run: |
           agent-browser open "https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery" > /dev/null 2>&1
           agent-browser wait --load networkidle > /dev/null 2>&1
           agent-browser eval --stdin <<'EVALEOF' > _data/plates.json 2>/dev/null
@@ -90,7 +100,8 @@ EVALEOF
 EVALEOF
           agent-browser close > /dev/null 2>&1
 
-          # ====== Kitchen Accessories ======
+      - name: Scrape JYSK Kitchen products — Kitchen Accessories
+        run: |
           agent-browser open "https://jysk.co.uk/homeware/kitchen/kitchen-accessories" > /dev/null 2>&1
           agent-browser wait --load networkidle > /dev/null 2>&1
           agent-browser eval --stdin <<'EVALEOF' > _data/accessories.json 2>/dev/null
@@ -119,8 +130,18 @@ EVALEOF
 EVALEOF
           agent-browser close > /dev/null 2>&1
 
-      - name: Generate updated HTML
+      - name: Save scrape date
+        run: date -u +"%Y-%m-%d" > _data/scrape-date.txt
+
+      - name: Generate updated HTML with weekly comparison
         run: node .github/scripts/generate-page.mjs
+
+      - name: Commit updated data for next week comparison
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add _data/ _site/
+          git diff --cached --quiet || git commit -m "Weekly data update [auto]" && git push
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
