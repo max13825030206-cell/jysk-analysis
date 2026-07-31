@@ -143,10 +143,37 @@ EVALEOF
           git add _data/ _site/
           git diff --cached --quiet || git commit -m "Weekly data update [auto]" && git push
 
-      - name: Deploy to GitHub Pages
+      - name: Archive previous gh-pages before overwriting
+        run: |
+          ARCHIVE_DIR="_archive"
+          mkdir -p $ARCHIVE_DIR
+          # Fetch gh-pages to get current index.html
+          git fetch origin gh-pages 2>/dev/null || true
+          if git show origin/gh-pages:index.html > /dev/null 2>&1; then
+            TIMESTAMP=$(date -u +"%Y-W%V")
+            git show origin/gh-pages:index.html > "$ARCHIVE_DIR/${TIMESTAMP}.html"
+            # Update archive index page
+            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>JYSK 历史数据</title><style>body{font-family:system-ui;max-width:800px;margin:60px auto;padding:0 20px;background:#faf7f0;color:#2c2c2c}h1{font-family:Georgia,serif}a{display:block;padding:12px 0;border-bottom:1px solid #e0d8cc;color:#6b4f3c;text-decoration:none}a:hover{color:#2c2c2c}</style></head><body><h1>📦 JYSK 每周数据 · 历史版本</h1><p>每周五自动存档。点击查看对应周数据。</p><ul style="list-style:none;padding:0;">' > $ARCHIVE_DIR/index.html
+            for f in $(ls -r $ARCHIVE_DIR/W*.html 2>/dev/null); do
+              WEEK=$(basename "$f" .html)
+              echo "<li><a href='${WEEK}.html'>${WEEK}</a></li>" >> $ARCHIVE_DIR/index.html
+            done
+            echo '</ul><p style="margin-top:40px;font-size:0.8rem;color:#999;">← <a href="/">返回最新数据</a></p></body></html>' >> $ARCHIVE_DIR/index.html
+            git add $ARCHIVE_DIR/
+            git diff --cached --quiet || git commit -m "Archive ${TIMESTAMP} page [auto]"
+          fi
+
+      - name: Copy archive to deploy directory
+        run: |
+          if [ -d _archive ]; then
+            cp -r _archive _site/_archive
+          fi
+
+      - name: Deploy to GitHub Pages (with archive preserved)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site
           publish_branch: gh-pages
-          force_orphan: true
+          keep_files: true
+          exclude_assets: ''

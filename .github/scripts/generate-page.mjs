@@ -400,6 +400,7 @@ ${changesHTML}
     <p>数据来源：JYSK UK 官网 · 每周五自动更新 · 分析仅供内部参考</p>
     <p style="margin-top:4px;">HER System × 小熊 · JYSK Kitchen Market Intelligence</p>
     ${prevDate ? `<p style="margin-top:4px;">上次数据：${prevDate} → 本次：${today}</p>` : ''}
+    <p style="margin-top:8px;"><a href="/_archive/" style="color:rgba(44,44,44,0.4);text-decoration:underline;">📦 查看历史数据</a></p>
   </div>
 </footer>
 
