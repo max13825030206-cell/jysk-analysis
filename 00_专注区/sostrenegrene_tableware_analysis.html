@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Søstrene Grene · Tableware 陶瓷供应商机会分析</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --cream: #F7F4EF;
+  --warm-white: #FCFAF7;
+  --sand: #E8DFD5;
+  --clay: #C4956A;
+  --terracotta: #B8673E;
+  --sage: #8B9D83;
+  --sage-light: #C5D0BF;
+  --slate: #6B7D8E;
+  --slate-dark: #3D4F5C;
+  --charcoal: #2C2C2C;
+  --ochre: #D4A853;
+  --rose: #D4A0A0;
+  --sky: #A3B5C7;
+  --success: #7A9B7E;
+  --warn: #D4A853;
+  --danger: #C4706C;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 3px rgba(44,44,44,0.06);
+  --shadow-md: 0 4px 16px rgba(44,44,44,0.08);
+  --shadow-lg: 0 8px 32px rgba(44,44,44,0.10);
+  --font-display: 'Georgia', 'Times New Roman', serif;
+  --font-body: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--charcoal);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Texture overlay ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* ── NAV ── */
+.nav-sticky {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(252,250,247,0.85); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--sand);
+  padding: 12px 0;
+}
+.nav-sticky .container { display: flex; align-items: center; gap: 24px; }
+.nav-sticky .logo { font-family: var(--font-display); font-size: 1.1rem; color: var(--slate-dark); white-space: nowrap; }
+.nav-sticky a {
+  text-decoration: none; color: var(--slate); font-size: 0.85rem;
+  transition: color 0.2s; white-space: nowrap;
+}
+.nav-sticky a:hover { color: var(--terracotta); }
+
+/* ── HERO ── */
+.hero {
+  padding: 64px 0 48px;
+  position: relative;
+  border-bottom: 1px solid var(--sand);
+}
+.hero .eyebrow {
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em;
+  color: var(--terracotta); margin-bottom: 12px; font-weight: 600;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400;
+  color: var(--slate-dark);
+  line-height: 1.15;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+.hero h1 em { font-style: italic; color: var(--terracotta); }
+.hero .subtitle {
+  font-size: 1.05rem; color: var(--slate);
+  max-width: 640px;
+  margin-bottom: 24px;
+}
+.hero .meta-row {
+  display: flex; flex-wrap: wrap; gap: 12px;
+}
+.hero .meta-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 99px;
+  font-size: 0.82rem; font-weight: 500;
+  background: var(--warm-white); border: 1px solid var(--sand);
+  color: var(--slate-dark);
+}
+.hero .meta-tag .dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot.dk { background: var(--danger); }
+.dot.uk { background: var(--slate); }
+.dot.pt { background: var(--sage); }
+.dot.price { background: var(--ochre); }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--sand);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: -1px 0 0;
+  position: relative;
+}
+.stat-cell {
+  background: var(--warm-white);
+  padding: 24px 20px;
+  text-align: center;
+}
+.stat-cell .stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--slate-dark);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-cell .stat-label { font-size: 0.78rem; color: var(--slate); text-transform: uppercase; letter-spacing: 0.08em; }
+.stat-cell .stat-hint { font-size: 0.72rem; color: var(--clay); margin-top: 2px; }
+
+/* ── SECTION ── */
+.section { padding: 56px 0; }
+.section + .section { border-top: 1px solid var(--sand); }
+.section-header { margin-bottom: 36px; }
+.section-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem; font-weight: 400;
+  color: var(--slate-dark);
+  margin-bottom: 6px;
+}
+.section-header p { color: var(--slate); font-size: 0.95rem; max-width: 600px; }
+
+/* ── PRODUCT CARDS ── */
+.material-group { margin-bottom: 40px; }
+.material-group-label {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+}
+.material-group-label h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem; font-weight: 400;
+  color: var(--slate-dark);
+}
+.material-badge {
+  display: inline-block; padding: 4px 12px; border-radius: 99px;
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.badge-stoneware { background: #F0E6DB; color: #8B5E3C; }
+.badge-porcelain { background: #E8EDF2; color: #4A6A8A; }
+.badge-glass { background: #E0EBE3; color: #4A7A5E; }
+.badge-other { background: #F2EFEA; color: #7A6E5E; }
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.product-card {
+  background: var(--warm-white);
+  border: 1px solid var(--sand);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.product-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.product-card .card-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 8px;
+}
+.product-card .card-name {
+  font-weight: 600; font-size: 0.95rem;
+  color: var(--slate-dark);
+  flex: 1;
+}
+.product-card .card-name .size {
+  display: block; font-weight: 400; font-size: 0.78rem;
+  color: var(--slate); margin-top: 2px;
+}
+.product-card .bestseller-tag {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em;
+  background: var(--ochre); color: #fff;
+  padding: 3px 8px; border-radius: 99px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.product-card .card-price {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--terracotta);
+  font-weight: 700;
+}
+.product-card .card-colors {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  align-items: center;
+}
+.color-dot {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid var(--warm-white);
+  box-shadow: 0 0 0 1px var(--sand);
+  cursor: default;
+  position: relative;
+}
+.color-dot:hover::after {
+  content: attr(data-label);
+  position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  background: var(--charcoal); color: #fff; font-size: 0.7rem;
+  padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+  pointer-events: none;
+}
+.pt-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.68rem; color: var(--sage); font-weight: 600;
+}
+
+/* ── GAP HEATMAP ── */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.heatmap-cell {
+  padding: 20px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: transform 0.2s;
+}
+.heatmap-cell:hover { transform: scale(1.03); }
+.heatmap-cell .cell-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.heatmap-cell .cell-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+.heatmap-cell .cell-status {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+  font-weight: 700;
+}
+.cell-present { background: #E8EEE6; border: 1px solid #B5D1B0; }
+.cell-present .cell-status { color: var(--success); }
+.cell-partial { background: #F9F2E0; border: 1px solid #E8D5A0; }
+.cell-partial .cell-status { color: #B8932E; }
+.cell-absent { background: #F8E8E6; border: 1px solid #E8C4C0; }
+.cell-absent .cell-status { color: var(--danger); }
+
+/* ── CHART CONTAINER ── */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 768px) { .chart-row { grid-template-columns: 1fr; } }
+.chart-box {
+  background: var(--warm-white);
+  border: 1px solid var(--sand);
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+}
+.chart-box h4 {
+  font-family: var(--font-display);
+  font-size: 1rem; font-weight: 400;
+  color: var(--slate-dark);
+  margin-bottom: 16px;
+}
+.chart-box canvas { max-height: 280px; }
+
+/* ── OPPORTUNITY CARDS ── */
+.opp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.opp-card {
+  padding: 24px;
+  border-radius: var(--radius-md);
+  position: relative;
+}
+.opp-card.high { background: #F3EAE3; border: 1px solid #D4A893; }
+.opp-card.medium { background: #F0F2EE; border: 1px solid #C4CFBE; }
+.opp-card.low { background: #F5F5F5; border: 1px solid #DDD; }
+.opp-card .opp-pill {
+  display: inline-block; padding: 3px 10px; border-radius: 99px;
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.opp-card.high .opp-pill { background: var(--terracotta); color: #fff; }
+.opp-card.medium .opp-pill { background: var(--sage); color: #fff; }
+.opp-card.low .opp-pill { background: #ccc; color: #666; }
+.opp-card h4 { font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 6px; color: var(--slate-dark); }
+.opp-card p { font-size: 0.85rem; color: var(--slate); line-height: 1.5; }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--sand);
+  padding: 24px 0;
+  text-align: center;
+}
+.footer p { font-size: 0.75rem; color: var(--slate); }
+.footer a { color: var(--terracotta); text-decoration: none; }
+
+/* ── TOOLTIP ── */
+.tooltip {
+  position: fixed; pointer-events: none;
+  background: var(--charcoal); color: #fff;
+  padding: 8px 14px; border-radius: 6px;
+  font-size: 0.8rem; line-height: 1.4;
+  opacity: 0; transition: opacity 0.15s;
+  z-index: 200; max-width: 280px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .hero { padding: 40px 0 32px; }
+  .hero h1 { font-size: 1.6rem; }
+  .product-grid { grid-template-columns: 1fr; }
+  .heatmap-grid { grid-template-columns: 1fr 1fr; }
+  .nav-sticky a { font-size: 0.75rem; }
+  .nav-sticky .container { gap: 12px; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Sticky Nav -->
+<nav class="nav-sticky">
+  <div class="container">
+    <span class="logo">Søstrene Grene · Analysis</span>
+    <a href="#products">产品矩阵</a>
+    <a href="#price">价格分析</a>
+    <a href="#gaps">品类缺口</a>
+    <a href="#opportunity">供应商机会</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero" id="top">
+  <div class="container">
+    <div class="eyebrow">New Supplier Opportunity · Ceramics</div>
+    <h1>Søstrene Grene<br><em>Tableware</em> 陶瓷切入机会</h1>
+    <p class="subtitle">
+      丹麦平价家居零售商。现有 Tableware 品类以石瓷碗为主，餐盘、杯具、套装几乎空白——陶瓷新供应商有明确的互补切入空间。
+    </p>
+    <div class="meta-row">
+      <span class="meta-tag"><span class="dot dk"></span> Danish · Aarhus HQ</span>
+      <span class="meta-tag"><span class="dot uk"></span> 75+ UK Stores</span>
+      <span class="meta-tag"><span class="dot price"></span> £0.94 – £8.94</span>
+      <span class="meta-tag"><span class="dot pt"></span> Made in Portugal</span>
+      <span class="meta-tag">Free delivery > £60</span>
+    </div>
+  </div>
+</header>
+
+<!-- Stats Bar -->
+<div class="container">
+  <div class="stats-bar">
+    <div class="stat-cell">
+      <div class="stat-num">20</div>
+      <div class="stat-label">Tableware SKUs</div>
+      <div class="stat-hint">已爬取 &amp; 关联发现</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">14</div>
+      <div class="stat-label">Stoneware</div>
+      <div class="stat-hint">12 bowls + 1 plate + 1 candleholder</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">1</div>
+      <div class="stat-label">Porcelain</div>
+      <div class="stat-hint">仅 1 个小碗</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">70%</div>
+      <div class="stat-label">Bowl 占比</div>
+      <div class="stat-hint">石瓷产品中 12/14 是碗</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Mug / Cup</div>
+      <div class="stat-hint">杯具完全缺失</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">0</div>
+      <div class="stat-label">Coordinated Sets</div>
+      <div class="stat-hint">无任何套装产品</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRODUCT MATRIX ── -->
+<section class="section" id="products">
+  <div class="container">
+    <div class="section-header">
+      <h2>产品矩阵 · 按材质</h2>
+      <p>数据源：<a href="https://sostrenegrene.com/en-gb/products/home/kitchenware/tableware-c-8341" target="_blank" style="color:var(--terracotta);">sostrenegrene.com tableware</a> + 关联推荐产品。2026-07-30 抓取。</p>
+    </div>
+
+    <!-- Stoneware -->
+    <div class="material-group">
+      <div class="material-group-label">
+        <h3>Stoneware 石瓷</h3>
+        <span class="material-badge badge-stoneware">14 SKUs</span>
+      </div>
+      <div class="product-grid" id="stoneware-grid">
+        <!-- JS populated -->
+      </div>
+    </div>
+
+    <!-- Porcelain -->
+    <div class="material-group">
+      <div class="material-group-label">
+        <h3>Porcelain 瓷器</h3>
+        <span class="material-badge badge-porcelain">1 SKU</span>
+      </div>
+      <div class="product-grid" id="porcelain-grid"></div>
+    </div>
+
+    <!-- Glass -->
+    <div class="material-group">
+      <div class="material-group-label">
+        <h3>Glass 玻璃</h3>
+        <span class="material-badge badge-glass">1 SKU</span>
+      </div>
+      <div class="product-grid" id="glass-grid"></div>
+    </div>
+
+    <!-- Other -->
+    <div class="material-group">
+      <div class="material-group-label">
+        <h3>Other 其他材质</h3>
+        <span class="material-badge badge-other">4 SKUs</span>
+      </div>
+      <div class="product-grid" id="other-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICE ANALYSIS ── -->
+<section class="section" id="price">
+  <div class="container">
+    <div class="section-header">
+      <h2>价格带分析</h2>
+      <p>Stoneware 价格集中在 £2–5，仅 1 款超过 £7。整体偏低，但为互补品类留出了价格参照。</p>
+    </div>
+    <div class="chart-row">
+      <div class="chart-box">
+        <h4>价格分布 · 按材质</h4>
+        <canvas id="priceChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>Stoneware 价格带占比</h4>
+        <canvas id="priceBandChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── GAP HEATMAP ── -->
+<section class="section" id="gaps">
+  <div class="container">
+    <div class="section-header">
+      <h2>品类覆盖 · Gap 热力图</h2>
+      <p>对照标准 Tableware 品类清单，标记 Søstrene Grene 现有覆盖状态。</p>
+    </div>
+    <div class="heatmap-grid" id="heatmap-grid">
+      <!-- JS populated -->
+    </div>
+  </div>
+</section>
+
+<!-- ── OPPORTUNITY ── -->
+<section class="section" id="opportunity">
+  <div class="container">
+    <div class="section-header">
+      <h2>陶瓷供应商机会判断</h2>
+      <p>基于现有产品结构、价格带、品牌审美的综合分析。</p>
+    </div>
+    <div class="opp-grid" id="opp-grid">
+      <!-- JS populated -->
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>数据来源：<a href="https://sostrenegrene.com/en-gb/products/home/kitchenware/tableware-c-8341" target="_blank">Søstrene Grene Tableware</a> · 抓取日期 2026-07-30 · 用于供应商开发分析</p>
+    <p style="margin-top:4px;color:var(--slate);">产品 URL 为真实抓取路径，点击可跳转验证。部分产品来自关联推荐发现，非 Tableware 分类页直接展示。</p>
+  </div>
+</footer>
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// ── Color palette ──
+const COLORS = {
+  'Off White': '#F2EFEA',
+  'Bordeaux': '#7B2D3B',
+  'Rose': '#D4A0A0',
+  'Blue': '#7B95AB',
+  'Light Brown': '#C4A882',
+  'Smokey Blue': '#8A9DAF',
+  'Light Olive': '#A3AD8B',
+  'Camel': '#C4A46C',
+  'Khaki': '#A3986E',
+};
+
+// ── PRODUCT DATA ──
+const stoneware = [
+  {name:'Bowl',size:'12.5×9.1×1.6cm',price:'£3.64',colors:['Off White','Bordeaux'],bestseller:true,url:'https://sostrenegrene.com/en-gb/products/home/bowl-p-59193d0a'},
+  {name:'Bowl',size:'Ø7cm',price:'£2.73',colors:['Rose'],bestseller:true,url:'https://sostrenegrene.com/en-gb/products/home/bowl-p-e49f8701'},
+  {name:'Bowl',size:'15cm',price:'£4.94',colors:['Off White','Blue'],bestseller:false,url:'https://sostrenegrene.com/en-gb/products/home/bowl-p-xd13c9a6',madeInPortugal:true},
+  {name:'Bowl',size:'Ø13cm',price:'£3.96',colors:['Off White','Blue'],bestseller:false,url:null},
+  {name:'Bowl',size:'Ø7cm',price:'£2.24',colors:[],bestseller:false,url:null},
+  {name:'Bowl',size:'Ø7.5×4cm',price:'£2.84',colors:['Light Brown','Smokey Blue','Light Olive'],bestseller:false,url:null},
+  {name:'Bowl',size:'Ø11.4cm',price:'£3.39',colors:['Off White','Blue'],bestseller:false,url:null},
+  {name:'Bowl',size:'14×7.5cm',price:'£6.73',colors:[],bestseller:false,url:null},
+  {name:'Bowl',size:'Ø9.5×4cm',price:'£3.73',colors:[],bestseller:false,url:null},
+  {name:'Bowl',size:'Ø7.4cm',price:'£2.24',colors:[],bestseller:false,url:null},
+  {name:'Bowl',size:'Ø10×4cm',price:'£2.64',colors:['Camel','Khaki'],bestseller:false,url:null},
+  {name:'Bowl',size:'Ø18.4×7.8cm',price:'£8.94',colors:[],bestseller:false,url:null},
+  {name:'Plate',size:'—',price:'£4.40',colors:['Camel','Khaki'],bestseller:false,url:null},
+  {name:'Candleholder',size:'Ø5.7cm',price:'£4.66',colors:[],bestseller:false,url:null},
+];
+
+const porcelain = [
+  {name:'Bowl',size:'—',price:'£2.44',colors:['Light Brown','Smokey Blue','Light Olive'],bestseller:false,url:null},
+];
+
+const glass = [
+  {name:'Jug 1L',size:'26.5cm',price:'£2.74',colors:[],bestseller:true,url:'https://sostrenegrene.com/en-gb/products/home/jug-1-l-p-640362dc'},
+];
+
+const other = [
+  {name:'Placemats 2pk',size:'37cm · Seagrass',price:'£2.89/pc',colors:[],bestseller:false,url:'https://sostrenegrene.com/en-gb/products/home/placemats-2-pack-p-4f593055'},
+  {name:'Bread Basket',size:'Ø18cm · Seagrass',price:'£2.89',colors:[],bestseller:true,url:'https://sostrenegrene.com/en-gb/products/home/bread-basket-p-4ab68d4f'},
+  {name:'Placemats 4pk',size:'45×30cm · Paper',price:'£1.64/pc',colors:[],bestseller:false,url:'https://sostrenegrene.com/en-gb/products/home/placemats-4-pack-p-6c89fed6'},
+  {name:'Chopsticks',size:'20cm · Beech/Silicone',price:'£0.94',colors:['Smokey Blue','Light Olive'],bestseller:true,url:'https://sostrenegrene.com/en-gb/products/home/childrens-chopsticks-p-a730a450'},
+];
+
+// ── RENDER PRODUCT CARDS ──
+function colorDots(colors) {
+  if (!colors.length) return '';
+  return '<div class="card-colors">' + colors.map(c => {
+    const hex = COLORS[c] || '#ccc';
+    return `<span class="color-dot" data-label="${c}" style="background:${hex};" title="${c}"></span>`;
+  }).join('') + '</div>';
+}
+
+function renderCards(data, gridId, badgeClass) {
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = data.map((p,i) => {
+    const bestsellerHtml = p.bestseller ? '<span class="bestseller-tag">⭐ Best</span>' : '';
+    const ptHtml = p.madeInPortugal ? '<span class="pt-badge">🇵🇹 Portugal</span>' : '';
+    const priceVal = parseFloat(p.price.replace(/[£\/pc]/g,''));
+    const urlHtml = p.url
+      ? `<a href="${p.url}" target="_blank" style="font-size:0.72rem;color:var(--terracotta);text-decoration:none;">查看源页 →</a>`
+      : '<span style="font-size:0.72rem;color:var(--sand);">关联推荐发现</span>';
+    return `
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-name">${p.name}<span class="size">${p.size}</span></div>
+          ${bestsellerHtml}
+        </div>
+        <div class="card-price">${p.price}</div>
+        ${colorDots(p.colors)}
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          ${ptHtml}
+          ${urlHtml}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+renderCards(stoneware, 'stoneware-grid');
+renderCards(porcelain, 'porcelain-grid');
+renderCards(glass, 'glass-grid');
+renderCards(other, 'other-grid');
+
+// ── GAP HEATMAP ──
+const gaps = [
+  {name:'Dinner Plates',icon:'🍽️',status:'absent',note:'仅 1 个 Stoneware Plate，不成套'},
+  {name:'Mugs / Cups',icon:'☕',status:'absent',note:'整个品类完全缺失'},
+  {name:'Teapots',icon:'🫖',status:'absent',note:'零覆盖'},
+  {name:'Serving Platters',icon:'🥘',status:'absent',note:'无大盘/托盘'},
+  {name:'Coordinated Sets',icon:'🎁',status:'absent',note:'所有产品单品销售'},
+  {name:'Porcelain Dinner Set',icon:'🍽️',status:'absent',note:'仅 1 个 porcelain bowl'},
+  {name:'Cereal / Soup Bowls',icon:'🥣',status:'present',note:'多尺寸覆盖充分'},
+  {name:'Small Dip Bowls',icon:'🫕',status:'present',note:'Ø7-10cm 多款可选'},
+  {name:'Placemats',icon:'🏷️',status:'present',note:'Seagrass + Paper 两种'},
+  {name:'Glassware (Jugs)',icon:'🫗',status:'partial',note:'仅 1 款 1L 玻璃壶'},
+  {name:'Candleholders',icon:'🕯️',status:'partial',note:'1 款 stoneware，非 tableware'},
+  {name:'Serving Jugs',icon:'🏺',status:'absent',note:'零覆盖（仅 1 个玻璃壶）'},
+];
+
+const heatmap = document.getElementById('heatmap-grid');
+heatmap.innerHTML = gaps.map(g => {
+  const statusClass = g.status === 'present' ? 'cell-present' : g.status === 'partial' ? 'cell-partial' : 'cell-absent';
+  const statusIcon = g.status === 'present' ? '✅ 已覆盖' : g.status === 'partial' ? '⚠️ 薄弱' : '❌ 缺失';
+  return `
+    <div class="heatmap-cell ${statusClass}" title="${g.note}">
+      <div class="cell-icon">${g.icon}</div>
+      <div class="cell-name">${g.name}</div>
+      <div class="cell-status">${statusIcon}</div>
+      <div style="font-size:0.72rem;color:var(--slate);margin-top:4px;">${g.note}</div>
+    </div>`;
+}).join('');
+
+// ── OPPORTUNITY CARDS ──
+const opps = [
+  {level:'high',title:'Dinner Plates 系列',desc:'现有 1 个疑似 plate，没有不同尺寸/深度的餐盘线。建议提供 Ø20/25/28cm 三件套，匹配现有 Off White / Blue 色系。建议价格 £3-6/pc。'},
+  {level:'high',title:'Mug & Cup 杯具',desc:'整个杯具品类缺失。Stoneware mug 是北欧家居中最基础的单品。建议 300-400ml 马克杯，organic 造型 + 哑光釉面。建议价格 £2-5/pc。'},
+  {level:'high',title:'Porcelain 瓷器线',desc:'14 个 stoneware vs 1 个 porcelain——瓷器几乎是空白。可提供 porcelain dinner set（4 件或 6 件套），差异化于现有手工感石瓷。建议价格 £12-20/set。'},
+  {level:'high',title:'Coordinated Sets 套装',desc:'现有 0 套装。2 bowl + 2 plate 或 mug + bowl + plate 组合填补了「一站式购买」的需求。建议价格 £8-15/set。'},
+  {level:'medium',title:'Serving & Platters',desc:'无大盘、无托盘、无分享盘。Scandi 风格的大浅盘适合 entertaining 场景。建议 Ø30-35cm，可做节日限定款。'},
+  {level:'medium',title:'Seasonal Collections',desc:'现有 Christmas 主题 bowl 证明季节性窗口存在。可提案 AW/SS 季度色系更新。'},
+  {level:'low',title:'单品 Bowl 替代',desc:'现有 12+ bowl SKU，价格极低（£2.24-8.94）。除非有显著设计差异或成本优势，不建议正面竞争。'},
+  {level:'low',title:'高价单品 (>£10)',desc:'最贵单品 £8.94。SG 价格天花板很低，超过 £10 的产品恐难进入。除非有独特设计价值支撑。'},
+];
+
+document.getElementById('opp-grid').innerHTML = opps.map(o => `
+  <div class="opp-card ${o.level}">
+    <span class="opp-pill">${o.level === 'high' ? '🔥 HIGH' : o.level === 'medium' ? '📌 MEDIUM' : '⬇ LOW'}</span>
+    <h4>${o.title}</h4>
+    <p>${o.desc}</p>
+  </div>
+`).join('');
+
+// ── CHARTS ──
+// Price distribution by material
+const priceCtx = document.getElementById('priceChart').getContext('2d');
+const allStonewarePrices = stoneware.map(p => parseFloat(p.price.replace('£','')));
+const allOtherPrices = [...porcelain, ...glass, ...other].map(p => parseFloat(p.price.replace(/[£\/pc]/g,'')));
+
+// Group into price bins
+const bins = ['<£2','£2-3','£3-4','£4-5','£5-6','£6-7','£7+'];
+function binPrices(prices) {
+  const b = [0,0,0,0,0,0,0];
+  prices.forEach(p => {
+    if (p < 2) b[0]++;
+    else if (p < 3) b[1]++;
+    else if (p < 4) b[2]++;
+    else if (p < 5) b[3]++;
+    else if (p < 6) b[4]++;
+    else if (p < 7) b[5]++;
+    else b[6]++;
+  });
+  return b;
+}
+
+new Chart(priceCtx, {
+  type: 'bar',
+  data: {
+    labels: bins,
+    datasets: [
+      {
+        label: 'Stoneware',
+        data: binPrices(allStonewarePrices),
+        backgroundColor: '#C4956A',
+        borderRadius: 4,
+      },
+      {
+        label: 'Other Materials',
+        data: binPrices(allOtherPrices),
+        backgroundColor: '#8B9D83',
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { size: 12 } } } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#E8DFD5' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// Price band pie
+const bandCtx = document.getElementById('priceBandChart').getContext('2d');
+const bands = binPrices(allStonewarePrices);
+new Chart(bandCtx, {
+  type: 'doughnut',
+  data: {
+    labels: bins,
+    datasets: [{
+      data: bands,
+      backgroundColor: ['#E8DFD5','#D4C4B0','#C4956A','#B8804F','#A06E3F','#8B5A30','#704520'],
+      borderColor: '#FCFAF7',
+      borderWidth: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { usePointStyle: true, padding: 16, font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+            const pct = Math.round(ctx.parsed / total * 100);
+            return ` ${ctx.label}: ${ctx.parsed} 款 (${pct}%)`;
+          }
+        }
+      }
+    }
+  }
+});
+
+// ── Intersection Observer for animation ──
+const observerOptions = { threshold: 0.1 };
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.product-card, .heatmap-cell, .opp-card, .chart-box').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(16px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

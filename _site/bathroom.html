@@ -1,0 +1,2870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JYSK — Bathroom Accessories · Market Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════ Design System ═══════════════════════════ */
+:root {
+  --bg: #f8f5f0; --card: #fff; --text: #2d2a26; --muted: #6b6560;
+  --accent: #1a4a3e; --accent-light: #2a6a5e;
+  --gold: #c8974a; --warm: #d4855e;
+  --ceramic: #c4956a; --glass: #7eb8c9; --polyresin: #9b8ec4;
+  --metal: #a0a0a0; --wood: #8faa6b; --natural: #b8956a; --plastic: #e0a85c;
+  --new: #4a8c5c; --sale: #d4493e; --edlp: #5b7a9e; --clearance: #c4704a;
+  --shadow: 0 2px 12px rgba(0,0,0,.06); --radius: 10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+
+/* ─── Hero ─── */
+.hero {
+  background: linear-gradient(165deg, #1a3a34 0%, #2a5a4e 50%, #1a4a3e 100%);
+  color: #fff; padding: 52px 0 44px; position: relative; overflow: hidden;
+}
+.hero::after {
+  content: ''; position: absolute; top: 0; right: 0; width: 400px; height: 100%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.06) 0%, transparent 70%);
+}
+.hero-inner { position: relative; z-index: 1; }
+.hero-label { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; opacity: .55; margin-bottom: 12px; font-weight: 500; }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 400; letter-spacing: -0.5px; line-height: 1.15; }
+.hero h1 em { font-style: italic; color: rgba(255,255,255,.7); }
+.hero p { margin-top: 10px; opacity: .75; font-size: .95rem; max-width: 520px; font-weight: 300; }
+.hero-meta { margin-top: 20px; font-size: .78rem; opacity: .5; }
+.hero-stats { display: flex; gap: 40px; margin-top: 36px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.12); flex-wrap: wrap; }
+.hero-stat h3 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; font-weight: 400; }
+.hero-stat p { font-size: .72rem; opacity: .5; margin-top: 2px; text-transform: uppercase; letter-spacing: .06em; }
+
+/* ─── KPI Row ─── */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin: -28px 0 32px; }
+.kpi {
+  background: var(--card); border-radius: var(--radius); padding: 20px;
+  text-align: center; box-shadow: var(--shadow); cursor: default;
+  border: 2px solid transparent; transition: transform .12s, box-shadow .12s, border-color .12s;
+}
+.kpi:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,.12); border-color: var(--accent); }
+.kpi .val { font-size: 1.7rem; font-weight: 700; color: var(--accent); }
+.kpi .lbl { font-size: .75rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .04em; }
+
+/* ─── Sections ─── */
+.section { margin: 40px 0 24px; }
+.section h2 {
+  font-family: 'DM Serif Display', serif; font-size: 1.35rem; font-weight: 400;
+  color: var(--accent); border-bottom: 2px solid var(--accent);
+  padding-bottom: 8px; margin-bottom: 8px;
+}
+.section-sub { font-size: .85rem; color: var(--muted); margin-bottom: 20px; }
+
+/* ─── Stats Grid ─── */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--card); border-radius: var(--radius); padding: 18px 20px;
+  text-align: center; box-shadow: var(--shadow);
+}
+.stat-card.stat-positive { border-top: 3px solid var(--new); }
+.stat-card.stat-negative { border-top: 3px solid var(--sale); }
+.stat-card.stat-warning { border-top: 3px solid var(--warm); }
+.stat-card.stat-info { border-top: 3px solid var(--edlp); }
+.stat-num { display: block; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+.stat-lbl { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+
+/* ─── Filter Bar ─── */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.filter-btn {
+  padding: 7px 16px; border-radius: 20px; border: 1.5px solid #d4cec7;
+  background: var(--card); cursor: pointer; font-size: .8rem; font-weight: 500;
+  transition: all .15s; color: var(--text); font-family: inherit;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ─── Product Grid ─── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.product-card {
+  background: var(--card); border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); text-decoration: none; color: inherit;
+  transition: transform .15s, box-shadow .15s; display: flex; flex-direction: column;
+  border: 1px solid #f0ede8;
+}
+.product-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,.1); }
+.product-card.hidden { display: none; }
+.product-img {
+  background: #f2ede6; height: 200px; display: flex; align-items: center;
+  justify-content: center; position: relative; overflow: hidden;
+}
+.product-img img {
+  max-width: 85%; max-height: 85%; object-fit: contain;
+}
+.no-img { color: var(--muted); font-size: .78rem; }
+.product-tags { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 3px; }
+.tag {
+  font-size: .65rem; font-weight: 700; padding: 2px 7px; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: .3px;
+}
+.tag-sale { background: var(--sale); color: #fff; }
+.tag-edlp { background: var(--edlp); color: #fff; }
+.tag-clearance { background: var(--clearance); color: #fff; }
+.tag-new { background: var(--new); color: #fff; }
+.product-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.product-name {
+  font-size: .8rem; font-weight: 600; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  color: var(--text);
+}
+.product-price-row { display: flex; align-items: baseline; gap: 8px; margin-top: auto; }
+.price { font-size: .95rem; font-weight: 700; color: var(--accent); }
+.old-price { font-size: .75rem; color: #999; text-decoration: line-through; }
+
+/* ─── Material Badge ─── */
+.mat-badge {
+  display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: .62rem;
+  font-weight: 600; text-transform: uppercase; letter-spacing: .04em; align-self: flex-start;
+}
+.mat-glass { background: #d4ebf2; color: #3d7585; }
+.mat-ceramic { background: #f2e4d4; color: #8c6d4a; }
+.mat-polyresin { background: #e6e0f2; color: #6b5c8c; }
+.mat-metal { background: #e8e8e8; color: #6b6b6b; }
+.mat-wood { background: #e2edda; color: #5c7a44; }
+.mat-natural { background: #efeadb; color: #8a7a5a; }
+.mat-plastic { background: #fdf0dd; color: #a87a3a; }
+
+/* ─── Bar Charts ─── */
+.bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.bar-label { width: 90px; text-align: right; font-size: .82rem; font-weight: 500; color: #5c5650; flex-shrink: 0; }
+.bar-track { flex: 1; height: 22px; background: #eeebe5; border-radius: 6px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--accent); border-radius: 6px; min-width: 3px; transition: width .4s ease; }
+.bar-fill.bar-glass { background: var(--glass); }
+.bar-fill.bar-ceramic { background: var(--ceramic); }
+.bar-fill.bar-polyresin { background: var(--polyresin); }
+.bar-fill.bar-metal { background: var(--metal); }
+.bar-fill.bar-wood { background: var(--wood); }
+.bar-fill.bar-natural { background: var(--natural); }
+.bar-fill.bar-plastic { background: var(--plastic); }
+.bar-value { font-size: .8rem; color: var(--muted); white-space: nowrap; }
+.bar-pct { font-size: .72rem; opacity: .6; }
+
+/* ─── Category Section ─── */
+.category-section { margin-bottom: 36px; }
+.category-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #eae5de;
+  flex-wrap: wrap; gap: 8px;
+}
+.category-header h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; font-weight: 400; color: var(--text); }
+.category-stats { font-size: .8rem; color: var(--muted); }
+
+/* ─── Legend ─── */
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; font-size: .78rem; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-item i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ─── Opportunity Cards ─── */
+.opp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.opp-card {
+  background: var(--card); border-radius: var(--radius); padding: 18px;
+  box-shadow: var(--shadow); border-left: 4px solid var(--accent);
+}
+.opp-card.opp-high { border-left-color: var(--sale); }
+.opp-card.opp-medium { border-left-color: var(--warm); }
+.opp-card h4 { font-size: .9rem; font-weight: 600; margin-bottom: 6px; }
+.opp-card p { font-size: .8rem; color: var(--muted); line-height: 1.5; }
+.opp-type { font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 4px; }
+
+/* ─── Diff Section ─── */
+.diff-section { margin-top: 20px; }
+.diff-section h4 { font-size: .9rem; margin-bottom: 10px; font-weight: 600; }
+.diff-new { color: var(--new); }
+.diff-removed { color: var(--sale); }
+.diff-price { color: var(--edlp); }
+.diff-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.diff-chip {
+  display: inline-block; padding: 5px 10px; border-radius: 6px; font-size: .78rem;
+  background: #faf9f7; border: 1px solid #f0ede8;
+}
+.chip-new { border-left: 3px solid var(--new); }
+.chip-removed { border-left: 3px solid var(--sale); color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(212,73,62,.2); }
+.chip-up { border-left: 3px solid var(--sale); }
+.chip-down { border-left: 3px solid var(--new); }
+
+/* ─── Footer ─── */
+.footer {
+  text-align: center; padding: 32px 0; margin-top: 40px;
+  border-top: 1px solid rgba(107,79,60,.08); color: var(--muted); font-size: .75rem;
+}
+.footer a { color: var(--muted); }
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .hero { padding: 36px 0 32px; }
+  .hero-stats { gap: 20px; }
+  .hero-stat h3 { font-size: 1.4rem; }
+  .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .bar-label { width: 65px; font-size: .75rem; }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 12px; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .product-img { height: 150px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container hero-inner">
+    <div class="hero-label">Market Intelligence · 31 July 2026 · W31</div>
+    <h1>JYSK — <em>Bathroom Accessories</em></h1>
+    <p>Product &amp; pricing intelligence extracted from https://jysk.co.uk. Updated weekly with change detection.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><h3>151</h3><p>Total SKUs</p></div>
+      <div class="hero-stat"><h3>£6.39</h3><p>Average Price</p></div>
+      <div class="hero-stat"><h3>8</h3><p>Categories</p></div>
+      <div class="hero-stat"><h3>0</h3><p>Materials</p></div>
+      <div class="hero-stat"><h3 style="color:rgba(255,255,255,.5)">0</h3><p>New This Week</p></div>
+    </div>
+    <div class="hero-meta">Data: 2026-07-31 · https://jysk.co.uk · customer-analysis v1.0</div>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="kpi-row">
+  <div class="kpi"><span class="val">151</span><span class="lbl">Total SKUs</span></div>
+  <div class="kpi"><span class="val">8</span><span class="lbl">Categories</span></div>
+  <div class="kpi"><span class="val">£6.39</span><span class="lbl">Avg Price</span></div>
+  <div class="kpi"><span class="val">0.0%</span><span class="lbl">On Sale</span></div>
+  <div class="kpi"><span class="val">0</span><span class="lbl">New</span></div>
+</div>
+
+
+    <section class="section">
+      <h2>Weekly Changes</h2>
+      <p class="section-sub">2026-07-30 → 2026-07-31</p>
+      <div class="stats-grid">
+        <div class="stat-card ">
+          <span class="stat-num">+0</span>
+          <span class="stat-lbl">New SKUs</span>
+        </div>
+        <div class="stat-card ">
+          <span class="stat-num">−0</span>
+          <span class="stat-lbl">Discontinued</span>
+        </div>
+        <div class="stat-card ">
+          <span class="stat-num">0</span>
+          <span class="stat-lbl">Price Changes</span>
+        </div>
+        <div class="stat-card ">
+          <span class="stat-num">0</span>
+          <span class="stat-lbl">Promo Changes</span>
+        </div>
+      </div>
+      
+      
+      
+    </section>
+
+<section class="section">
+  <h2>Price Band Distribution</h2>
+  <p class="section-sub">151 priced products · average £6.39</p>
+  
+      <div class="bar-row">
+        <span class="bar-label">£0–2</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:37.5%"></div>
+        </div>
+        <span class="bar-value">18 <span class="bar-pct">(11.9%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£2–4</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:75%"></div>
+        </div>
+        <span class="bar-value">36 <span class="bar-pct">(23.8%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£4–6</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:100%"></div>
+        </div>
+        <span class="bar-value">48 <span class="bar-pct">(31.8%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£6–8</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:29.166666666666668%"></div>
+        </div>
+        <span class="bar-value">14 <span class="bar-pct">(9.3%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£8–12</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:33.33333333333333%"></div>
+        </div>
+        <span class="bar-value">16 <span class="bar-pct">(10.6%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£12–20</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:37.5%"></div>
+        </div>
+        <span class="bar-value">18 <span class="bar-pct">(11.9%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£20+</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:2.083333333333333%"></div>
+        </div>
+        <span class="bar-value">1 <span class="bar-pct">(0.7%)</span></span>
+      </div>
+</section>
+
+
+
+
+    <section class="section">
+      <h2>Gap & Opportunity Analysis</h2>
+      <p class="section-sub">Automatically detected market gaps and competitive opportunities</p>
+      <div class="opp-grid">
+        
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Soap Dispensers</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Toothbrush Holder</h4>
+            <p>No products in £6–8 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Toothbrush Holder</h4>
+            <p>No products in £8–12 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Toothbrush Holder</h4>
+            <p>No products in £12–20 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Toothbrush Holder</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Toilet Brushes</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Toilet Bins</h4>
+            <p>No products in £0–2 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Toilet Bins</h4>
+            <p>No products in £6–8 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Toilet Bins</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Accessories</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Reed Diffusers</h4>
+            <p>No products in £0–2 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Reed Diffusers</h4>
+            <p>No products in £8–12 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Reed Diffusers</h4>
+            <p>No products in £12–20 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Reed Diffusers</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Towel Rails</h4>
+            <p>No products in £8–12 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Towel Rails</h4>
+            <p>No products in £12–20 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Towel Rails</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+      </div>
+    </section>
+
+<section class="section">
+  <h2>Products by Category</h2>
+  
+  
+      <section class="category-section" id="cat-accessories">
+        <div class="category-header">
+          <h3>Accessories</h3>
+          <span class="category-stats">
+            44 SKUs
+            · avg £4.70
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/squeegee-djura-suction-cup" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/275603" alt="Squeegee DJURA with suction cup" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Squeegee DJURA with suction cup</div>
+        
+        <div class="product-price-row">
+          <span class="price">£0.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/nail-brush-valje-wood-schima-wallichi" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/281268" alt="Nail brush VALJE wood Schima wallichi" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Nail brush VALJE wood Schima wallichi</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/squeegee-forsby-suction-cup-grey" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/159903" alt="Squeegee FORSBY with suction cup grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Squeegee FORSBY with suction cup grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/bin-bags-rottne-12l-5l-3l-assorted-0" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/176730" alt="Bin bags ROTTNE for 12L/5L/3L assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bin bags ROTTNE for 12L/5L/3L assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/hairbrush-hallerna-black-assorted-1" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270722" alt="Hairbrush HALLERNA black assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Hairbrush HALLERNA black assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/trinket-dish-bodafors-glass-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270718" alt="Trinket dish BODAFORS glass assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Trinket dish BODAFORS glass assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/face-roller-vallsta-jade-stone" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270730" alt="Face roller VALLSTA jade stone" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Face roller VALLSTA jade stone</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/hairbrush-hogstad-beige-sdp" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270732" alt="Hairbrush HOGSTAD beige SDP" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Hairbrush HOGSTAD beige SDP</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/storage-jar-genevad-d8xh10-recycled-glass-brown" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/254085" alt="Storage jar GENEVAD D8xH10 recycled glass brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage jar GENEVAD D8xH10 recycled glass brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/bath-brush-valje-wood-schima-wallichi" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270724" alt="Bath brush VALJE wood Schima wallichi" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bath brush VALJE wood Schima wallichi</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/hair-turban-tunadal-2pcs-sand-rose" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/254681" alt="Hair turban TUNADAL 2pcs sand/rose" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Hair turban TUNADAL 2pcs sand/rose</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/makeup-bag-toftbyn-w21xl13xd6-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/269535" alt="Makeup bag TOFTBYN W21xL13xD6 assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Makeup bag TOFTBYN W21xL13xD6 assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/storage-jar-skogsby-d7-d9-glass-pack-2" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270725" alt="Storage jar SKOGSBY D7 + D9 glass pack of 2" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage jar SKOGSBY D7 + D9 glass pack of 2</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/bathroom-shelf-bensbyn-w20xh10-beige" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/275604" alt="Bathroom shelf BENSBYN W20xH10 beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bathroom shelf BENSBYN W20xH10 beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/trinket-dish-forsbacka-d11-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270712" alt="Trinket dish FORSBACKA D11 assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Trinket dish FORSBACKA D11 assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/cotton-bud-holder-lekeryd-brown" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/272678" alt="Cotton bud holder LEKERYD brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Cotton bud holder LEKERYD brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.29</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/trinket-dish-stugun-w11xl20xh5-white" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/273935" alt="Trinket dish STUGUN W11xL20xH5 off-white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Trinket dish STUGUN W11xL20xH5 off-white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/trinket-dish-kangos-d9-12cm-seagrass-2-pieces" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/254073" alt="Trinket dish KANGOS D9/12cm seagrass 2 pieces" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Trinket dish KANGOS D9/12cm seagrass 2 pieces</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/tray-kattarp-12x19xh3-green" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270719" alt="Tray KATTARP 12x19xH3 green" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Tray KATTARP 12x19xH3 green</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/trinket-dish-makaryd-d10xh2cm-marble-effect-brown" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/268510" alt="Trinket dish MAKARYD D10xH2cm marble effect brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Trinket dish MAKARYD D10xH2cm marble effect brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.99</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/trinket-dish-flygsfors-d15xh4-brown" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/274682" alt="Trinket dish FLYGSFORS D15xH4 brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Trinket dish FLYGSFORS D15xH4 brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/toilet-roll-holder-sundsbruk-metal-black" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/278362" alt="Toilet roll holder SUNDSBRUK metal black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet roll holder SUNDSBRUK metal black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/hair-comb-set-kulltorp-pack-3-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270728" alt="Hair comb set KULLTORP pack of 3 assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Hair comb set KULLTORP pack of 3 assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/storage-jar-genevad-d8xh10-recycled-glass-brown-0" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/254082" alt="Storage jar GENEVAD D8xH10 recycled glass brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage jar GENEVAD D8xH10 recycled glass brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.29</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/ring-holder-lekeryd-brown" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/272683" alt="Ring holder LEKERYD brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Ring holder LEKERYD brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.29</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/hot-water-bottle-kramfors-15l-soft-fleece" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270717" alt="Hot water bottle KRAMFORS 1.5L with soft fleece" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Hot water bottle KRAMFORS 1.5L with soft fleece</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/jewellry-box-tornelilla-corduroy-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/271991" alt="Jewellry box TORNELILLA corduroy assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Jewellry box TORNELILLA corduroy assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/toilet-roll-holder-traryd-w10xl18xh9cm-natural" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/267080" alt="Toilet roll holder TRARYD W10xL18xH9cm natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet roll holder TRARYD W10xL18xH9cm natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/double-sided-mirror-ilsbo-h35" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/254687" alt="Double sided mirror ILSBO H35" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Double sided mirror ILSBO H35</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/trinket-dish-stenstorp-d11-d14-stoneware-2pcs" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270726" alt="Trinket dish STENSTORP D11/D14 stoneware 2pcs" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Trinket dish STENSTORP D11/D14 stoneware 2pcs</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/hair-clip-furulund-2-pcs-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/273927" alt="Hair clip FURULUND 2 pcs assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Hair clip FURULUND 2 pcs assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/jewellry-tree-sjuntorp-chrome" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/273875" alt="Jewellry tree SJUNTORP chrome" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Jewellry tree SJUNTORP chrome</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/storage-jar-tenhult-d11xh6-gold" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/269772" alt="Storage jar TENHULT D11xH6 gold" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage jar TENHULT D11xH6 gold</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/toilet-bag-karlsborg-w23xl15xh9-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/272573" alt="Toilet bag KARLSBORG W23xL15xH9 assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet bag KARLSBORG W23xL15xH9 assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/tray-kungsbacka-marble-effect" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/273900" alt="Tray KUNGSBACKA marble effect" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Tray KUNGSBACKA marble effect</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/toilet-bag-svalsta-2-pcs-multi-coloured" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/254101" alt="Toilet bag SVALSTA 2 pcs. multi-coloured" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet bag SVALSTA 2 pcs. multi-coloured</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/makeup-lamp-led-kalix-l30-silver" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/149574" alt="Makeup lamp with LED KALIX L30 silver" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Makeup lamp with LED KALIX L30 silver</div>
+        
+        <div class="product-price-row">
+          <span class="price">£7.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/face-roller-massage-stone-vallsta-rose" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270711" alt="Face roller &amp; massage stone VALLSTA rose" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Face roller &amp; massage stone VALLSTA rose</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/trinket-dish-edsele-d11-14-goldenmetal-2pc" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270723" alt="Trinket dish EDSELE D11/14 goldenmetal 2pc" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Trinket dish EDSELE D11/14 goldenmetal 2pc</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/double-sided-mirror-skurup-beige" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/274167" alt="Double sided mirror SKURUP beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Double sided mirror SKURUP beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/makeup-mirror-veddige-w-led-d20xh22-white" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270721" alt="Makeup mirror VEDDIGE w/LED D20xH22 white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Makeup mirror VEDDIGE w/LED D20xH22 white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/toilet-roll-holder-vansbro-d16h47-seagrass" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270288" alt="Toilet roll holder VANSBRO D16H47 seagrass" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet roll holder VANSBRO D16H47 seagrass</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/tray-torup-w11xl18xh2cm-beige-stone" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270729" alt="Tray TORUP W11xL18xH2cm beige stone" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Tray TORUP W11xL18xH2cm beige stone</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.99</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/accessories/bathroom-scale-venjan-glass-200kg-100g" target="_blank" rel="noopener" data-mat="" data-cat="Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/271265" alt="Bathroom scale VENJAN glass 200kg/100g" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bathroom scale VENJAN glass 200kg/100g</div>
+        
+        <div class="product-price-row">
+          <span class="price">£14.00</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+
+      <section class="category-section" id="cat-bathroom-storage">
+        <div class="category-header">
+          <h3>Bathroom Storage</h3>
+          <span class="category-stats">
+            24 SKUs
+            · avg £10.57
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/shower-basket-stocka-w-suction-cups" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/254079" alt="Shower basket STOCKA w/suction cups" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Shower basket STOCKA w/suction cups</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/shower-basket-hammerdal-w24xh24xd11-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/276746" alt="Shower basket HAMMERDAL W24xH24xD11 assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Shower basket HAMMERDAL W24xH24xD11 assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/storage-case-junsele-pack-2-sand" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/275614" alt="Storage case JUNSELE pack of 2 sand" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage case JUNSELE pack of 2 sand</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/storage-box-husum-w22xl16xh14-rose" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270731" alt="Storage box HUSUM W22xL16xH14 rose" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage box HUSUM W22xL16xH14 rose</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/shower-basket-nacka-black" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270710" alt="Shower basket NACKA black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Shower basket NACKA black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/storage-case-jonstorp-3-pcs-plastic-sand" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/268273" alt="Storage case JONSTORP 3 pcs plastic sand" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage case JONSTORP 3 pcs plastic sand</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/storage-box-korsberga-paper-natural" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/273943" alt="Storage box KORSBERGA paper natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage box KORSBERGA paper natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/shower-shelf-mohed-w23xl12xh27cm-beige" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270706" alt="Shower shelf MOHED W23xL12xH27cm beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Shower shelf MOHED W23xL12xH27cm beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/basket-haguda-natural" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/273947" alt="Basket HAGUDA natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Basket HAGUDA natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£7.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/tiered-baskets-tureholm-d16xh31cm-natural" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/264428" alt="Tiered baskets TUREHOLM D16xH31cm natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Tiered baskets TUREHOLM D16xH31cm natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/hanging-baskets-olstorp-2-pcs-set" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270733" alt="Hanging baskets OLSTORP 2 pcs/set" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Hanging baskets OLSTORP 2 pcs/set</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/jewellery-box-viken-16x25x6" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/129004" alt="Jewellery box VIKEN 16x25x6" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Jewellery box VIKEN 16x25x6</div>
+        
+        <div class="product-price-row">
+          <span class="price">£11.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/makeup-organiser-viken-w10xl18xh5-9cm" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/181698" alt="Makeup organiser VIKEN W10xL18xH5/9cm" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Makeup organiser VIKEN W10xL18xH5/9cm</div>
+        
+        <div class="product-price-row">
+          <span class="price">£11.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/shower-shelf-mohed-double-w23xl12xh48-beige" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/275595" alt="Shower shelf MOHED double W23xL12xH48 beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Shower shelf MOHED double W23xL12xH48 beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£11.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/storage-box-sennan-w-lid-sea-grass-2-pcs" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/254070" alt="Storage box SENNAN w/lid sea grass 2 pcs" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage box SENNAN w/lid sea grass 2 pcs</div>
+        
+        <div class="product-price-row">
+          <span class="price">£11.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/basket-hulu-w24xl34xh26-natural" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/264424" alt="Basket HULU W24xL34xH26 natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Basket HULU W24xL34xH26 natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£11.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/bathroom-shelving-unit-nacka-w14xl26xh28-black" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/254088" alt="Bathroom shelving unit NACKA W14xL26xH28 black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bathroom shelving unit NACKA W14xL26xH28 black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£12.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/bathroom-shelving-unit-kareby-beige" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270704" alt="Bathroom shelving unit KAREBY beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bathroom shelving unit KAREBY beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£12.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/tiered-baskets-rydaholm-natural" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/273879" alt="Tiered baskets RYDAHOLM natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Tiered baskets RYDAHOLM natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£14.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/shelf-nacka-w-multi-hanging-hooks-black" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270707" alt="Shelf NACKA w/multi hanging hooks black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Shelf NACKA w/multi hanging hooks black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£15.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/hanging-storage-stockaryd-w20xl30xh78-natural" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/273883" alt="Hanging storage STOCKARYD W20xL30xH78 natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Hanging storage STOCKARYD W20xL30xH78 natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£15.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/corner-shelving-unit-kareby-beige" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/290337" alt="Corner shelving unit KAREBY beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Corner shelving unit KAREBY beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£16.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/tiered-baskets-haguda-3-tier-shelf-natural" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/273951" alt="Tiered baskets HAGUDA 3-tier shelf natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Tiered baskets HAGUDA 3-tier shelf natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£20.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/bathroom-storage/over-door-organiser-hult-w40xh135xd15" target="_blank" rel="noopener" data-mat="" data-cat="Bathroom Storage">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/274282" alt="Over door organiser HULT W40xH135xD15" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Over door organiser HULT W40xH135xD15</div>
+        
+        <div class="product-price-row">
+          <span class="price">£30.00</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+
+      <section class="category-section" id="cat-soap-dispensers">
+        <div class="category-header">
+          <h3>Soap Dispensers</h3>
+          <span class="category-stats">
+            21 SKUs
+            · avg £5.39
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-sangis-recycled-plastic-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270629" alt="Soap dispenser SANGIS recycled plastic assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser SANGIS recycled plastic assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/bathroom-set-vislanda-3-pcs-set-asstd" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/149573" alt="Bathroom set VISLANDA 3 pcs/set asstd" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bathroom set VISLANDA 3 pcs/set asstd</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-karlskrona-glass" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/266952" alt="Soap dispenser KARLSKRONA glass" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser KARLSKRONA glass</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-rosenlund-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/263338" alt="Soap dispenser ROSENLUND assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser ROSENLUND assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-mala-black" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270633" alt="Soap dispenser MALA black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser MALA black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-steninge-beige" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270595" alt="Soap dispenser STENINGE beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser STENINGE beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.80</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-roteberg-grey" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270597" alt="Soap dispenser ROTEBERG grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser ROTEBERG grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-smedby-light-grey" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/253646" alt="Soap dispenser SMEDBY light grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser SMEDBY light grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-gesunda-mat-glazed" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270601" alt="Soap dispenser GESUNDA mat glazed" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser GESUNDA mat glazed</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/bathroom-set-lindssdal-3-piece-set-black" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/273831" alt="Bathroom set LINDSSDAL 3 piece set black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bathroom set LINDSSDAL 3 piece set black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-kungsbacka-marble-effect" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/273887" alt="Soap dispenser KUNGSBACKA marble effect" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser KUNGSBACKA marble effect</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-lycksele-terrazzo-effect" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/275578" alt="Soap dispenser LYCKSELE terrazzo effect" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser LYCKSELE terrazzo effect</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-genevad-recycled-glass-brown" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/255796" alt="Soap dispenser GENEVAD recycled glass brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser GENEVAD recycled glass brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.99</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-ekby-white" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270600" alt="Soap dispenser EKBY white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser EKBY white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.49</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-ekby-black" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270630" alt="Soap dispenser EKBY black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser EKBY black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.49</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-lekeryd-brown" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/272668" alt="Soap dispenser LEKERYD brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser LEKERYD brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.49</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-makaryd-marbel-effect-brown" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/268506" alt="Soap dispenser MAKARYD marbel effect brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser MAKARYD marbel effect brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£7.99</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-torup-beige-stone" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270594" alt="Soap dispenser TORUP beige stone" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser TORUP beige stone</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.49</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-kattarp-green" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270598" alt="Soap dispenser KATTARP green" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser KATTARP green</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.49</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-torestorp-black-xl" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/268263" alt="Soap dispenser TORESTORP black XL" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser TORESTORP black XL</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/soap-dispensers/soap-dispenser-husby-sensor-grey" target="_blank" rel="noopener" data-mat="" data-cat="Soap Dispensers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/288775" alt="Soap dispenser HUSBY sensor grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Soap dispenser HUSBY sensor grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£16.50</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+
+      <section class="category-section" id="cat-toothbrush-holder">
+        <div class="category-header">
+          <h3>Toothbrush Holder</h3>
+          <span class="category-stats">
+            14 SKUs
+            · avg £3.66
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-mala-black" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270637" alt="Toothbrush holder MALA black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder MALA black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-karlskrona-glass" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/266957" alt="Toothbrush holder KARLSKRONA glass" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder KARLSKRONA glass</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-steninge-beige" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270644" alt="Toothbrush holder STENINGE beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder STENINGE beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-smedby-light-grey" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/253652" alt="Toothbrush holder SMEDBY light grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder SMEDBY light grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-roteberg-anthracite-grey" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270640" alt="Toothbrush holder ROTEBERG anthracite grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder ROTEBERG anthracite grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-gesunda-mat-glazed" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270643" alt="Toothbrush holder GESUNDA mat glazed" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder GESUNDA mat glazed</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-kungsbacka-marble-effect" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/273892" alt="Toothbrush holder KUNGSBACKA marble effect" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder KUNGSBACKA marble effect</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-genevad-brown-recycled-glass" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/254607" alt="Toothbrush holder GENEVAD brown recycled glass" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder GENEVAD brown recycled glass</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.99</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/tooth-brush-holder-lycksele-terrazzo-effect" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/275582" alt="Tooth brush holder LYCKSELE terrazzo effect" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Tooth brush holder LYCKSELE terrazzo effect</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-lekeryd-brown" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/272673" alt="Toothbrush holder LEKERYD brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder LEKERYD brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.49</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-ekby-white" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270638" alt="Toothbrush holder EKBY white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder EKBY white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.49</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-ekby-black" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270634" alt="Toothbrush holder EKBY black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder EKBY black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.49</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-kattarp-green" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270636" alt="Toothbrush holder KATTARP green" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder KATTARP green</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.49</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toothbrush-holder/toothbrush-holder-torup-beige-stone" target="_blank" rel="noopener" data-mat="" data-cat="Toothbrush Holder">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270635" alt="Toothbrush holder TORUP beige stone" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toothbrush holder TORUP beige stone</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.99</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+
+      <section class="category-section" id="cat-toilet-brushes">
+        <div class="category-header">
+          <h3>Toilet Brushes</h3>
+          <span class="category-stats">
+            14 SKUs
+            · avg £5.84
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-torreby-plastic-white" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/254094" alt="Toilet brush TORREBY plastic white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush TORREBY plastic white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-torreby-black" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/254093" alt="Toilet brush TORREBY black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush TORREBY black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-mala-black" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270694" alt="Toilet brush MALA black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush MALA black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-medle-steel" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270691" alt="Toilet brush MEDLE steel" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush MEDLE steel</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-balsby-coated-steel-beige" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/267190" alt="Toilet brush BALSBY coated steel beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush BALSBY coated steel beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-balsby-coated-steel-antgrey" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/254604" alt="Toilet brush BALSBY coated steel ant.grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush BALSBY coated steel ant.grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-balsby-coated-steel-white" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270689" alt="Toilet brush BALSBY coated steel white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush BALSBY coated steel white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-steninge-beige" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270688" alt="Toilet brush STENINGE beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush STENINGE beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-gesunda-mat-glazed" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270696" alt="Toilet brush GESUNDA mat glazed" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush GESUNDA mat glazed</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-smedby-light-grey" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/253649" alt="Toilet brush SMEDBY light grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush SMEDBY light grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£7.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-lycksele-terrazzo-effect" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/275587" alt="Toilet brush LYCKSELE terrazzo effect" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush LYCKSELE terrazzo effect</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-kungsbacka-marble-effect" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/273897" alt="Toilet brush KUNGSBACKA marble effect" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush KUNGSBACKA marble effect</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-ekby-black" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270697" alt="Toilet brush EKBY black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush EKBY black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.99</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-brushes/toilet-brush-torup-beige-stone" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Brushes">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270692" alt="Toilet brush TORUP beige stone" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Toilet brush TORUP beige stone</div>
+        
+        <div class="product-price-row">
+          <span class="price">£13.99</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+
+      <section class="category-section" id="cat-reed-diffusers">
+        <div class="category-header">
+          <h3>Reed Diffusers</h3>
+          <span class="category-stats">
+            14 SKUs
+            · avg £5.38
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/room-spray-bastian-warm-sunset-50ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/282347" alt="Room spray BASTIAN warm sunset 50ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Room spray BASTIAN warm sunset 50ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/room-spray-bastian-warm-sunset-200ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/283293" alt="Room spray BASTIAN warm sunset 200ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Room spray BASTIAN warm sunset 200ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/room-spray-moheda-ocean-breeze-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/282337" alt="Room spray MOHEDA ocean breeze 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Room spray MOHEDA ocean breeze 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/room-spray-moheda-nordic-woods-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/283298" alt="Room spray MOHEDA nordic woods 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Room spray MOHEDA nordic woods 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/room-spray-moheda-lemon-verde-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/282322" alt="Room spray MOHEDA lemon verde 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Room spray MOHEDA lemon verde 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/room-spray-moheda-clean-cotton-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/282332" alt="Room spray MOHEDA clean cotton 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Room spray MOHEDA clean cotton 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/reed-diffuser-moheda-floral-breeze-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270702" alt="Reed diffuser MOHEDA floral breeze 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Reed diffuser MOHEDA floral breeze 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/reed-diffuser-moheda-clean-cotton-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/283321" alt="Reed diffuser MOHEDA clean cotton 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Reed diffuser MOHEDA clean cotton 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/reed-diffuser-moheda-ocean-breeze-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/283303" alt="Reed diffuser MOHEDA ocean breeze 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Reed diffuser MOHEDA ocean breeze 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/reed-diffuser-eneryda-white-blossom-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/254402" alt="Reed diffuser ENERYDA white blossom 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Reed diffuser ENERYDA white blossom 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/reed-diffuser-eneryda-lemon-verde-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/254406" alt="Reed diffuser ENERYDA lemon verde 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Reed diffuser ENERYDA lemon verde 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/reed-diffuser-sunnemo-clean-cotton-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/255805" alt="Reed diffuser SUNNEMO clean cotton 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Reed diffuser SUNNEMO clean cotton 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/reed-diffuser-moheda-nordic-woods-100ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/283310" alt="Reed diffuser MOHEDA nordic woods 100ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Reed diffuser MOHEDA nordic woods 100ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£7.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/reed-diffusers/reed-diffuser-bastian-warm-sunset-120ml" target="_blank" rel="noopener" data-mat="" data-cat="Reed Diffusers">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/283315" alt="Reed diffuser BASTIAN warm sunset 120ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Reed diffuser BASTIAN warm sunset 120ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£7.50</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+
+      <section class="category-section" id="cat-toilet-bins">
+        <div class="category-header">
+          <h3>Toilet Bins</h3>
+          <span class="category-stats">
+            13 SKUs
+            · avg £11.88
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/bathroom-bin-tahult-3l-plastic-beige" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/272581" alt="Bathroom bin TAHULT 3L plastic beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bathroom bin TAHULT 3L plastic beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-mala-3l-coated-metal-black" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/270677" alt="Pedal bin MALA 3L coated metal black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin MALA 3L coated metal black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-medle-3l-steel" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270686" alt="Pedal bin MEDLE 3L steel" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin MEDLE 3L steel</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-medle-5l-steel" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270680" alt="Pedal bin MEDLE 5L steel" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin MEDLE 5L steel</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-hallen-5l-softclose-cream" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/253635" alt="Pedal bin HALLEN 5L with softclose cream" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin HALLEN 5L with softclose cream</div>
+        
+        <div class="product-price-row">
+          <span class="price">£11.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-ullatti-5l-softclose-beige" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270678" alt="Pedal bin ULLATTI 5L with softclose beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin ULLATTI 5L with softclose beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£12.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-medle-12l-steel" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/270681" alt="Pedal bin MEDLE 12L steel" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin MEDLE 12L steel</div>
+        
+        <div class="product-price-row">
+          <span class="price">£14.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/bathroom-bin-vartofta-5l-natural" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/273939" alt="Bathroom bin VARTOFTA 5L natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bathroom bin VARTOFTA 5L natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£15.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-jung-5l-steel" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/274456" alt="Pedal bin JUNG 5L steel" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin JUNG 5L steel</div>
+        
+        <div class="product-price-row">
+          <span class="price">£15.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/bathroom-bin-vegby-5l-seagrass" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/270683" alt="Bathroom bin VEGBY 5L seagrass" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bathroom bin VEGBY 5L seagrass</div>
+        
+        <div class="product-price-row">
+          <span class="price">£15.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-oxie-5l-softclose-beige" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/266948" alt="Pedal bin OXIE 5L with softclose beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin OXIE 5L with softclose beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£16.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-oxie-5l-softclose-grey" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270676" alt="Pedal bin OXIE 5L with softclose grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin OXIE 5L with softclose grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£16.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/toilet-bins/pedal-bin-oxie-5l-softclose-white" target="_blank" rel="noopener" data-mat="" data-cat="Toilet Bins">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/270685" alt="Pedal bin OXIE 5L with softclose white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Pedal bin OXIE 5L with softclose white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£16.50</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+
+      <section class="category-section" id="cat-towel-rails">
+        <div class="category-header">
+          <h3>Towel Rails</h3>
+          <span class="category-stats">
+            7 SKUs
+            · avg £4.11
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/towel-rails/wall-hook-riala-plast-3pcs-pk-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Towel Rails">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/288778" alt="Wall hook RIALA plast 3pcs/pk assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Wall hook RIALA plast 3pcs/pk assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/towel-rails/wall-hook-holmsund-2-pieces-black" target="_blank" rel="noopener" data-mat="" data-cat="Towel Rails">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/288780" alt="Wall hook HOLMSUND 2 pieces black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Wall hook HOLMSUND 2 pieces black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/towel-rails/wall-hook-ekedalen-steel-2-pieces-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Towel Rails">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/212385" alt="Wall hook EKEDALEN steel 2 pieces assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Wall hook EKEDALEN steel 2 pieces assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/towel-rails/wall-hook-ekedalen-steel-2-pcs-beige" target="_blank" rel="noopener" data-mat="" data-cat="Towel Rails">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/275605" alt="Wall hook EKEDALEN steel 2 pcs beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Wall hook EKEDALEN steel 2 pcs beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/towel-rails/over-door-hanger-stockvik-25x14x5cm-white" target="_blank" rel="noopener" data-mat="" data-cat="Towel Rails">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/288805" alt="Over door hanger STOCKVIK 25x14x5cm white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Over door hanger STOCKVIK 25x14x5cm white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/towel-rails/over-door-hanger-stockvik-25x14x5cm-black" target="_blank" rel="noopener" data-mat="" data-cat="Towel Rails">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/254394" alt="Over door hanger STOCKVIK 25x14x5cm black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Over door hanger STOCKVIK 25x14x5cm black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//bathroom/bathroom-accessories/towel-rails/towel-rail-stockvik-60x6x7-black" target="_blank" rel="noopener" data-mat="" data-cat="Towel Rails">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/254388" alt="Towel rail STOCKVIK 60x6x7 black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Towel rail STOCKVIK 60x6x7 black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.00</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+</section>
+
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>Data source: https://jysk.co.uk · Generated 31 July 2026 · customer-analysis v1.0</p>
+    <p style="margin-top:4px;">HER System · Market Intelligence · For internal analysis only</p>
+  </div>
+</footer>
+
+<script>
+// Material filter functionality
+document.querySelectorAll('.mat-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mat = btn.dataset.mat;
+    const isActive = btn.classList.contains('active');
+
+    // Deactivate all
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-btn.all').classList.add('active');
+
+    if (!isActive) {
+      // Filter: show only this material
+      btn.classList.add('active');
+      document.querySelector('.filter-btn.all').classList.remove('active');
+      document.querySelectorAll('.product-card').forEach(card => {
+        card.classList.toggle('hidden', card.dataset.mat !== mat);
+      });
+    } else {
+      // Unfilter: show all
+      filterAll();
+    }
+  });
+});
+
+function filterAll() {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn.all').classList.add('active');
+  document.querySelectorAll('.product-card').forEach(card => card.classList.remove('hidden'));
+}
+</script>
+
+</body>
+</html>

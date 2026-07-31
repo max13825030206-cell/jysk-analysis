@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JYSK — Kitchen · Market Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════ Design System ═══════════════════════════ */
+:root {
+  --bg: #f8f5f0; --card: #fff; --text: #2d2a26; --muted: #6b6560;
+  --accent: #1a4a3e; --accent-light: #2a6a5e;
+  --gold: #c8974a; --warm: #d4855e;
+  --ceramic: #c4956a; --glass: #7eb8c9; --polyresin: #9b8ec4;
+  --metal: #a0a0a0; --wood: #8faa6b; --natural: #b8956a; --plastic: #e0a85c;
+  --new: #4a8c5c; --sale: #d4493e; --edlp: #5b7a9e; --clearance: #c4704a;
+  --shadow: 0 2px 12px rgba(0,0,0,.06); --radius: 10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+
+/* ─── Hero ─── */
+.hero {
+  background: linear-gradient(165deg, #1a3a34 0%, #2a5a4e 50%, #1a4a3e 100%);
+  color: #fff; padding: 52px 0 44px; position: relative; overflow: hidden;
+}
+.hero::after {
+  content: ''; position: absolute; top: 0; right: 0; width: 400px; height: 100%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.06) 0%, transparent 70%);
+}
+.hero-inner { position: relative; z-index: 1; }
+.hero-label { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; opacity: .55; margin-bottom: 12px; font-weight: 500; }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 400; letter-spacing: -0.5px; line-height: 1.15; }
+.hero h1 em { font-style: italic; color: rgba(255,255,255,.7); }
+.hero p { margin-top: 10px; opacity: .75; font-size: .95rem; max-width: 520px; font-weight: 300; }
+.hero-meta { margin-top: 20px; font-size: .78rem; opacity: .5; }
+.hero-stats { display: flex; gap: 40px; margin-top: 36px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.12); flex-wrap: wrap; }
+.hero-stat h3 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; font-weight: 400; }
+.hero-stat p { font-size: .72rem; opacity: .5; margin-top: 2px; text-transform: uppercase; letter-spacing: .06em; }
+
+/* ─── KPI Row ─── */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin: -28px 0 32px; }
+.kpi {
+  background: var(--card); border-radius: var(--radius); padding: 20px;
+  text-align: center; box-shadow: var(--shadow); cursor: default;
+  border: 2px solid transparent; transition: transform .12s, box-shadow .12s, border-color .12s;
+}
+.kpi:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,.12); border-color: var(--accent); }
+.kpi .val { font-size: 1.7rem; font-weight: 700; color: var(--accent); }
+.kpi .lbl { font-size: .75rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .04em; }
+
+/* ─── Sections ─── */
+.section { margin: 40px 0 24px; }
+.section h2 {
+  font-family: 'DM Serif Display', serif; font-size: 1.35rem; font-weight: 400;
+  color: var(--accent); border-bottom: 2px solid var(--accent);
+  padding-bottom: 8px; margin-bottom: 8px;
+}
+.section-sub { font-size: .85rem; color: var(--muted); margin-bottom: 20px; }
+
+/* ─── Stats Grid ─── */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--card); border-radius: var(--radius); padding: 18px 20px;
+  text-align: center; box-shadow: var(--shadow);
+}
+.stat-card.stat-positive { border-top: 3px solid var(--new); }
+.stat-card.stat-negative { border-top: 3px solid var(--sale); }
+.stat-card.stat-warning { border-top: 3px solid var(--warm); }
+.stat-card.stat-info { border-top: 3px solid var(--edlp); }
+.stat-num { display: block; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+.stat-lbl { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+
+/* ─── Filter Bar ─── */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.filter-btn {
+  padding: 7px 16px; border-radius: 20px; border: 1.5px solid #d4cec7;
+  background: var(--card); cursor: pointer; font-size: .8rem; font-weight: 500;
+  transition: all .15s; color: var(--text); font-family: inherit;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ─── Product Grid ─── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.product-card {
+  background: var(--card); border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); text-decoration: none; color: inherit;
+  transition: transform .15s, box-shadow .15s; display: flex; flex-direction: column;
+  border: 1px solid #f0ede8;
+}
+.product-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,.1); }
+.product-card.hidden { display: none; }
+.product-img {
+  background: #f2ede6; height: 200px; display: flex; align-items: center;
+  justify-content: center; position: relative; overflow: hidden;
+}
+.product-img img {
+  max-width: 85%; max-height: 85%; object-fit: contain;
+}
+.no-img { color: var(--muted); font-size: .78rem; }
+.product-tags { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 3px; }
+.tag {
+  font-size: .65rem; font-weight: 700; padding: 2px 7px; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: .3px;
+}
+.tag-sale { background: var(--sale); color: #fff; }
+.tag-edlp { background: var(--edlp); color: #fff; }
+.tag-clearance { background: var(--clearance); color: #fff; }
+.tag-new { background: var(--new); color: #fff; }
+.product-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.product-name {
+  font-size: .8rem; font-weight: 600; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  color: var(--text);
+}
+.product-price-row { display: flex; align-items: baseline; gap: 8px; margin-top: auto; }
+.price { font-size: .95rem; font-weight: 700; color: var(--accent); }
+.old-price { font-size: .75rem; color: #999; text-decoration: line-through; }
+
+/* ─── Material Badge ─── */
+.mat-badge {
+  display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: .62rem;
+  font-weight: 600; text-transform: uppercase; letter-spacing: .04em; align-self: flex-start;
+}
+.mat-glass { background: #d4ebf2; color: #3d7585; }
+.mat-ceramic { background: #f2e4d4; color: #8c6d4a; }
+.mat-polyresin { background: #e6e0f2; color: #6b5c8c; }
+.mat-metal { background: #e8e8e8; color: #6b6b6b; }
+.mat-wood { background: #e2edda; color: #5c7a44; }
+.mat-natural { background: #efeadb; color: #8a7a5a; }
+.mat-plastic { background: #fdf0dd; color: #a87a3a; }
+
+/* ─── Bar Charts ─── */
+.bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.bar-label { width: 90px; text-align: right; font-size: .82rem; font-weight: 500; color: #5c5650; flex-shrink: 0; }
+.bar-track { flex: 1; height: 22px; background: #eeebe5; border-radius: 6px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--accent); border-radius: 6px; min-width: 3px; transition: width .4s ease; }
+.bar-fill.bar-glass { background: var(--glass); }
+.bar-fill.bar-ceramic { background: var(--ceramic); }
+.bar-fill.bar-polyresin { background: var(--polyresin); }
+.bar-fill.bar-metal { background: var(--metal); }
+.bar-fill.bar-wood { background: var(--wood); }
+.bar-fill.bar-natural { background: var(--natural); }
+.bar-fill.bar-plastic { background: var(--plastic); }
+.bar-value { font-size: .8rem; color: var(--muted); white-space: nowrap; }
+.bar-pct { font-size: .72rem; opacity: .6; }
+
+/* ─── Category Section ─── */
+.category-section { margin-bottom: 36px; }
+.category-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #eae5de;
+  flex-wrap: wrap; gap: 8px;
+}
+.category-header h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; font-weight: 400; color: var(--text); }
+.category-stats { font-size: .8rem; color: var(--muted); }
+
+/* ─── Legend ─── */
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; font-size: .78rem; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-item i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ─── Opportunity Cards ─── */
+.opp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.opp-card {
+  background: var(--card); border-radius: var(--radius); padding: 18px;
+  box-shadow: var(--shadow); border-left: 4px solid var(--accent);
+}
+.opp-card.opp-high { border-left-color: var(--sale); }
+.opp-card.opp-medium { border-left-color: var(--warm); }
+.opp-card h4 { font-size: .9rem; font-weight: 600; margin-bottom: 6px; }
+.opp-card p { font-size: .8rem; color: var(--muted); line-height: 1.5; }
+.opp-type { font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 4px; }
+
+/* ─── Diff Section ─── */
+.diff-section { margin-top: 20px; }
+.diff-section h4 { font-size: .9rem; margin-bottom: 10px; font-weight: 600; }
+.diff-new { color: var(--new); }
+.diff-removed { color: var(--sale); }
+.diff-price { color: var(--edlp); }
+.diff-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.diff-chip {
+  display: inline-block; padding: 5px 10px; border-radius: 6px; font-size: .78rem;
+  background: #faf9f7; border: 1px solid #f0ede8;
+}
+.chip-new { border-left: 3px solid var(--new); }
+.chip-removed { border-left: 3px solid var(--sale); color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(212,73,62,.2); }
+.chip-up { border-left: 3px solid var(--sale); }
+.chip-down { border-left: 3px solid var(--new); }
+
+/* ─── Footer ─── */
+.footer {
+  text-align: center; padding: 32px 0; margin-top: 40px;
+  border-top: 1px solid rgba(107,79,60,.08); color: var(--muted); font-size: .75rem;
+}
+.footer a { color: var(--muted); }
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .hero { padding: 36px 0 32px; }
+  .hero-stats { gap: 20px; }
+  .hero-stat h3 { font-size: 1.4rem; }
+  .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .bar-label { width: 65px; font-size: .75rem; }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 12px; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .product-img { height: 150px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container hero-inner">
+    <div class="hero-label">Market Intelligence · 30 July 2026 · W31</div>
+    <h1>JYSK — <em>Kitchen</em></h1>
+    <p>Product &amp; pricing intelligence extracted from https://jysk.co.uk. Updated weekly with change detection.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><h3>59</h3><p>Total SKUs</p></div>
+      <div class="hero-stat"><h3>£5.98</h3><p>Average Price</p></div>
+      <div class="hero-stat"><h3>3</h3><p>Categories</p></div>
+      <div class="hero-stat"><h3>0</h3><p>Materials</p></div>
+      
+    </div>
+    <div class="hero-meta">Data: 2026-07-30 · https://jysk.co.uk · customer-analysis v1.0</div>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="kpi-row">
+  <div class="kpi"><span class="val">59</span><span class="lbl">Total SKUs</span></div>
+  <div class="kpi"><span class="val">3</span><span class="lbl">Categories</span></div>
+  <div class="kpi"><span class="val">£5.98</span><span class="lbl">Avg Price</span></div>
+  <div class="kpi"><span class="val">0.0%</span><span class="lbl">On Sale</span></div>
+  <div class="kpi"><span class="val">0</span><span class="lbl">New</span></div>
+</div>
+
+
+
+<section class="section">
+  <h2>Price Band Distribution</h2>
+  <p class="section-sub">59 priced products · average £5.98</p>
+  
+      <div class="bar-row">
+        <span class="bar-label">£0–2</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:18.51851851851852%"></div>
+        </div>
+        <span class="bar-value">5 <span class="bar-pct">(8.5%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£2–4</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:100%"></div>
+        </div>
+        <span class="bar-value">27 <span class="bar-pct">(45.8%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£4–6</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:29.629629629629626%"></div>
+        </div>
+        <span class="bar-value">8 <span class="bar-pct">(13.6%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£6–8</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:14.814814814814813%"></div>
+        </div>
+        <span class="bar-value">4 <span class="bar-pct">(6.8%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£8–12</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:25.925925925925924%"></div>
+        </div>
+        <span class="bar-value">7 <span class="bar-pct">(11.9%)</span></span>
+      </div>
+
+      <div class="bar-row">
+        <span class="bar-label">£12–20</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:29.629629629629626%"></div>
+        </div>
+        <span class="bar-value">8 <span class="bar-pct">(13.6%)</span></span>
+      </div>
+</section>
+
+
+
+
+    <section class="section">
+      <h2>Gap & Opportunity Analysis</h2>
+      <p class="section-sub">Automatically detected market gaps and competitive opportunities</p>
+      <div class="opp-grid">
+        
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Drinking Glasses &amp; Mugs</h4>
+            <p>No products in £6–8 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Drinking Glasses &amp; Mugs</h4>
+            <p>No products in £12–20 range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Drinking Glasses &amp; Mugs</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Plates, Bowls &amp; Cutlery</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+
+          <div class="opp-card opp-medium">
+            <div class="opp-type">price gap</div>
+            <h4>Kitchen Accessories</h4>
+            <p>No products in £20+ range</p>
+          </div>
+        
+      </div>
+    </section>
+
+<section class="section">
+  <h2>Products by Category</h2>
+  
+  
+      <section class="category-section" id="cat-plates-bowls-cutlery">
+        <div class="category-header">
+          <h3>Plates, Bowls &amp; Cutlery</h3>
+          <span class="category-stats">
+            28 SKUs
+            · avg £6.40
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-emil-d10xh3cm-flowers" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/250464" alt="Bowl EMIL D10xH3cm with flowers" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl EMIL D10xH3cm with flowers</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/plate-elias-d18cm" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/249628" alt="Plate ELIAS D18cm" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plate ELIAS D18cm</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/plate-ferdus-d19cm-grey" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/235907" alt="Plate FERDUS D19cm grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plate FERDUS D19cm grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-elias-d24xh7cm" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/249620" alt="Bowl ELIAS D24xH7cm" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl ELIAS D24xH7cm</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-bertil-d9xh4cm-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/271773" alt="Bowl BERTIL D9xH4cm assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl BERTIL D9xH4cm assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/plate-bertil-d10cm-assorted" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/271767" alt="Plate BERTIL D10cm assorted" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plate BERTIL D10cm assorted</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/plate-elias-d28cm" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/249632" alt="Plate ELIAS D28cm" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plate ELIAS D28cm</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-ferdus-d15cm-beige" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/242254" alt="Bowl FERDUS D15cm beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl FERDUS D15cm beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/plate-ferdus-d19cm-beige" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/235856" alt="Plate FERDUS D19cm beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plate FERDUS D19cm beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-emil-d16xh8cm-flowers" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/250468" alt="Bowl EMIL D16xH8cm with flowers" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl EMIL D16xH8cm with flowers</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-alf-d15xh6cm-blue-white" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/271805" alt="Bowl ALF D15xH6cm blue/white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl ALF D15xH6cm blue/white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-mak-d18xh6cm-multi-coloured" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/249584" alt="Bowl MAK D18xH6cm multi-coloured" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl MAK D18xH6cm multi-coloured</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/serving-platter-emil-w11xl25cm-w-flower" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/250472" alt="Serving platter EMIL W11xL25cm w/flower" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Serving platter EMIL W11xL25cm w/flower</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/plate-ferdus-d27cm-beige" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/235857" alt="Plate FERDUS D27cm beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plate FERDUS D27cm beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/plate-ferdus-d27cm-grey" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/235908" alt="Plate FERDUS D27cm grey" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plate FERDUS D27cm grey</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-jensen-d22xh4cm-white" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/235513" alt="Bowl JENSEN D22xH4cm white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl JENSEN D22xH4cm white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£5.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-victor-d20cm-beige" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/235867" alt="Bowl VICTOR D20cm beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl VICTOR D20cm beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-malik-d16xh6cm-dusty-grape" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/281682" alt="Bowl MALIK D16xH6cm dusty grape" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl MALIK D16xH6cm dusty grape</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-malik-d16xh6cm-apple-green" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/281685" alt="Bowl MALIK D16xH6cm apple green" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl MALIK D16xH6cm apple green</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/plate-malik-d21cm-pale-khaki-stoneware" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/281688" alt="Plate MALIK D21cm pale khaki stoneware" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plate MALIK D21cm pale khaki stoneware</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/plate-malik-d27cm-natural-stoneware" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/281691" alt="Plate MALIK D27cm natural stoneware" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plate MALIK D27cm natural stoneware</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-nor-d19xh7cm-pale-khaki" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/281676" alt="Bowl NOR D19xH7cm pale khaki" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl NOR D19xH7cm pale khaki</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/cutlery-set-gregers-stainless-steel-pack-16" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/249616" alt="Cutlery set GREGERS stainless steel pack of 16" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Cutlery set GREGERS stainless steel pack of 16</div>
+        
+        <div class="product-price-row">
+          <span class="price">£13.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/cutlery-set-ove-brown-16-pcs-pk" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/271705" alt="Cutlery set OVE brown 16 pcs/pk" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Cutlery set OVE brown 16 pcs/pk</div>
+        
+        <div class="product-price-row">
+          <span class="price">£13.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-sigurd-d24xh7cm-light-green" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/271759" alt="Bowl SIGURD D24xH7cm light green" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl SIGURD D24xH7cm light green</div>
+        
+        <div class="product-price-row">
+          <span class="price">£13.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-nor-d25xh10cm-dusty-grape" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/281679" alt="Bowl NOR D25xH10cm dusty grape" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl NOR D25xH10cm dusty grape</div>
+        
+        <div class="product-price-row">
+          <span class="price">£15.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-odd-d30xh9cm-multi-coloured" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/249588" alt="Bowl ODD D30xH9cm multi-coloured" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl ODD D30xH9cm multi-coloured</div>
+        
+        <div class="product-price-row">
+          <span class="price">£15.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/plates-bowls-cutlery/bowl-sigurd-d30xh9cm-light-green" target="_blank" rel="noopener" data-mat="" data-cat="Plates, Bowls &amp; Cutlery">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/271762" alt="Bowl SIGURD D30xH9cm light green" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Bowl SIGURD D30xH9cm light green</div>
+        
+        <div class="product-price-row">
+          <span class="price">£17.50</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+
+      <section class="category-section" id="cat-kitchen-accessories">
+        <div class="category-header">
+          <h3>Kitchen Accessories</h3>
+          <span class="category-stats">
+            16 SKUs
+            · avg £7.67
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/drinking-bottle-karlsen-500ml-clear" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/235931" alt="Drinking bottle KARLSEN 500ml clear" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Drinking bottle KARLSEN 500ml clear</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/trivet-geir-d15cm-beige" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/281630" alt="Trivet GEIR D15cm beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Trivet GEIR D15cm beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/kitchen-roll-holder-kjeld-d13xh32cm" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/271690" alt="Kitchen roll holder KJELD D13xH32cm" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Kitchen roll holder KJELD D13xH32cm</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/thermal-drinking-bottle-peter-450ml-black" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/235868" alt="Thermal drinking bottle PETER 450ml black" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Thermal drinking bottle PETER 450ml black</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/thermal-drinking-bottle-torkild-750ml-steel" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/271676" alt="Thermal drinking bottle TORKILD 750ml steel" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Thermal drinking bottle TORKILD 750ml steel</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/salad-servers-gregers-2pcs-pk" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/271687" alt="Salad servers GREGERS 2pcs/pk" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Salad servers GREGERS 2pcs/pk</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/cutting-board-sigvart-w17xl26cm-acacia" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/281659" alt="Cutting board SIGVART W17xL26cm acacia" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Cutting board SIGVART W17xL26cm acacia</div>
+        
+        <div class="product-price-row">
+          <span class="price">£6.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/storage-jar-dahl-d12xh15cm-w-lid-transparent" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/282078" alt="Storage jar DAHL D12xH15cm w/lid transparent" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Storage jar DAHL D12xH15cm w/lid transparent</div>
+        
+        <div class="product-price-row">
+          <span class="price">£7.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/kitchen-roll-holder-einar-d13xh31-marble" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/259724" alt="Kitchen roll holder EINAR D13xH31 marble" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Kitchen roll holder EINAR D13xH31 marble</div>
+        
+        <div class="product-price-row">
+          <span class="price">£7.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/jug-jimmi-d10xh24cm-125l-glass" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/271647" alt="Jug JIMMI D10xH24cm 1.25L glass" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Jug JIMMI D10xH24cm 1.25L glass</div>
+        
+        <div class="product-price-row">
+          <span class="price">£8.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/tea-box-mathias-w16xl23xh9cm-natural" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/271779" alt="Tea box MATHIAS W16xL23xH9cm natural" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Tea box MATHIAS W16xL23xH9cm natural</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/cutting-board-sigvart-w20xl38cm-acacia-wood" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/249612" alt="Cutting board SIGVART W20xL38cm acacia wood" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Cutting board SIGVART W20xL38cm acacia wood</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/salad-servers-krestian-l30cm-wood" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/235929" alt="Salad servers KRESTIAN L30cm wood" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Salad servers KRESTIAN L30cm wood</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/salt-and-pepper-grinder-uno-d6xh15cm" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/281626" alt="Salt and pepper grinder UNO D6xH15cm" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Salt and pepper grinder UNO D6xH15cm</div>
+        
+        <div class="product-price-row">
+          <span class="price">£11.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/cake-stand-sune-d28xh10cm-white" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/271620" alt="Cake stand SUNE D28xH10cm white" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Cake stand SUNE D28xH10cm white</div>
+        
+        <div class="product-price-row">
+          <span class="price">£15.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/kitchen-accessories/cutting-board-claes-w25xl50cm-acacia-wood" target="_blank" rel="noopener" data-mat="" data-cat="Kitchen Accessories">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/271696" alt="Cutting board CLAES W25xL50cm acacia wood" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Cutting board CLAES W25xL50cm acacia wood</div>
+        
+        <div class="product-price-row">
+          <span class="price">£16.50</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+
+      <section class="category-section" id="cat-drinking-glasses-mugs">
+        <div class="category-header">
+          <h3>Drinking Glasses &amp; Mugs</h3>
+          <span class="category-stats">
+            15 SKUs
+            · avg £3.38
+            
+          </span>
+        </div>
+        <div class="product-grid">
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/drinking-glass-ferdinand-320ml-clear" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/271776" alt="Drinking glass FERDINAND 320ml clear" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Drinking glass FERDINAND 320ml clear</div>
+        
+        <div class="product-price-row">
+          <span class="price">£1.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/mug-emil-d8xh10cm-350-ml-flowers" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/250476" alt="Mug EMIL D8xH10cm 350 ml with flowers" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Mug EMIL D8xH10cm 350 ml with flowers</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/espresso-cup-detmer-d7xh5cm-110-ml-beige" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/259944" alt="Espresso cup DETMER D7xH5cm 110 ml beige" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Espresso cup DETMER D7xH5cm 110 ml beige</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/drinking-glass-gunvald-350ml-brown" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/261243" alt="Drinking glass GUNVALD 350ml brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Drinking glass GUNVALD 350ml brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/mug-hilmer-d8xh9cm-320ml-glass-palm-tree" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/249668" alt="Mug HILMER D8xH9cm 320ml glass with palm tree" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Mug HILMER D8xH9cm 320ml glass with palm tree</div>
+        
+        <div class="product-price-row">
+          <span class="price">£2.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/coffee-cup-detmer-220-ml-d9xh7cm-beige-stoneware" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/271715" alt="Coffee cup DETMER 220 ml D9xH7cm beige stoneware" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Coffee cup DETMER 220 ml D9xH7cm beige stoneware</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/mug-alf-d9xh9cm-blue-white-400-ml" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/235889" alt="Mug ALF D9xH9cm blue/white 400 ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Mug ALF D9xH9cm blue/white 400 ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/drinking-glass-jimmi-d7xh11cm-260ml" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn3.jysk.com/getimage/wd3.medium/271650" alt="Drinking glass JIMMI D7xH11cm 260ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Drinking glass JIMMI D7xH11cm 260ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.00</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/drinking-glass-isak-300ml-dusty-grape" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn4.jysk.com/getimage/wd3.medium/282026" alt="Drinking glass ISAK 300ml dusty grape" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Drinking glass ISAK 300ml dusty grape</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/drinking-glass-isak-300ml-pale-khaki" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/282029" alt="Drinking glass ISAK 300ml pale khaki" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Drinking glass ISAK 300ml pale khaki</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.25</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/wine-glass-gunvald-h24cm-430-ml-brown" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/282033" alt="Wine glass GUNVALD H24cm 430 ml brown" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Wine glass GUNVALD H24cm 430 ml brown</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/mug-sverre-d10xh10cm-400-ml-stoneware" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/235866" alt="Mug SVERRE D10xH10cm 400 ml stoneware" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Mug SVERRE D10xH10cm 400 ml stoneware</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/mug-melvin-d10xh9cm-dusty-grape-370-ml" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/271693" alt="Mug MELVIN D10xH9cm dusty grape 370 ml" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Mug MELVIN D10xH9cm dusty grape 370 ml</div>
+        
+        <div class="product-price-row">
+          <span class="price">£3.75</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/drinking-glass-torre-d9xh10cm-420-ml-2pcs-pk" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn2.jysk.com/getimage/wd3.medium/274804" alt="Drinking glass TORRE D9xH10cm 420 ml 2pcs/pk" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Drinking glass TORRE D9xH10cm 420 ml 2pcs/pk</div>
+        
+        <div class="product-price-row">
+          <span class="price">£4.50</span>
+          
+        </div>
+      </div>
+    </a>
+
+    <a class="product-card " href="https://jysk.co.uk//homeware/kitchen/drinking-glasses-mugs/wine-glass-torre-h24cm-430ml-2pcs-pk" target="_blank" rel="noopener" data-mat="" data-cat="Drinking Glasses &amp; Mugs">
+      <div class="product-img">
+        <img src="https://cdn1.jysk.com/getimage/wd3.medium/274801" alt="Wine glass TORRE H24cm 430ml 2pcs/pk" loading="lazy">
+        
+      </div>
+      <div class="product-body">
+        <div class="product-name">Wine glass TORRE H24cm 430ml 2pcs/pk</div>
+        
+        <div class="product-price-row">
+          <span class="price">£9.00</span>
+          
+        </div>
+      </div>
+    </a></div>
+      </section>
+</section>
+
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>Data source: https://jysk.co.uk · Generated 30 July 2026 · customer-analysis v1.0</p>
+    <p style="margin-top:4px;">HER System · Market Intelligence · For internal analysis only</p>
+  </div>
+</footer>
+
+<script>
+// Material filter functionality
+document.querySelectorAll('.mat-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mat = btn.dataset.mat;
+    const isActive = btn.classList.contains('active');
+
+    // Deactivate all
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-btn.all').classList.add('active');
+
+    if (!isActive) {
+      // Filter: show only this material
+      btn.classList.add('active');
+      document.querySelector('.filter-btn.all').classList.remove('active');
+      document.querySelectorAll('.product-card').forEach(card => {
+        card.classList.toggle('hidden', card.dataset.mat !== mat);
+      });
+    } else {
+      // Unfilter: show all
+      filterAll();
+    }
+  });
+});
+
+function filterAll() {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn.all').classList.add('active');
+  document.querySelectorAll('.product-card').forEach(card => card.classList.remove('hidden'));
+}
+</script>
+
+</body>
+</html>

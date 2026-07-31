@@ -1,0 +1,6 @@
+_data/
+_snapshots/
+output/
+_drupal_settings.json
+_test_*.mjs
+node_modules/

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JYSK Bathroom — Ceramic &amp; Glass Sets · AW27 Opportunity Analysis</title>
+<style>
+:root {
+  --bg: #f8f5f0; --card: #fff; --text: #2d2a26; --muted: #6b6560;
+  --accent: #1a4a3e; --gold: #c8974a; --warm: #d4855e; --stone: #b8a99a;
+  --ceramic: #e8ddd3; --glass: #d6e8e0; --new-badge: #1a4a3e; --pop-badge: #c8974a;
+  --shadow: 0 2px 12px rgba(0,0,0,.06); --radius: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+.container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+
+/* Header */
+header { background: linear-gradient(135deg, #1a3a34 0%, #2a5a4e 50%, #1a4a3e 100%); color: #fff; padding: 48px 0 40px; }
+header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+header p { margin-top: 8px; opacity: .85; font-size: 1.05rem; }
+header .meta { margin-top: 16px; font-size: .82rem; opacity: .65; }
+
+/* KPI row */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 14px; margin: -28px 0 32px; }
+.kpi { background: var(--card); border-radius: var(--radius); padding: 20px; text-align: center; box-shadow: var(--shadow); position: relative; z-index: 1; cursor: pointer; transition: transform .12s, box-shadow .12s, border-color .12s; border: 2px solid transparent; }
+.kpi:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,.12); border-color: var(--accent); }
+.kpi.active-kpi { border-color: var(--accent); background: #f0f7f4; }
+.kpi .val { font-size: 1.75rem; font-weight: 700; color: var(--accent); }
+.kpi .lbl { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+
+/* Section headings */
+.section { margin: 40px 0 24px; }
+.section h2 { font-size: 1.3rem; font-weight: 700; color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 20px; }
+.section h3 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 12px; }
+
+/* Filter bar */
+.filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.filter-btn { padding: 8px 18px; border-radius: 20px; border: 1.5px solid #d4cec7; background: var(--card); cursor: pointer; font-size: .85rem; font-weight: 500; transition: all .15s; color: var(--text); }
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.filter-btn.all { font-weight: 700; }
+
+/* Product grid */
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 16px; }
+.product-card { background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform .15s, box-shadow .15s; cursor: default; }
+.product-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,.1); }
+.product-card .img-wrap { background: #f2ede6; height: 220px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.product-card .img-wrap a { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.product-card .img-wrap a img { max-width: 85%; max-height: 85%; object-fit: contain; }
+.product-card .badges { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; }
+.product-card .badge { font-size: .68rem; font-weight: 700; padding: 2px 8px; border-radius: 3px; text-transform: uppercase; letter-spacing: .5px; }
+.badge-new { background: var(--new-badge); color: #fff; }
+.badge-popular { background: var(--gold); color: #fff; }
+.badge-clearance { background: #c44; color: #fff; }
+.badge-deal { background: #e88830; color: #fff; }
+.product-card .info { padding: 12px 14px; position: relative; }
+.product-card .name { font-size: .82rem; font-weight: 600; line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.product-card .info .img-preview { display: none; position: absolute; bottom: calc(100% - 8px); left: 0; width: 100px; height: 100px; object-fit: contain; background: #fff; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.18); z-index: 10; padding: 4px; }
+.product-card .info:hover .img-preview { display: block; }
+.product-card .material-tag { font-size: .7rem; color: var(--muted); margin-bottom: 6px; text-transform: capitalize; }
+.product-card .price-row { display: flex; align-items: baseline; gap: 8px; }
+.product-card .price { font-size: 1rem; font-weight: 700; color: var(--accent); }
+.product-card .old-price { font-size: .78rem; color: #999; text-decoration: line-through; }
+.product-card .discount { font-size: .75rem; font-weight: 700; color: #c44; margin-left: auto; }
+.product-card a { color: inherit; text-decoration: none; }
+.product-card a:hover { text-decoration: underline; }
+
+/* Summary table */
+.summary-table { width: 100%; border-collapse: collapse; font-size: .88rem; background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.summary-table th { background: var(--accent); color: #fff; padding: 12px 16px; text-align: left; font-weight: 600; }
+.summary-table td { padding: 10px 16px; border-bottom: 1px solid #eae5de; }
+.summary-table tr:last-child td { border-bottom: none; }
+.summary-table .num { text-align: center; font-weight: 700; }
+
+/* Opportunity cards */
+.opp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 16px; }
+.opp-card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border-left: 4px solid var(--accent); }
+.opp-card h4 { font-size: .95rem; font-weight: 700; margin-bottom: 8px; }
+.opp-card p { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+.opp-card .opp-meta { margin-top: 10px; font-size: .75rem; color: var(--accent); font-weight: 600; }
+
+/* Priority matrix */
+.matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: #ddd8d0; border-radius: var(--radius); overflow: hidden; max-width: 700px; margin: 0 auto; }
+.matrix .cell { padding: 20px; background: var(--card); }
+.matrix .cell h4 { font-size: .85rem; font-weight: 700; margin-bottom: 6px; }
+.matrix .cell ul { font-size: .78rem; color: var(--muted); padding-left: 18px; }
+
+/* Legend */
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; font-size: .78rem; }
+.legend span { display: flex; align-items: center; gap: 4px; }
+.legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend .dot.ceramic { background: #c4a882; }
+.legend .dot.glass { background: #7db89a; }
+.legend .dot.plastic { background: #a0b4c8; }
+.legend .dot.metal { background: #b8b8b8; }
+.legend .dot.natural { background: #b8956a; }
+
+/* Stats row */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: var(--card); border-radius: var(--radius); padding: 16px 20px; box-shadow: var(--shadow); }
+.stat-card .stat-title { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+.stat-card .stat-big { font-size: 1.2rem; font-weight: 700; }
+
+/* Material analysis */
+.material-section { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-bottom: 28px; }
+.material-card { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.material-card .mat-header { padding: 24px 20px 16px; color: #fff; }
+.material-card .mat-header.glass-hd { background: linear-gradient(135deg, #5b9a8b, #3d7a6b); }
+.material-card .mat-header.polyresin-hd { background: linear-gradient(135deg, #8b7e6a, #6b5e4a); }
+.material-card .mat-header.ceramic-hd { background: linear-gradient(135deg, #c4a882, #a08060); }
+.material-card .mat-header h3 { font-size: 1.15rem; font-weight: 700; margin: 0; border: none; color: #fff; }
+.material-card .mat-header .mat-sub { font-size: .78rem; opacity: .85; margin-top: 4px; }
+.material-card .cat-imgs img { width: 34px; height: 34px; }
+.material-card .mat-body { background: var(--card); padding: 16px 20px; }
+.mat-body .mat-stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eee; font-size: .82rem; }
+.mat-body .mat-stat:last-child { border-bottom: none; }
+.mat-body .mat-stat .mat-val { font-weight: 700; }
+.mat-insight { margin-top: 12px; padding: 10px 12px; background: #faf7f2; border-radius: 6px; font-size: .78rem; color: var(--muted); line-height: 1.5; }
+.mat-insight strong { color: var(--accent); }
+.mat-series { display: inline-block; margin: 2px 4px 2px 0; padding: 2px 8px; border-radius: 10px; font-size: .7rem; font-weight: 600; background: #f0ece5; color: var(--text); position: relative; cursor: default; }
+.mat-series .series-preview { display: none; position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%); width: 120px; height: 120px; object-fit: contain; background: #fff; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,.2); z-index: 20; padding: 6px; }
+.mat-series:hover .series-preview { display: block; }
+.glass-tag { background: #d6e8e0; color: #3d7a6b; }
+.polyresin-tag { background: #e8e0d5; color: #6b5e4a; }
+.ceramic-tag { background: #f0e6d8; color: #8b6a3a; }
+@media (max-width: 768px) { .material-section { grid-template-columns: 1fr; } }
+
+/* Price tier grid */
+.price-tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 16px; }
+.price-tier-col { background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.price-tier-col .pt-head { padding: 14px 16px; font-weight: 700; font-size: .9rem; color: #fff; }
+.pt-head.soap { background: #1a4a3e; } .pt-head.holder { background: #2a6a5e; } .pt-head.brush { background: #3a7a6e; } .pt-head.acc { background: #4a8a7e; }
+.price-tier-col .pt-band { padding: 10px 14px; border-bottom: 1px solid #f0ece5; }
+.price-tier-col .pt-band:last-child { border-bottom: none; }
+.price-tier-col .pt-band .band-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 6px; }
+.price-tier-col .pt-band .band-label .band-count { font-weight: 400; color: #999; }
+.price-tier-col .pt-band .band-imgs { display: flex; flex-wrap: wrap; gap: 4px; }
+.price-tier-col .pt-band .band-imgs a { display: block; }
+.price-tier-col .pt-band .band-imgs img { width: 44px; height: 44px; object-fit: contain; background: #faf7f2; border-radius: 4px; transition: transform .12s; }
+.price-tier-col .pt-band .band-imgs img:hover { transform: scale(1.1); }
+
+/* Category cards */
+.cat-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; }
+.cat-card { background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.cat-card .cat-head { padding: 16px 18px 12px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: baseline; }
+.cat-card .cat-head h3 { font-size: .95rem; font-weight: 700; margin: 0; }
+.cat-card .cat-head .cat-count { font-size: .8rem; color: var(--muted); font-weight: 600; }
+.cat-card .cat-imgs { display: flex; gap: 4px; background: #f2ede6; padding: 8px; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+.cat-card .cat-imgs::-webkit-scrollbar { height: 4px; }
+.cat-card .cat-imgs::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+.cat-card .cat-imgs img { width: 50px; height: 50px; object-fit: contain; background: #faf7f2; border-radius: 6px; flex-shrink: 0; }
+.cat-card .cat-stats { padding: 12px 18px; display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: .75rem; }
+.cat-card .cat-stats .stat-item { display: flex; flex-direction: column; }
+.cat-card .cat-stats .stat-item .stat-num { font-weight: 700; font-size: .95rem; }
+.cat-card .cat-stats .stat-item .stat-lbl { color: var(--muted); font-size: .68rem; text-transform: uppercase; letter-spacing: .3px; }
+.cat-card .mat-dots { display: flex; gap: 6px; align-items: center; padding: 0 18px 12px; font-size: .7rem; }
+.cat-card .mat-dots .m-dot { display: flex; align-items: center; gap: 3px; }
+.cat-card .mat-dots .m-dot .d { width: 8px; height: 8px; border-radius: 50%; }
+.d-glass { background: #7db89a; } .d-ceramic { background: #c4a882; } .d-poly { background: #a08060; } .d-other { background: #ccc; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px; }
+  .kpi-row { grid-template-columns: repeat(3,1fr); }
+  .matrix { grid-template-columns: 1fr; }
+  #popularNewGrid { grid-template-columns: 1fr !important; }
+  header h1 { font-size: 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>JYSK Bathroom Accessories — AW27 Ceramic &amp; Glass Development</h1>
+    <p>Product landscape analysis: 151 SKUs across 8 subcategories. Focus on ceramic and glass bathroom sets. <span style="font-size:.78rem;opacity:.65;">· Data: 2026-07-30 · Updates every Friday · <a href="jysk_bathroom_opportunity_2026-07-30.html" style="color:#fff;text-decoration:underline;">Previous snapshot</a></span></p>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- KPI Row -->
+<div class="kpi-row" id="kpiRow"></div>
+
+<!-- Category Filter + Product Grid -->
+<div class="section">
+  <h2>Product Catalog</h2>
+  <div class="legend">
+    <span><span class="dot ceramic"></span> Ceramic / Stone</span>
+    <span><span class="dot glass"></span> Glass</span>
+    <span><span class="dot metal"></span> Metal</span>
+    <span><span class="dot plastic"></span> Plastic</span>
+    <span><span class="dot natural"></span> Natural / Wood</span>
+  </div>
+  <div class="filter-bar" id="filterBar"></div>
+  <div class="product-grid" id="productGrid"></div>
+</div>
+
+<!-- Popular & New -->
+<div class="section">
+  <h2>Popular &amp; Top Rated &amp; New</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px;" id="popularNewGrid">
+    <div><h3 id="popularHeader">🔥 Most Popular</h3><div class="product-grid" id="popularGrid"></div></div>
+    <div><h3 id="ratedHeader">⭐ Top Rated</h3><div class="product-grid" id="ratedGrid"></div></div>
+    <div><h3 id="newHeader">🆕 New Arrivals</h3><div class="product-grid" id="newGrid"></div></div>
+  </div>
+</div>
+
+<!-- Category Summary -->
+<div class="section">
+  <h2>Category Breakdown</h2>
+  <div class="cat-cards" id="catCards"></div>
+  <div class="opp-grid" style="margin-top:20px;" id="catInsights"></div>
+</div>
+
+<!-- Price Architecture -->
+<div class="section" id="priceSection">
+  <h2>Price Architecture — Core Categories</h2>
+  <div class="price-tier-grid" id="priceTiers"></div>
+  <div id="priceGapAnalysis" style="margin-top:28px;"></div>
+</div>
+
+<!-- Material Analysis -->
+<div class="section">
+  <h2>Material Analysis: GLASS · POLYRESIN · CERAMIC</h2>
+  <p style="color:var(--muted); margin-bottom:20px;">151 products classified by verified JYSK product page Specifications → Material field.</p>
+  <div class="material-section" id="materialGrid"></div>
+</div>
+
+<!-- AW27 Opportunities -->
+<div class="section">
+  <h2>AW27 Development Directions — Based on JYSK Style Analysis</h2>
+  <p style="color:var(--muted); margin-bottom:20px;">Directions derived from studying JYSK's actual product aesthetic across soap dispensers, toothbrush holders, toilet brushes, and accessories. What's missing in their current design language?</p>
+  <div class="opp-grid" id="oppGrid"></div>
+</div>
+
+<!-- Priority Matrix -->
+<div class="section">
+  <h2>Opportunity Priority Matrix</h2>
+  <div class="matrix">
+    <div class="cell"><h4>⚡ High Impact · Quick Win</h4><ul id="hiQuick"></ul></div>
+    <div class="cell"><h4>🎯 High Impact · Requires Development</h4><ul id="hiDev"></ul></div>
+  </div>
+</div>
+
+</div><!-- .container -->
+
+<script>
+// ============================================================
+// PRODUCT DATA — 151 SKUs verified from jysk.co.uk
+// Scraped 2026-07-28 via browser automation
+// ============================================================
+var PRODUCTS = [{"sku":"2782400","name":"Soap dispenser GENEVAD recycled glass brown","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/255796","price":"£3","oldPrice":"£5.99","sticker":"-50%A great offer","cat":"Soap Dispensers"},{"sku":"2782900","name":"Soap dispenser SMEDBY light grey","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/253646","price":"£3.50","oldPrice":"£6.49","sticker":"-46%A great offer","cat":"Soap Dispensers"},{"sku":"2786100","name":"Soap dispenser LYCKSELE terrazzo effect","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/275578","price":"£4","oldPrice":"£7.99","sticker":"-50%A great offer","cat":"Soap Dispensers"},{"sku":"2784903","name":"Soap dispenser MAKARYD marbel effect brown","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/268506","price":"£4.50","oldPrice":"£7.99","sticker":"-44%A great offer","cat":"Soap Dispensers"},{"sku":"2702400","name":"Soap dispenser KUNGSBACKA marble effect","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/273887","price":"£4.50","oldPrice":"£8.99","sticker":"-50%A great offer","cat":"Soap Dispensers"},{"sku":"2779900","name":"Soap dispenser SANGIS recycled plastic assorted","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270629","price":"£1.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Soap Dispensers"},{"sku":"2780900","name":"Bathroom set VISLANDA 3 pcs/set asstd","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/149573","price":"£1.75","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Soap Dispensers"},{"sku":"2785500","name":"Soap dispenser KARLSKRONA glass","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/266952","price":"£1.75","oldPrice":"£4.99","sticker":"-65%While stocks last","cat":"Soap Dispensers"},{"sku":"2781000","name":"Soap dispenser ROSENLUND assorted","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/263338","price":"£2","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Soap Dispensers"},{"sku":"2783840","name":"Soap dispenser MALA black","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270633","price":"£2","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Soap Dispensers"},{"sku":"2769100","name":"Soap dispenser GESUNDA mat glazed","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270601","price":"£3.50","oldPrice":"£6.49","sticker":"-46%While stocks last","cat":"Soap Dispensers"},{"sku":"2782001","name":"Soap dispenser ROTEBERG grey","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270597","price":"£4","oldPrice":"£5.99","sticker":"-33%","cat":"Soap Dispensers"},{"sku":"2773112","name":"Soap dispenser STENINGE beige","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270595","price":"£4","oldPrice":"£6.99","sticker":"-43%","cat":"Soap Dispensers"},{"sku":"2781101","name":"Soap dispenser EKBY white","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270600","price":"£4.50","oldPrice":"£6.49","sticker":"-31%","cat":"Soap Dispensers"},{"sku":"2781140","name":"Soap dispenser EKBY black","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270630","price":"£4.50","oldPrice":"£6.49","sticker":"-31%","cat":"Soap Dispensers"},{"sku":"2729700","name":"Soap dispenser LEKERYD brown","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/272668","price":"£4.50","oldPrice":"£6.49","sticker":"-31%","cat":"Soap Dispensers"},{"sku":"2700740","name":"Bathroom set LINDSSDAL 3 piece set black","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/273831","price":"£5","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Soap Dispensers"},{"sku":"2778566","name":"Soap dispenser KATTARP green","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270598","price":"£5.50","oldPrice":"£8.49","sticker":"-35%","cat":"Soap Dispensers"},{"sku":"2777712","name":"Soap dispenser TORUP beige stone","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270594","price":"£6.50","oldPrice":"£8.49","sticker":"-23%","cat":"Soap Dispensers"},{"sku":"2764740","name":"Soap dispenser TORESTORP black XL","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/268263","price":"£10","oldPrice":"£13.99","sticker":"-29%","cat":"Soap Dispensers"},{"sku":"2754042","name":"Soap dispenser HUSBY sensor grey","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/288775","price":"£18.50","oldPrice":"£22.99","sticker":"-20%","cat":"Soap Dispensers"},{"sku":"2782401","name":"Toothbrush holder GENEVAD brown recycled glass","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/254607","price":"£2","oldPrice":"£3.99","sticker":"-50%A great offer","cat":"Toothbrush Holder"},{"sku":"2782901","name":"Toothbrush holder SMEDBY light grey","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/253652","price":"£2.75","oldPrice":"£5.49","sticker":"-50%A great offer","cat":"Toothbrush Holder"},{"sku":"2786101","name":"Tooth brush holder LYCKSELE terrazzo effect","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/275582","price":"£3","oldPrice":"£5.49","sticker":"-45%A great offer","cat":"Toothbrush Holder"},{"sku":"2702401","name":"Toothbrush holder KUNGSBACKA marble effect","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/273892","price":"£3.50","oldPrice":"£6.49","sticker":"-46%A great offer","cat":"Toothbrush Holder"},{"sku":"2783940","name":"Toothbrush holder MALA black","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270637","price":"£1","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toothbrush Holder"},{"sku":"2785501","name":"Toothbrush holder KARLSKRONA glass","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/266957","price":"£1.50","oldPrice":"£3.99","sticker":"-62%While stocks last","cat":"Toothbrush Holder"},{"sku":"2773212","name":"Toothbrush holder STENINGE beige","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270644","price":"£2.25","oldPrice":"£5.99","sticker":"-62%While stocks last","cat":"Toothbrush Holder"},{"sku":"2781201","name":"Toothbrush holder EKBY white","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270638","price":"£3","oldPrice":"£4.49","sticker":"-33%","cat":"Toothbrush Holder"},{"sku":"2781240","name":"Toothbrush holder EKBY black","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270634","price":"£3","oldPrice":"£4.49","sticker":"-33%","cat":"Toothbrush Holder"},{"sku":"2729701","name":"Toothbrush holder LEKERYD brown","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/272673","price":"£3.50","oldPrice":"£4.49","sticker":"-22%","cat":"Toothbrush Holder"},{"sku":"2769200","name":"Toothbrush holder GESUNDA mat glazed","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270643","price":"£3.50","oldPrice":"£4.99","sticker":"-30%While stocks last","cat":"Toothbrush Holder"},{"sku":"2778666","name":"Toothbrush holder KATTARP green","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270636","price":"£4","oldPrice":"£5.49","sticker":"-27%","cat":"Toothbrush Holder"},{"sku":"2782002","name":"Toothbrush holder ROTEBERG anthracite grey","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270640","price":"£4","oldPrice":"£5.49","sticker":"-27%","cat":"Toothbrush Holder"},{"sku":"2777512","name":"Toothbrush holder TORUP beige stone","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270635","price":"£4","oldPrice":"£5.99","sticker":"-33%","cat":"Toothbrush Holder"},{"sku":"2785600","name":"Bathroom bin TAHULT 3L plastic beige","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/272581","price":"£4","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2766440","name":"Pedal bin MALA 3L coated metal black","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270677","price":"£6","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2780100","name":"Pedal bin MEDLE 3L steel","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270686","price":"£6","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2780200","name":"Pedal bin MEDLE 5L steel","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270680","price":"£6","oldPrice":"£8","sticker":"-25%While stocks last","cat":"Toilet Bins"},{"sku":"2780300","name":"Pedal bin MEDLE 12L steel","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270681","price":"£14","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2782300","name":"Pedal bin HALLEN 5L with softclose cream","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/253635","price":"£11.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2771884","name":"Pedal bin ULLATTI 5L with softclose beige","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270678","price":"£12.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2779701","name":"Bathroom bin VARTOFTA 5L natural","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/273939","price":"£15","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2785700","name":"Pedal bin JUNG 5L steel","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/274456","price":"£15","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2779700","name":"Bathroom bin VEGBY 5L seagrass","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270683","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2762512","name":"Pedal bin OXIE 5L with softclose beige","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/266948","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2762541","name":"Pedal bin OXIE 5L with softclose grey","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270676","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2762501","name":"Pedal bin OXIE 5L with softclose white","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270685","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Bins"},{"sku":"2786102","name":"Toilet brush LYCKSELE terrazzo effect","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/275587","price":"£6","oldPrice":"£9.99","sticker":"-40%A great offer","cat":"Toilet Brushes"},{"sku":"2702402","name":"Toilet brush KUNGSBACKA marble effect","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/273897","price":"£6.50","oldPrice":"£11.99","sticker":"-46%A great offer","cat":"Toilet Brushes"},{"sku":"2782902","name":"Toilet brush SMEDBY light grey","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/253649","price":"£7","oldPrice":"£9.99","sticker":"-30%A great offer","cat":"Toilet Brushes"},{"sku":"2781802","name":"Toilet brush TORREBY plastic white","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/254094","price":"£1","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Brushes"},{"sku":"2781803","name":"Toilet brush TORREBY black","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/254093","price":"£1","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Brushes"},{"sku":"2784040","name":"Toilet brush MALA black","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270694","price":"£3.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Brushes"},{"sku":"2765960","name":"Toilet brush MEDLE steel","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270691","price":"£3.75","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Brushes"},{"sku":"2779803","name":"Toilet brush BALSBY coated steel beige","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/267190","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Brushes"},{"sku":"2779805","name":"Toilet brush BALSBY coated steel ant.grey","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/254604","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Brushes"},{"sku":"2779802","name":"Toilet brush BALSBY coated steel white","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270689","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Toilet Brushes"},{"sku":"2773312","name":"Toilet brush STENINGE beige","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270688","price":"£5.50","oldPrice":"£11.99","sticker":"-54%While stocks last","cat":"Toilet Brushes"},{"sku":"2769300","name":"Toilet brush GESUNDA mat glazed","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270696","price":"£6","oldPrice":"£11.99","sticker":"-50%While stocks last","cat":"Toilet Brushes"},{"sku":"2781340","name":"Toilet brush EKBY black","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270697","price":"£7","oldPrice":"£8.99","sticker":"-22%","cat":"Toilet Brushes"},{"sku":"2777612","name":"Toilet brush TORUP beige stone","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270692","price":"£10","oldPrice":"£13.99","sticker":"-29%","cat":"Toilet Brushes"},{"sku":"2783001","name":"Storage jar GENEVAD D8xH10 recycled glass brown","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/254082","price":"£2.50","oldPrice":"£4.29","sticker":"-42%A great offer","cat":"Accessories"},{"sku":"2702403","name":"Tray KUNGSBACKA marble effect","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/273900","price":"£5","oldPrice":"£8.99","sticker":"-44%A great offer","cat":"Accessories"},{"sku":"2781401","name":"Squeegee DJURA with suction cup","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/275603","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2780401","name":"Nail brush VALJE wood Schima wallichi","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/281268","price":"£1","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2780501","name":"Bath brush VALJE wood Schima wallichi","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270724","price":"£2.75","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2783100","name":"Bin bags ROTTNE for 12L/5L/3L assorted","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/176730","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2782818","name":"Hair turban TUNADAL 2pcs sand/rose","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/254681","price":"£3","oldPrice":"£4.50","sticker":"-33%While stocks last","cat":"Accessories"},{"sku":"2778400","name":"Makeup bag TOFTBYN W21xL13xD6 assorted","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/269535","price":"£3","oldPrice":"£5","sticker":"-40%While stocks last","cat":"Accessories"},{"sku":"2768226","name":"Hot water bottle KRAMFORS 1.5L with soft fleece","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270717","price":"£5","oldPrice":"£7","sticker":"-29%While stocks last","cat":"Accessories"},{"sku":"2783701","name":"Hair clip FURULUND 2 pcs assorted","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/273927","price":"£6","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2785800","name":"Jewellry tree SJUNTORP chrome","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/273875","price":"£6","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"3901502","name":"Bathroom scale VENJAN glass 200kg/100g","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/271265","price":"£14","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2781700","name":"Squeegee FORSBY with suction cup grey","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/159903","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2780940","name":"Hairbrush HALLERNA black assorted","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270722","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2785400","name":"Trinket dish BODAFORS glass assorted","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270718","price":"£1.50","oldPrice":"£2.25","sticker":"-33%While stocks last","cat":"Accessories"},{"sku":"2764000","name":"Face roller VALLSTA jade stone","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270730","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2763900","name":"Face roller & massage stone VALLSTA rose","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270711","price":"£8","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2777900","name":"Hairbrush HOGSTAD beige SDP","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270732","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2729703","name":"Cotton bud holder LEKERYD brown","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/272678","price":"£2.50","oldPrice":"£3.29","sticker":"-24%","cat":"Accessories"},{"sku":"2729702","name":"Ring holder LEKERYD brown","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/272683","price":"£3.25","oldPrice":"£4.29","sticker":"-24%","cat":"Accessories"},{"sku":"2783000","name":"Storage jar GENEVAD D8xH10 recycled glass brown","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/254085","price":"£2.50","oldPrice":"£4.29","sticker":"-42%While stocks last","cat":"Accessories"},{"sku":"2778200","name":"Storage jar SKOGSBY D7 + D9 glass pack of 2","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270725","price":"£3","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2785200","name":"Bathroom shelf BENSBYN W20xH10 beige","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/275604","price":"£3","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2784904","name":"Trinket dish MAKARYD D10xH2cm marble effect brown","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/268510","price":"£3","oldPrice":"£3.99","sticker":"-25%","cat":"Accessories"},{"sku":"2764400","name":"Trinket dish FORSBACKA D11 assorted","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270712","price":"£3.25","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2786301","name":"Trinket dish STUGUN W11xL20xH5 off-white","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/273935","price":"£3.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2783200","name":"Trinket dish KANGOS D9/12cm seagrass 2 pieces","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/254073","price":"£3.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2778766","name":"Tray KATTARP 12x19xH3 green","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270719","price":"£3.50","oldPrice":"£4.99","sticker":"-30%While stocks last","cat":"Accessories"},{"sku":"2786300","name":"Trinket dish FLYGSFORS D15xH4 brown","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/274682","price":"£4","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2784640","name":"Toilet roll holder SUNDSBRUK metal black","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/278362","price":"£4","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2773500","name":"Hair comb set KULLTORP pack of 3 assorted","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270728","price":"£4","oldPrice":"£9","sticker":"-56%While stocks last","cat":"Accessories"},{"sku":"2715300","name":"Jewellry box TORNELILLA corduroy assorted","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/271991","price":"£5","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2784600","name":"Toilet roll holder TRARYD W10xL18xH9cm natural","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/267080","price":"£5","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2779840","name":"Double sided mirror ILSBO H35","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/254687","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2777300","name":"Trinket dish STENSTORP D11/D14 stoneware 2pcs","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270726","price":"£5","oldPrice":"£6.50","sticker":"-23%While stocks last","cat":"Accessories"},{"sku":"2785900","name":"Toilet bag KARLSBORG W23xL15xH9 assorted","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/272573","price":"£6","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2785350","name":"Storage jar TENHULT D11xH6 gold","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/269772","price":"£6","oldPrice":"","sticker":"NewEVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2784201","name":"Toilet bag SVALSTA 2 pcs. multi-coloured","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/254101","price":"£6","oldPrice":"£9","sticker":"-33%While stocks last","cat":"Accessories"},{"sku":"2776800","name":"Makeup lamp with LED KALIX L30 silver","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/149574","price":"£7.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2777812","name":"Tray TORUP W11xL18xH2cm beige stone","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270729","price":"£8","oldPrice":"£9.99","sticker":"-20%","cat":"Accessories"},{"sku":"2763151","name":"Trinket dish EDSELE D11/14 goldenmetal 2pc","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270723","price":"£9","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2700600","name":"Double sided mirror SKURUP beige","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/274167","price":"£9","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2771600","name":"Makeup mirror VEDDIGE w/LED D20xH22 white","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270721","price":"£9","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2772200","name":"Toilet roll holder VANSBRO D16H47 seagrass","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270288","price":"£9","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Accessories"},{"sku":"2786701","name":"Room spray BASTIAN warm sunset 50ml","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/282347","price":"£2.75","oldPrice":"","sticker":"NewEVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2786703","name":"Room spray BASTIAN warm sunset 200ml","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/283293","price":"£4","oldPrice":"","sticker":"","cat":"Reed Diffusers"},{"sku":"2786700","name":"Reed diffuser BASTIAN warm sunset 120ml","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/283315","price":"£7.50","oldPrice":"","sticker":"NewEVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2787201","name":"Room spray MOHEDA lemon verde 100ml","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/282322","price":"£4.50","oldPrice":"","sticker":"NewEVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2786801","name":"Room spray MOHEDA clean cotton 100ml","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/282332","price":"£4.50","oldPrice":"","sticker":"NewEVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2786901","name":"Room spray MOHEDA ocean breeze 100ml","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/282337","price":"£4.50","oldPrice":"","sticker":"NewEVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2787001","name":"Room spray MOHEDA nordic woods 100ml","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/283298","price":"£4.50","oldPrice":"","sticker":"NewEVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2773701","name":"Reed diffuser MOHEDA floral breeze 100ml","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/270702","price":"£6","oldPrice":"","sticker":"","cat":"Reed Diffusers"},{"sku":"2786800","name":"Reed diffuser MOHEDA clean cotton 100ml","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/283321","price":"£6","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2786900","name":"Reed diffuser MOHEDA ocean breeze 100ml","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/283303","price":"£6","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2787000","name":"Reed diffuser MOHEDA nordic woods 100ml","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/283310","price":"£7","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2782501","name":"Reed diffuser ENERYDA lemon verde 100ml","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/254406","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2782500","name":"Reed diffuser ENERYDA white blossom 100ml","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/254402","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Reed Diffusers"},{"sku":"2782600","name":"Reed diffuser SUNNEMO clean cotton 100ml","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/255805","price":"£6","oldPrice":"£9","sticker":"-33%While stocks last","cat":"Reed Diffusers"},{"sku":"2779300","name":"Shower basket STOCKA w/suction cups","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/254079","price":"£2","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2781601","name":"Shower basket HAMMERDAL W24xH24xD11 assorted","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/276746","price":"£2.75","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2778818","name":"Storage box HUSUM W22xL16xH14 rose","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270731","price":"£5","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2784801","name":"Storage case JUNSELE pack of 2 sand","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/275614","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2759140","name":"Shower basket NACKA black","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270710","price":"£5.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2782740","name":"Bathroom shelving unit NACKA W14xL26xH28 black","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/254088","price":"£12.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2768040","name":"Shelf NACKA w/multi hanging hooks black","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270707","price":"£15","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2784800","name":"Storage case JONSTORP 3 pcs plastic sand","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/268273","price":"£5.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2786000","name":"Storage box KORSBERGA paper natural","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/273943","price":"£6","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2778312","name":"Shower shelf MOHED W23xL12xH27cm beige","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/270706","price":"£6","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2778412","name":"Shower shelf MOHED double W23xL12xH48 beige","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/275595","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2786500","name":"Basket HAGUDA natural","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/273947","price":"£7","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2776901","name":"Tiered baskets HAGUDA 3-tier shelf natural","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/273951","price":"£20","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2784500","name":"Tiered baskets TUREHOLM D16xH31cm natural","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/264428","price":"£8","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2773600","name":"Hanging baskets OLSTORP 2 pcs/set","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/270733","price":"£9","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2786200","name":"Hanging storage STOCKARYD W20xL30xH78 natural","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/273883","price":"£15","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2786400","name":"Over door organiser HULT W40xH135xD15","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/274282","price":"£30","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2747202","name":"Jewellery box VIKEN 16x25x6","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/129004","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2763200","name":"Makeup organiser VIKEN W10xL18xH5/9cm","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/181698","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2783300","name":"Storage box SENNAN w/lid sea grass 2 pcs","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/254070","price":"£11.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2784400","name":"Basket HULU W24xL34xH26 natural","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/264424","price":"£11.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2777412","name":"Bathroom shelving unit KAREBY beige","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/270704","price":"NELP","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2777413","name":"Corner shelving unit KAREBY beige","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/290337","price":"£16.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2715200","name":"Tiered baskets RYDAHOLM natural","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/273879","price":"£14","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Bathroom Storage"},{"sku":"2781500","name":"Wall hook RIALA plast 3pcs/pk assorted","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/288778","price":"£1","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Towel Rails"},{"sku":"2784106","name":"Wall hook HOLMSUND 2 pieces black","imgUrl":"https://cdn3.jysk.com/getimage/wd3.medium/288780","price":"£2.75","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Towel Rails"},{"sku":"2769000","name":"Wall hook EKEDALEN steel 2 pieces assorted","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/212385","price":"£3.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Towel Rails"},{"sku":"2769001","name":"Wall hook EKEDALEN steel 2 pcs beige","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/275605","price":"£3.50","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Towel Rails"},{"sku":"2784107","name":"Over door hanger STOCKVIK 25x14x5cm white","imgUrl":"https://cdn2.jysk.com/getimage/wd3.medium/288805","price":"£5","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Towel Rails"},{"sku":"2784108","name":"Over door hanger STOCKVIK 25x14x5cm black","imgUrl":"https://cdn1.jysk.com/getimage/wd3.medium/254394","price":"£5","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Towel Rails"},{"sku":"2784101","name":"Towel rail STOCKVIK 60x6x7 black","imgUrl":"https://cdn4.jysk.com/getimage/wd3.medium/254388","price":"£8","oldPrice":"","sticker":"EVERYDAY LOW PRICE","cat":"Towel Rails"}];
+
+// === RENDER ENGINE ===
+
+// Material classification uses POLYRESIN_SERIES, CERAMIC_SERIES, GLASS_SERIES (defined above in material())
+var NEW_SKUS = {2785350:1,2786701:1,2786700:1,2787201:1,2786801:1,2786901:1,2787001:1};
+var POPULAR_SKUS = {2782400:1,2782900:2,2786100:3,2702400:4,2784903:5,2785500:6,2729700:7,2764740:8,2754042:9,2782001:10,2782401:11,2782901:12,2786101:13,2702401:14,2785501:15};
+// Top Rated SKUs — verified from JYSK JSON-LD AggregateRating, weighted by ratingValue × reviewCount
+var RATED_SKUS = {2782400:1,2773112:2,2773212:3,2764400:4,2777300:5,2782401:6,2769200:7,2782900:8};
+// Rating data scraped from JYSK JSON-LD AggregateRating (2026-07-30)
+var RATED_DATA = {
+  2782400:{stars:5.0, reviews:11}, 2773112:{stars:5.0, reviews:8}, 2773212:{stars:5.0, reviews:7},
+  2764400:{stars:5.0, reviews:4}, 2777300:{stars:5.0, reviews:1}, 2782401:{stars:4.9, reviews:7},
+  2769200:{stars:4.8, reviews:6}, 2782900:{stars:4.8, reviews:4}, 2764740:{stars:4.3, reviews:6},
+  2769300:{stars:4.2, reviews:13}, 2769100:{stars:4.0, reviews:8}, 2777812:{stars:3.9, reviews:8}
+};
+
+// Material classification based on verified JYSK product page specs (same as classifyMat)
+var POLYRESIN_SERIES = ['kungsbacka','makaryd','torup','torestorp'];
+var CERAMIC_SERIES = ['lycksele','steninge','gesunda','ekby','smedby','lekeryd','stenstorp','flygsfors','forsbacka'];
+var GLASS_SERIES = ['genevad','karlskrona','kattarp','roteberg','rosenlund','bodafors','skogsby','venjan'];
+function material(p) {
+  var n = p.name.toLowerCase();
+  for (var i=0; i<POLYRESIN_SERIES.length; i++) { if (n.indexOf(POLYRESIN_SERIES[i])>=0) return 'polyresin'; }
+  for (var i=0; i<CERAMIC_SERIES.length; i++) { if (n.indexOf(CERAMIC_SERIES[i])>=0) return 'ceramic'; }
+  for (var i=0; i<GLASS_SERIES.length; i++) { if (n.indexOf(GLASS_SERIES[i])>=0) return 'glass'; }
+  if (/steel|metal|chrome|goldenmetal/.test(n)) return 'metal';
+  if (/plastic|resin/.test(n)) return 'plastic';
+  if (/wood|bamboo|seagrass|natural|rattan|paper/.test(n)) return 'natural';
+  return 'other';
+}
+function pp(p) { if (!p||p==='NELP') return null; return parseFloat(p.replace('£','')); }
+function productUrl(p) {
+  var catSlugs = {'Soap Dispensers':'soap-dispensers','Toothbrush Holder':'toothbrush-holder','Toilet Brushes':'toilet-brushes','Accessories':'accessories','Toilet Bins':'toilet-bins','Reed Diffusers':'reed-diffusers','Bathroom Storage':'bathroom-storage','Towel Rails':'towel-rails'};
+  var catSlug = catSlugs[p.cat] || 'accessories';
+  var nameSlug = p.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  return 'https://jysk.co.uk/bathroom/bathroom-accessories/'+catSlug+'/'+nameSlug;
+}
+
+var CATS = ['Soap Dispensers','Toothbrush Holder','Toilet Brushes','Accessories','Toilet Bins','Reed Diffusers','Bathroom Storage','Towel Rails'];
+var catsByProd = {};
+CATS.forEach(function(c){ catsByProd[c] = PRODUCTS.filter(function(p){return p.cat===c;}); });
+
+var CORE_CATS = ['Soap Dispensers','Toothbrush Holder','Toilet Brushes','Accessories'];
+
+// === KPI ROW ===
+(function(){
+  var totalSKU = PRODUCTS.length;
+  var totalCats = CATS.length;
+  var prices = PRODUCTS.map(function(p){return pp(p.price);}).filter(Boolean);
+  var minP = Math.min.apply(null, prices);
+  var maxP = Math.max.apply(null, prices);
+  var newProds = PRODUCTS.filter(function(p){return NEW_SKUS[p.sku];});
+  var onPromo = PRODUCTS.filter(function(p){return p.sticker&&p.sticker.indexOf('EVERYDAY LOW PRICE')===-1;});
+  var sets = PRODUCTS.filter(function(p){var n=p.name.toLowerCase();return n.indexOf('set')>=0||n.indexOf('3 piece')>=0||n.indexOf('3 pcs')>=0;});
+  var clearance = PRODUCTS.filter(function(p){return p.sticker&&p.sticker.indexOf('While stocks last')>=0;});
+  var kpis = [
+    {val:totalSKU,lbl:'Total SKUs',filter:function(){return PRODUCTS;}},
+    {val:totalCats,lbl:'Subcategories',filter:function(){ document.getElementById('catCards').scrollIntoView({behavior:'smooth',block:'start'}); return null; }},
+    {val:'£'+minP+' – £'+maxP,lbl:'Price Range',filter:function(){ document.getElementById('priceSection').scrollIntoView({behavior:'smooth',block:'start'}); return null; }},
+    {val:clearance.length,lbl:'Clearance',filter:function(){return clearance;}},
+    {val:newProds.length,lbl:'New Arrivals',filter:function(){return newProds;}},
+    {val:sets.length,lbl:'Bathroom Sets',filter:function(){return sets;}},
+    {val:onPromo.length,lbl:'On Promotion',filter:function(){return onPromo;}}
+  ];
+  var html = '';
+  kpis.forEach(function(k,i){
+    html += '<div class="kpi" data-kpi="'+i+'" onclick="kpiFilter('+i+',this)"><div class="val">'+k.val+'</div><div class="lbl">'+k.lbl+'</div></div>';
+  });
+  document.getElementById('kpiRow').innerHTML = html;
+  window._kpis = kpis;
+})();
+
+function kpiFilter(idx, el) {
+  // Toggle off if already active
+  if (el.classList.contains('active-kpi')) {
+    el.classList.remove('active-kpi');
+    renderProducts(PRODUCTS, 'productGrid');
+    resetFilterBtns();
+    return;
+  }
+  // Clear all active states
+  document.querySelectorAll('.kpi').forEach(function(k){k.classList.remove('active-kpi');});
+  resetFilterBtns();
+  el.classList.add('active-kpi');
+  var k = window._kpis[idx];
+  if (k.filter) {
+    var filtered = k.filter();
+    if (filtered) {
+      renderProducts(filtered, 'productGrid');
+      document.getElementById('productGrid').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    // if filtered is null, the filter function handled its own action (e.g. scroll)
+  }
+}
+
+function resetFilterBtns() {
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+}
+
+// === FILTER BAR ===
+(function(){
+  var html = '<button class="filter-btn all" onclick="filterProducts(\'all\',this)">All ('+PRODUCTS.length+')</button>';
+  CATS.forEach(function(c){
+    html += '<button class="filter-btn" onclick="filterProducts(\'cat:'+c+'\',this)">'+c+' ('+catsByProd[c].length+')</button>';
+  });
+  // Material filter tags
+  html += '<span style="color:var(--muted);margin:0 4px;font-size:.82rem;">|</span>';
+  html += '<button class="filter-btn mat-btn" id="matBtnGlass" onclick="filterProducts(\'mat:GLASS\',this)" style="border-color:#7db89a;">Glass</button>';
+  html += '<button class="filter-btn mat-btn" id="matBtnPoly" onclick="filterProducts(\'mat:POLYRESIN\',this)" style="border-color:#a08060;">Polyresin</button>';
+  html += '<button class="filter-btn mat-btn" id="matBtnCeramic" onclick="filterProducts(\'mat:CERAMIC\',this)" style="border-color:#c4a882;">Ceramic</button>';
+  document.getElementById('filterBar').innerHTML = html;
+  // Update Clearance button with count
+  var clCount = PRODUCTS.filter(function(p){return p.sticker && p.sticker.indexOf('While stocks last')>=0;}).length;
+  var clBtns = document.querySelectorAll('.filter-btn');
+  for (var i=0; i<clBtns.length; i++) {
+    if (clBtns[i].textContent === 'Clearance') { clBtns[i].textContent = 'Clearance ('+clCount+')'; break; }
+  }
+})();
+
+function filterProducts(key, btn) {
+  // Clear KPI active states
+  document.querySelectorAll('.kpi').forEach(function(k){k.classList.remove('active-kpi');});
+  var allBtns = document.querySelectorAll('.filter-btn');
+  for (var i=0; i<allBtns.length; i++) allBtns[i].classList.remove('active');
+  btn.classList.add('active');
+  var filtered;
+  if (key === 'all') {
+    filtered = PRODUCTS;
+  } else if (key === 'clearance') {
+    filtered = PRODUCTS.filter(function(p){return p.sticker && p.sticker.indexOf('While stocks last')>=0;});
+  } else if (key.indexOf('cat:') === 0) {
+    filtered = catsByProd[key.slice(4)];
+  } else if (key.indexOf('mat:') === 0) {
+    filtered = window._matGroups[key.slice(4)] || [];
+  } else {
+    filtered = PRODUCTS;
+  }
+  renderProducts(filtered, 'productGrid');
+}
+
+// === RENDER PRODUCTS ===
+function renderProducts(list, gridId) {
+  var grid = document.getElementById(gridId);
+  var html = '';
+  list.forEach(function(p){
+    var mat = material(p);
+    var isNew = !!NEW_SKUS[p.sku];
+    var isPopular = !!POPULAR_SKUS[p.sku];
+    var badges = '';
+    if (isNew) badges += '<span class="badge badge-new">NEW</span>';
+    if (isPopular && !isNew) badges += '<span class="badge badge-popular">POPULAR</span>';
+    if (p.sticker && p.sticker.indexOf('While stocks last')>=0) badges += '<span class="badge badge-clearance">CLEARANCE</span>';
+    if (p.sticker && p.sticker.indexOf('great offer')>=0) badges += '<span class="badge badge-deal">DEAL</span>';
+    var imgSrc = p.imgUrl||'';
+    var disc = '';
+    if (p.oldPrice) { disc = '-'+Math.round((1-pp(p.price)/pp(p.oldPrice))*100)+'%'; }
+    var priceHtml = '';
+    if (p.price==='NELP') {
+      priceHtml = '<span class="price">NELP</span>';
+    } else {
+      priceHtml = '<span class="price">'+p.price+'</span>';
+      if (p.oldPrice) priceHtml += ' <span class="old-price">'+p.oldPrice+'</span>';
+      if (disc) priceHtml += ' <span class="discount">'+disc+'</span>';
+    }
+    var ratingHtml = '';
+    if (RATED_DATA[p.sku]) {
+      var rd = RATED_DATA[p.sku];
+      var starsStr = '';
+      var full = Math.floor(rd.stars);
+      var half = rd.stars - full >= 0.3 ? 1 : 0;
+      for (var si=0; si<full; si++) starsStr += '★';
+      if (half) starsStr += '☆';
+      ratingHtml = '<div class="rating-line"><span style="color:#c8974a;font-size:.7rem;">'+starsStr+'</span> <span style="color:var(--muted);font-size:.66rem;">'+rd.stars.toFixed(1)+' ('+rd.reviews+')</span></div>';
+    }
+    html += '<div class="product-card"><div class="img-wrap"><a href="'+productUrl(p)+'" target="_blank"><img src="'+imgSrc+'" alt="'+p.name+'" loading="lazy" onerror="this.style.display=\'none\'"></a><div class="badges">'+badges+'</div></div><div class="info">'+(imgSrc?'<img src="'+imgSrc+'" class="img-preview" alt="">':'')+'<div class="name"><a href="'+productUrl(p)+'" target="_blank" title="'+p.name+'">'+p.name+'</a></div><div class="material-tag">'+mat+'</div>'+ratingHtml+'<div class="price-row">'+priceHtml+'</div></div></div>';
+  });
+  grid.innerHTML = html;
+}
+
+// Initial render — show core 4 categories only (93 SKUs), not all 151
+var CORE_CATS = ['Soap Dispensers','Toothbrush Holder','Toilet Brushes','Accessories'];
+var defaultProducts = PRODUCTS.filter(function(p){return p.cat==='Soap Dispensers';});
+// Default to Soap Dispensers (21 SKUs) — cleanest entry view, user clicks category filters to explore more
+// Activate a virtual "Core Categories" filter style by not activating any single button
+renderProducts(defaultProducts, 'productGrid');
+
+// === CATEGORY CARDS ===
+(function(){
+  var html = '';
+  CATS.forEach(function(c){
+    var items = catsByProd[c];
+    var prices = items.map(function(p){return pp(p.price);}).filter(Boolean);
+    var avg = prices.length ? '£'+(prices.reduce(function(a,b){return a+b;},0)/prices.length).toFixed(2) : '—';
+    var min = prices.length ? '£'+Math.min.apply(null, prices) : '—';
+    var max = prices.length ? '£'+Math.max.apply(null, prices) : '—';
+    var gCount = items.filter(function(p){return material(p)==='glass';}).length;
+    var ceCount = items.filter(function(p){return material(p)==='ceramic';}).length;
+    var pCount = items.filter(function(p){return material(p)==='polyresin';}).length;
+    var oCount = items.length - gCount - ceCount - pCount;
+
+    // Show all product images (scrollable)
+    var samples = items.filter(function(p){return p.imgUrl;});
+    var imgsHtml = '';
+    samples.forEach(function(s){
+      imgsHtml += '<a href="'+productUrl(s)+'" target="_blank"><img src="'+s.imgUrl+'" alt="'+s.name+'" loading="lazy" onerror="this.style.display=\'none\'"></a>';
+    });
+
+    // Material dots string
+    var dots = '';
+    if (gCount) dots += '<span class="m-dot"><span class="d d-glass"></span> '+gCount+' glass</span>';
+    if (ceCount) dots += '<span class="m-dot"><span class="d d-ceramic"></span> '+ceCount+' ceramic</span>';
+    if (pCount) dots += '<span class="m-dot"><span class="d d-poly"></span> '+pCount+' polyresin</span>';
+    if (oCount) dots += '<span class="m-dot"><span class="d d-other"></span> '+oCount+' other</span>';
+
+    html += '<div class="cat-card">'+
+      '<div class="cat-head"><h3>'+c+'</h3><span class="cat-count">'+items.length+' SKUs</span></div>'+
+      '<div class="cat-imgs">'+imgsHtml+'</div>'+
+      '<div class="cat-stats">'+
+        '<div class="stat-item"><span class="stat-num">'+min+'</span><span class="stat-lbl">Min</span></div>'+
+        '<div class="stat-item"><span class="stat-num">'+max+'</span><span class="stat-lbl">Max</span></div>'+
+        '<div class="stat-item"><span class="stat-num">'+avg+'</span><span class="stat-lbl">Avg Price</span></div>'+
+        '<div class="stat-item"><span class="stat-num">'+items.filter(function(p){return NEW_SKUS[p.sku];}).length+'</span><span class="stat-lbl">New</span></div>'+
+      '</div>'+
+      '<div class="mat-dots">'+dots+'</div>'+
+    '</div>';
+  });
+  document.getElementById('catCards').innerHTML = html;
+
+  // Compute cross-category gaps for Glass and Ceramic
+  var coreCats = ['Soap Dispensers','Toothbrush Holder','Toilet Brushes','Accessories'];
+  var glassCoverage = [], ceramicCoverage = [];
+  coreCats.forEach(function(c){
+    var items = catsByProd[c];
+    var g = items.filter(function(p){return material(p)==='glass';});
+    var ce = items.filter(function(p){return material(p)==='ceramic';});
+    glassCoverage.push({cat:c, count: g.length, items: g});
+    ceramicCoverage.push({cat:c, count: ce.length, items: ce});
+  });
+
+  // Compute ceramic totals needed for dev direction cards
+  var ceramicTotal = ceramicCoverage.reduce(function(a,b){return a+b.count;},0);
+  var ceramicClearance = ceramicCoverage.reduce(function(a,b){return a+b.items.filter(function(p){return p.sticker&&p.sticker.indexOf('While stocks last')>=0;}).length;},0);
+
+  // Helper: get first product image for a given series from core categories
+  function seriesImg(seriesName) {
+    var found = PRODUCTS.find(function(p){
+      return p.imgUrl && p.name.toLowerCase().indexOf(seriesName)>=0 && CORE_CATS.indexOf(p.cat)>=0;
+    });
+    return found ? found.imgUrl : '';
+  }
+
+  document.getElementById('catInsights').innerHTML = '';
+})();
+
+// === PRICE TIERS WITH PRODUCT IMAGES ===
+(function(){
+  var tierColors = {
+    'Economy < £3': {bg:'#e8f0ec', txt:'#2a5a3e'},
+    'Mid £3–£7': {bg:'#f5efe5', txt:'#8b6914'},
+    'Premium £7–£15': {bg:'#ede4f0', txt:'#5a3a6e'},
+    'Upper £15+': {bg:'#e0eaf2', txt:'#2a4a6e'},
+    'NELP': {bg:'#f5f0f0', txt:'#999'}
+  };
+
+  var catColors = {0:'soap',1:'holder',2:'brush',3:'acc'};
+  var html = '';
+
+  CORE_CATS.forEach(function(c, ci){
+    var items = catsByProd[c];  // all products, including NELP and no-image
+    var tiers = {
+      'Economy < £3': items.filter(function(p){var pr=pp(p.price); return pr!==null && pr<3;}),
+      'Mid £3–£7': items.filter(function(p){var pr=pp(p.price); return pr!==null && pr>=3 && pr<7;}),
+      'Premium £7–£15': items.filter(function(p){var pr=pp(p.price); return pr!==null && pr>=7 && pr<15;}),
+      'Upper £15+': items.filter(function(p){var pr=pp(p.price); return pr!==null && pr>=15;}),
+      'NELP': items.filter(function(p){return pp(p.price)===null;})
+    };
+
+    html += '<div class="price-tier-col">';
+    html += '<div class="pt-head '+catColors[ci]+'">'+c+' <span style="font-weight:400;opacity:.8;font-size:.78rem;">('+items.length+' SKUs)</span></div>';
+
+    Object.keys(tiers).forEach(function(tier){
+      var prods = tiers[tier];
+      if (!prods.length) return;
+      var tc = tierColors[tier];
+      html += '<div class="pt-band">';
+      html += '<div class="band-label" style="color:'+tc.txt+';">'+tier+' <span class="band-count">('+prods.length+')</span></div>';
+      html += '<div class="band-imgs">';
+      prods.forEach(function(p){
+        var priceLabel = p.price==='NELP' ? 'NELP' : p.price;
+        if (p.imgUrl) {
+          html += '<a href="'+productUrl(p)+'" target="_blank" title="'+p.name+' | '+priceLabel+'"><img src="'+p.imgUrl+'" alt="'+p.name+'" loading="lazy" onerror="this.style.display=\'none\'"></a>';
+        }
+      });
+      html += '</div></div>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('priceTiers').innerHTML = html;
+})();
+
+// === PRICE GAP ANALYSIS — Development Opportunities ===
+(function(){
+  var gapData = [
+    {
+      cat: 'Soap Dispensers',
+      catClass: 'soap',
+      summary: 'Huge premium void above £7 — only 1 SKU (TORESTORP polyresin £10). No ceramic or glass dispenser in the £7–£12 band. A premium stoneware dispenser at £8–£10 with tactile finish would have zero competition in its tier.',
+      gaps: [
+        {label:'Premium Stoneware','range':'£8–£12','current':'0 SKUs','target':'Matte glazed or speckled stoneware dispenser','color':'#c4a882'},
+        {label:'Elevated Glass','range':'£6–£9','current':'0 SKUs (glass all ≤£5.50)','target':'Thick recycled glass with wood/stone accent','color':'#5b9a8b'},
+        {label:'XL Statement','range':'£12–£18','current':'1 SKU (TORESTORP £10)','target':'Oversized stoneware, sculptural silhouette','color':'#8b6a3a'}
+      ]
+    },
+    {
+      cat: 'Toothbrush Holder',
+      catClass: 'holder',
+      summary: 'Entire category caps at £4. Zero products above £5. Most underserved category — no premium holder on JYSK. A ceramic holder matching the dispenser form language at £5–£8 creates a new category price tier.',
+      gaps: [
+        {label:'Mid-Premium Stoneware','range':'£5–£8','current':'0 SKUs (everything ≤£4)','target':'Coordinated ribbed/fluted holder matching dispenser','color':'#c4a882'},
+        {label:'Textured Glass','range':'£4–£6','current':'0 SKUs in this band','target':'Tinted recycled glass with vertical rib texture','color':'#5b9a8b'},
+        {label:'3-Piece Set','range':'£8–£14','current':'0 SKUs','target':'Dispenser + holder + tray in matching stoneware','color':'#8b7e6a'}
+      ]
+    },
+    {
+      cat: 'Toilet Brushes',
+      catClass: 'brush',
+      summary: 'Ceramic brushes (STENINGE, GESUNDA, LYCKSELE) all on clearance — JYSK signals range refresh. Only 3 premium SKUs at £7–£10. Gap: concealed-head ceramic brush at £9–£12 — no current design hides the brush head inside a stoneware canister.',
+      gaps: [
+        {label:'Concealed-Head Ceramic','range':'£9–£13','current':'0 SKUs (all expose brush head)','target':'Stoneware canister with internal brush, matte finish','color':'#c4a882'},
+        {label:'Stoneware Refresh','range':'£7–£10','current':'2 SKUs (£7, both dated)','target':'Replace clearance designs with modern profile','color':'#8b6a3a'}
+      ]
+    },
+    {
+      cat: 'Accessories',
+      catClass: 'acc',
+      summary: '44 SKUs — focus on ceramic/glass sub-types. STENSTORP stoneware trinket dish (£5) validates demand but no family exists. No coordinated stoneware tray set or tinted glass jar family. Expand single items into ranges.',
+      gaps: [
+        {label:'Stoneware Tray Set','range':'£8–£12','current':'0 SKUs','target':'2-3 piece tray set, organic shapes, matte glaze','color':'#c4a882'},
+        {label:'Glass Storage Jar Family','range':'£4–£8','current':'Fragmentary (GENEVAD/SKOGSBY)','target':'S/M/L set in tinted recycled glass','color':'#5b9a8b'},
+        {label:'Ceramic Trinket Range','range':'£5–£9','current':'1 SKU (STENSTORP £5 clearance)','target':'Round + oval + rectangular stoneware, coordinated','color':'#8b6a3a'}
+      ]
+    }
+  ];
+
+  var catCols = {soap:'#1a4a3e', holder:'#2a6a5e', brush:'#3a7a6e', acc:'#4a8a7e'};
+
+  var html = '<h3 style="font-size:1rem;font-weight:700;margin:0 0 16px;">Development Gap Analysis — Where We Can Win</h3>';
+
+  // Clearance Signal — right below title
+  var cItems = PRODUCTS.filter(function(p){ return p.sticker && p.sticker.indexOf('While stocks last')>=0; });
+  var coreC = cItems.filter(function(p){ return CORE_CATS.indexOf(p.cat)>=0; });
+  var smap = {};
+  coreC.forEach(function(p){
+    var n = p.name.toLowerCase();
+    var found = null;
+    var allSeries = POLYRESIN_SERIES.concat(CERAMIC_SERIES).concat(GLASS_SERIES);
+    for (var i=0; i<allSeries.length; i++) { if (n.indexOf(allSeries[i])>=0) { found = allSeries[i]; break; } }
+    if (!found) found = n.split(' ').slice(0,2).join(' ');
+    if (!smap[found]) smap[found] = {series: found, items: [], mats: [], cats: {}};
+    smap[found].items.push(p);
+    var mat = material(p);
+    if (smap[found].mats.indexOf(mat)<0) smap[found].mats.push(mat);
+    if (!smap[found].cats[p.cat]) smap[found].cats[p.cat] = 0;
+    smap[found].cats[p.cat]++;
+  });
+  var slist = Object.values(smap).filter(function(s){ return s.items.length>=2; });
+  slist.sort(function(a,b){ return b.items.length - a.items.length; });
+  html += '<div style="background:var(--card);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);border-left:4px solid #c44;margin-bottom:18px;">';
+  html += '<h4 style="margin:0 0 4px;font-size:.88rem;">Clearance Signal — Series Being Phased Out</h4>';
+  html += '<p style="font-size:.78rem;color:var(--muted);line-height:1.5;margin:0 0 10px;"><strong>'+coreC.length+' of '+cItems.length+' clearance SKUs</strong> in core categories. GESUNDA, STENINGE, KARLSKRONA cleared entirely — <strong>range refresh window</strong>.</p>';
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;">';
+  slist.forEach(function(s){
+    var discounts = s.items.map(function(p){ var d=p.sticker.match(/-(\d+)%/); return d ? parseInt(d[1]) : 0; });
+    var avgDisc = Math.round(discounts.reduce(function(a,b){return a+b;},0)/discounts.length);
+    var cats = Object.keys(s.cats).join(', ');
+    var matLabel = s.mats.join(' + ');
+    var simg = '';
+    var sample = s.items.find(function(p){ return p.imgUrl; });
+    if (sample) simg = '<img src="'+sample.imgUrl+'" style="width:36px;height:36px;object-fit:contain;border-radius:4px;background:#faf7f2;flex-shrink:0;" alt="">';
+    html += '<div style="padding:6px 10px;background:#fdf8f5;border-radius:6px;display:flex;align-items:center;gap:8px;">';
+    if (simg) html += simg;
+    html += '<div style="flex:1;"><div style="font-weight:700;font-size:.76rem;">'+s.series.toUpperCase()+' <span style="color:#c44;">-'+avgDisc+'% avg</span></div>';
+    html += '<div style="font-size:.68rem;color:var(--muted);">'+s.items.length+' SKUs across '+cats+' | '+matLabel+'</div></div></div>';
+  });
+  html += '</div>';
+  html += '<p style="font-size:.74rem;color:var(--muted);line-height:1.5;margin:8px 0 0;"><strong>→ Conclusion:</strong> GESUNDA & STENINGE clearance = JYSK replacing 2 of 3 stoneware series. Prime window for warm-neutral stoneware range. KARLSKRONA exit = shift to coloured/textured recycled glass. AW27 sample timing is now.</p>';
+  html += '</div>';
+
+  html += '<div class="cat-cards">';
+
+  gapData.forEach(function(g){
+    var sample = catsByProd[g.cat].filter(function(p){return p.imgUrl;}).slice(0,6);
+    var catProds = catsByProd[g.cat].filter(function(p){return pp(p.price)!==null;});
+    var prices = catProds.map(function(p){return pp(p.price);});
+    var min = '£'+Math.min.apply(null,prices);
+    var max = '£'+Math.max.apply(null,prices);
+
+    html += '<div class="cat-card">';
+    html += '<div class="cat-head" style="background:'+catCols[g.catClass]+';color:#fff;border-bottom:none;border-radius:8px 8px 0 0;">';
+    html += '<div><h3 style="color:#fff;font-size:.9rem;">'+g.cat+'</h3>';
+    html += '<div style="font-size:.72rem;opacity:.8;">Current: '+min+' – '+max+' | '+catProds.length+' priced SKUs</div></div></div>';
+    if (sample.length) {
+      html += '<div class="cat-imgs">';
+      sample.forEach(function(p){
+        html += '<a href="'+productUrl(p)+'" target="_blank"><img src="'+p.imgUrl+'" alt="'+p.name+'" loading="lazy" onerror="this.style.display=\'none\'"></a>';
+      });
+      html += '</div>';
+    }
+    html += '<div style="padding:12px 16px;">';
+    html += '<p style="font-size:.78rem;color:var(--muted);line-height:1.55;margin:0 0 12px;">'+g.summary+'</p>';
+    g.gaps.forEach(function(gap){
+      html += '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;padding:10px 12px;background:#faf7f2;border-radius:6px;border-left:3px solid '+gap.color+';">';
+      html += '<div style="flex:1;">';
+      html += '<div style="font-size:.8rem;font-weight:700;">'+gap.label+' <span style="font-weight:400;color:#888;">'+gap.range+'</span></div>';
+      html += '<div style="font-size:.7rem;color:var(--muted);margin-top:3px;">';
+      html += '<span style="color:#c0392b;">Current: '+gap.current+'</span> → <span style="color:#27ae60;font-weight:600;">Target: '+gap.target+'</span>';
+      html += '</div></div></div>';
+    });
+    html += '</div></div>';
+  });
+  html += '</div>';
+
+  document.getElementById('priceGapAnalysis').innerHTML = html;
+})();
+
+// === MATERIAL ANALYSIS ===
+// Classification from JYSK product page Specifications → Material field (verified per-series, 2026-07-29):
+//   GLASS:      Material field contains "glass"
+//   CERAMIC:    Material field contains "stoneware" (JYSK uses "stoneware" for ceramic bathroom items)
+//   POLYRESIN:  Material field contains "polyresin"
+//   OTHER:      Everything else (plastic, metal, wood, textile, etc.)
+(function(){
+  function classifyMat(p) {
+    var m = material(p);
+    if (m === 'glass') return 'GLASS';
+    if (m === 'polyresin') return 'POLYRESIN';
+    if (m === 'ceramic') return 'CERAMIC';
+    return 'OTHER';
+  }
+  var matGroups = {GLASS:[], POLYRESIN:[], CERAMIC:[], OTHER:[]};
+  PRODUCTS.forEach(function(p){
+    var m = classifyMat(p);
+    if (!matGroups[m]) matGroups[m] = [];
+    matGroups[m].push(p);
+  });
+
+  // Three material categories based on JYSK product page Specifications → Material
+  var MATS = ['GLASS','POLYRESIN','CERAMIC'];
+  var matMeta = {
+    GLASS: {
+      color: 'glass-hd', tag: 'glass-tag',
+      series: 'GENEVAD recycled glass, KARLSKRONA clear glass, KATTARP green glass, ROTEBERG grey glass, ROSENLUND assorted glass, BODAFORS glass, SKOGSBY glass, VENJAN glass',
+      colors: 'Brown (recycled), clear, green (30% recycled), anthracite grey (51% recycled), assorted tints',
+      finishes: 'Transparent, tinted, recycled glass with color variance, smooth',
+      priceRange: function(){var ps=matGroups.GLASS.map(function(p){return pp(p.price);}).filter(Boolean);return ps.length?'£'+Math.min.apply(null,ps)+' – £'+Math.max.apply(null,ps):'—';},
+      avgPrice: function(){var ps=matGroups.GLASS.map(function(p){return pp(p.price);}).filter(Boolean);return ps.length?'£'+(ps.reduce(function(a,b){return a+b;},0)/ps.length).toFixed(2):'—';},
+      insight: '<strong>Glass = JYSK\'s eco-entry material with high recycled content.</strong> Series span 30-60% recycled glass. GENEVAD recycled glass soap dispenser is the #1 bestseller. Products: soap dispensers, toothbrush holders, storage jars, trinket dishes. Price range: £1.50–£14 (VENJAN scale at high end). <strong>Gap:</strong> no glass tray, no matched glass bathroom sets. Glass stays affordable — opportunity to upgrade to thicker/tinted glass at £8–£12 for mid-tier positioning. Best opportunity: bundle GENEVAD dispenser + holder + jar into a 3-piece gift set.'
+    },
+    POLYRESIN: {
+      color: 'polyresin-hd', tag: 'polyresin-tag',
+      series: 'KUNGSBACKA marble effect, TORUP beige stone, MAKARYD marble effect, TORESTORP black XL',
+      colors: 'White marble, brown marble, beige stone, black',
+      finishes: 'High-gloss polished marble/stone-look, matte stone-textured (TORUP)',
+      priceRange: function(){var ps=matGroups.POLYRESIN.map(function(p){return pp(p.price);}).filter(Boolean);return '£'+Math.min.apply(null,ps)+' – £'+Math.max.apply(null,ps);},
+      avgPrice: function(){var ps=matGroups.POLYRESIN.map(function(p){return pp(p.price);}).filter(Boolean);return '£'+(ps.reduce(function(a,b){return a+b;},0)/ps.length).toFixed(2);},
+      insight: '<strong>Polyresin = JYSK\'s "premium look for less" strategy.</strong> Resin+stone powder composite (ABS base body). Achieves convincing marble and stone visuals at mass-market prices. 4 series confirmed from JYSK specs. KUNGSBACKA spans soap dispenser + toothbrush holder + toilet brush + tray. TORUP spans all 4 core categories. TORESTORP is the largest XL dispenser. <strong>None are bundled as sets.</strong> <strong>Gap:</strong> no warm earth colors beyond beige, no solid-color matte polyresin, no coordinated accessories beyond the core 4 items.'
+    },
+    CERAMIC: {
+      color: 'ceramic-hd', tag: 'ceramic-tag',
+      series: 'LYCKSELE terrazzo, STENINGE beige, GESUNDA mat glazed, EKBY white/black, SMEDBY light grey, LEKERYD brown, STENSTORP stoneware, FLYGSFORS brown, FORSBACKA assorted',
+      colors: 'Multi-color terrazzo, beige, matte grey, white, black, light grey, warm brown, natural stoneware',
+      finishes: 'Terrazzo speckle, matte glazed, reactive glaze, smooth satin, stoneware textured',
+      priceRange: function(){var ps=matGroups.CERAMIC.map(function(p){return pp(p.price);}).filter(Boolean);return '£'+Math.min.apply(null,ps)+' – £'+Math.max.apply(null,ps);},
+      avgPrice: function(){var ps=matGroups.CERAMIC.map(function(p){return pp(p.price);}).filter(Boolean);return '£'+(ps.reduce(function(a,b){return a+b;},0)/ps.length).toFixed(2);},
+      insight: '<strong>Ceramic (Stoneware) = JYSK\'s broadest bathroom material.</strong> All confirmed as "Stoneware" in JYSK product specs. 7 series identified. LYCKSELE terrazzo, STENINGE, GESUNDA each span soap dispenser + toothbrush holder + toilet brush. EKBY offers white/black dual-color range. STENSTORP is the only pure stoneware accessory (no ABS base). <strong>Gap:</strong> despite being the largest material group, ceramic has zero coordinated bathroom sets. STENINGE and GESUNDA are marked "While stocks last" (phasing out) — prime replacement window for a warm-neutral stoneware 4-piece set at £15–£22.'
+    }
+  };
+
+  // Render material cards
+  var matHtml = '';
+  MATS.forEach(function(m){
+    var items = matGroups[m];
+    var meta = matMeta[m];
+    var seriesArr = meta.series.split(', ');
+    // Build series -> first product image lookup
+    var seriesImg = {};
+    items.forEach(function(p){
+      if (p.imgUrl) {
+        var pn = p.name.toLowerCase();
+        seriesArr.forEach(function(sn){
+          var sl = sn.toLowerCase();
+          var key = sl.split(' ')[0]; // first word = series name
+          if (pn.indexOf(key)>=0 && !seriesImg[sn]) seriesImg[sn] = p.imgUrl;
+        });
+      }
+    });
+    var seriesTags = '';
+    seriesArr.forEach(function(s){
+      var preview = seriesImg[s] ? '<img src="'+seriesImg[s]+'" class="series-preview" alt="">' : '';
+      seriesTags += '<span class="mat-series '+meta.tag+'">'+s+preview+'</span>';
+    });
+    // Product images for this material
+    var matImgs = '';
+    items.forEach(function(p){
+      if (p.imgUrl) matImgs += '<a href="'+productUrl(p)+'" target="_blank"><img src="'+p.imgUrl+'" alt="'+p.name+'" loading="lazy" onerror="this.style.display=\'none\'" title="'+p.name+'"></a>';
+    });
+
+    // Pick 3-4 representative products showing color/finish variety
+    var samples = [];
+    var seen = {};
+    items.forEach(function(p){
+      if (p.imgUrl && samples.length < 4 && !seen[p.imgUrl]) {
+        seen[p.imgUrl] = 1; samples.push(p);
+      }
+    });
+    var colorImgsHtml = '';
+    samples.forEach(function(sp){
+      colorImgsHtml += '<a href="'+productUrl(sp)+'" target="_blank"><img src="'+sp.imgUrl+'" style="width:40px;height:40px;object-fit:contain;background:#faf7f2;border-radius:4px;" loading="lazy" onerror="this.style.display=\'none\'"></a>';
+    });
+
+    matHtml += '<div class="material-card">'+
+      '<div class="mat-header '+meta.color+'"><h3>'+m+'</h3><div class="mat-sub">'+items.length+' SKUs · '+meta.series.split(', ').length+' series</div></div>'+
+      '<div class="cat-imgs" style="background:#f2ede6;padding:6px 10px;">'+matImgs+'</div>'+
+      '<div class="mat-body">'+
+        '<div class="mat-stat"><span>SKU Count</span><span class="mat-val">'+items.length+'</span></div>'+
+        '<div class="mat-stat"><span>Price Range</span><span class="mat-val">'+meta.priceRange()+'</span></div>'+
+        '<div class="mat-stat"><span>Avg Price</span><span class="mat-val">'+meta.avgPrice()+'</span></div>'+
+        '<div class="mat-stat"><span>Core Colors</span><span class="mat-val" style="font-size:.75rem;">'+meta.colors+'</span></div>'+
+        '<div style="display:flex;gap:4px;margin-bottom:4px;">'+colorImgsHtml+'</div>'+
+        '<div class="mat-stat"><span>Finishes</span><span class="mat-val" style="font-size:.75rem;">'+meta.finishes+'</span></div>'+
+        '<div style="margin-top:10px;">'+seriesTags+'</div>'+
+        '<div class="mat-insight">'+meta.insight+'</div>'+
+      '</div></div>';
+  });
+  document.getElementById('materialGrid').innerHTML = matHtml;
+
+  // Expose matGroups globally for filter bar
+  window._matGroups = matGroups;
+  // Update filter bar material buttons with SKU counts
+  var gb = document.getElementById('matBtnGlass');
+  var pb = document.getElementById('matBtnPoly');
+  var cb = document.getElementById('matBtnCeramic');
+  if (gb) gb.textContent = 'Glass ('+matGroups.GLASS.length+')';
+  if (pb) pb.textContent = 'Polyresin ('+matGroups.POLYRESIN.length+')';
+  if (cb) cb.textContent = 'Ceramic ('+matGroups.CERAMIC.length+')';
+})();
+
+// === POPULAR GRID ===
+(function(){
+  var popular = [];
+  Object.keys(POPULAR_SKUS).forEach(function(sku){
+    var p = PRODUCTS.find(function(p){return p.sku===sku;});
+    if (p) popular.push(p);
+  });
+  renderProducts(popular.slice(0,12), 'popularGrid');
+  var ph = document.getElementById('popularHeader');
+  if (ph) ph.textContent = '🔥 Most Popular · ' + Math.min(popular.length, 12);
+})();
+
+// === TOP RATED GRID ===
+(function(){
+  var rated = [];
+  Object.keys(RATED_SKUS).forEach(function(sku){
+    var p = PRODUCTS.find(function(p){return p.sku===sku;});
+    if (p) rated.push(p);
+  });
+  renderProducts(rated, 'ratedGrid');
+  var rh = document.getElementById('ratedHeader');
+  if (rh) rh.textContent = '⭐ Top Rated · ' + rated.length;
+})();
+
+// === NEW GRID ===
+(function(){
+  var newProds = PRODUCTS.filter(function(p){return NEW_SKUS[p.sku];});
+  renderProducts(newProds, 'newGrid');
+  var nh = document.getElementById('newHeader');
+  if (nh) nh.textContent = '🆕 New Arrivals · ' + newProds.length;
+})();
+
+// === AW27 DEVELOPMENT DIRECTIONS (Style-Based) ===
+(function(){
+  var opps = [
+    {
+      title:'1. Warm Earth Stoneware — Soap Dispenser + Holder + Brush + Dish',
+      body:'JYSK\'s color palette is entirely cool-neutral: white, black, grey, beige. Only one green exists (KATTARP). The entire warm spectrum is missing — no terracotta, rust, clay, or warm sand. This is the biggest color gap in the range. Launch a matte glazed stoneware series in 3 warm earth tones (terracotta, warm sand, clay) across all 4 core categories. Individual items at £4–£8 each + optional 4-piece gift set at £16–£22.',
+      meta:'Colors: terracotta · warm sand · clay | Material: matte glazed stoneware | Format: individual + 4-pc set',
+      swatches: [
+        {label:'Terracotta', color:'#c1654a'},
+        {label:'Warm Sand', color:'#c4a882'},
+        {label:'Clay', color:'#b8906a'},
+        {label:'Matte glaze', color:'#d4c4b0', texture:'matte'}
+      ]
+    },
+    {
+      title:'2. Ribbed/Fluted Ceramic — Two-Tone Finish',
+      body:'Every JYSK bathroom product has a smooth surface. There is zero surface texture — no ribbing, fluting, or geometric relief. Meanwhile, fluted/ribbed ceramics are a dominant trend in bathroom accessories across competitors. Add vertical fluting to ceramic bodies in 3 two-tone colorways: cream body + sand base, sage body + cream base, charcoal body + beige base. Soap dispenser + toothbrush holder + toilet brush + trinket dish. £5–£10 each.',
+      meta:'Finish: vertical fluted ceramic | Colors: cream/sand · sage/cream · charcoal/beige | Two-tone',
+      swatches: [
+        {label:'Cream+Sand', duo:['#f5f0e8','#c4a882']},
+        {label:'Sage+Cream', duo:['#b8c4a0','#f5f0e8']},
+        {label:'Charcoal+Beige', duo:['#4a4a4a','#d4c4b0']},
+        {label:'Fluted', pattern:'fluted'}
+      ]
+    },
+    {
+      title:'3. Speckled Stoneware — Terrazzo Color Expansion',
+      body:'LYCKSELE terrazzo-effect is top-5 popular but exists in only one colorway (grey/white/black speckle). The terrazzo trend supports at least 2-3 color variants. Launch 2 new speckled stoneware colorways: warm beige terrazzo (beige/cream/brown chips) and sage terrazzo (green/cream/grey chips). Apply across soap dispenser + toothbrush holder + toilet brush + accessories (tray, jar). £4–£9 each.',
+      meta:'Colorways: warm beige terrazzo · sage terrazzo | Material: stoneware | Extends proven LYCKSELE demand',
+      swatches: [
+        {label:'Warm Beige Terrazzo', speckle:['#d4c4b0','#f5f0e8','#8b6a3a']},
+        {label:'Sage Terrazzo', speckle:['#b8c4a0','#f5f0e8','#9a9a9a']},
+        {label:'LYCKSELE (ref)', speckle:['#e0e0e0','#f8f8f8','#3a3a3a']}
+      ]
+    },
+    {
+      title:'4. Mixed-Material: Stoneware + Ash Wood Accents',
+      body:'JYSK has zero mixed-material bathroom accessories. Every product is single-material. Scandinavian design increasingly pairs ceramic with light wood (ash, birch, oak) for warmth and tactility. Launch a stoneware + ash wood series: soap dispenser with wood pump collar, toothbrush holder with wood base ring, storage jar with wood lid, toilet brush with wood handle. Matte stoneware in sand + clay colors. £6–£12 each.',
+      meta:'Material: matte stoneware + ash wood | Colors: sand · clay | Fills mixed-material gap',
+      swatches: [
+        {label:'Sand Stoneware', color:'#c4a882'},
+        {label:'Clay Stoneware', color:'#b8906a'},
+        {label:'Ash Wood', color:'#d4c4a0', wood:true},
+        {label:'Combined', duo:['#c4a882','#d4c4a0']}
+      ]
+    }
+  ];
+
+  function renderSwatch(sw) {
+    var s = '';
+    if (sw.color) {
+      var bg = sw.color;
+      if (sw.texture === 'matte') bg = 'linear-gradient(135deg, '+sw.color+' 0%, '+sw.color+' 60%, rgba(0,0,0,.06) 60%, rgba(0,0,0,.06) 100%)';
+      if (sw.wood) bg = 'repeating-linear-gradient(0deg, '+sw.color+' 0px, #c8b890 1px, '+sw.color+' 2px, '+sw.color+' 6px)';
+      s += '<div title="'+sw.label+'" style="width:36px;height:36px;border-radius:50%;background:'+bg+';border:2px solid #e8e0d5;flex-shrink:0;"></div>';
+    } else if (sw.duo) {
+      s += '<div title="'+sw.label+'" style="display:flex;width:36px;height:36px;border-radius:50%;overflow:hidden;border:2px solid #e8e0d5;flex-shrink:0;">';
+      s += '<div style="flex:1;background:'+sw.duo[0]+';"></div>';
+      s += '<div style="flex:1;background:'+sw.duo[1]+';"></div>';
+      s += '</div>';
+    } else if (sw.speckle) {
+      var stops = sw.speckle.map(function(c,i){ return c+' '+(i*33)+'%'+(i<2?', ':''); }).join('');
+      s += '<div title="'+sw.label+'" style="width:36px;height:36px;border-radius:50%;background:radial-gradient(circle,'+stops+');border:2px solid #e8e0d5;flex-shrink:0;"></div>';
+    } else if (sw.pattern === 'fluted') {
+      s += '<div title="Fluted texture" style="width:36px;height:36px;border-radius:50%;background:repeating-linear-gradient(90deg, #e8e0d5 0px, #f5f0e8 1px, #e8e0d5 2px, #e8e0d5 4px);border:2px solid #e8e0d5;flex-shrink:0;"></div>';
+    }
+    s += '<span style="font-size:.62rem;color:var(--muted);text-align:center;line-height:1.1;">'+sw.label+'</span>';
+    return s;
+  }
+
+  var html = '';
+  opps.forEach(function(o){
+    html += '<div class="opp-card"><h4>'+o.title+'</h4>';
+    html += '<p>'+o.body+'</p><div class="opp-meta">'+o.meta+'</div>';
+    if (o.swatches && o.swatches.length) {
+      html += '<div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;align-items:flex-start;">';
+      o.swatches.forEach(function(sw){
+        html += '<div style="display:flex;flex-direction:column;align-items:center;gap:2px;">'+renderSwatch(sw)+'</div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  document.getElementById('oppGrid').innerHTML = html;
+})();
+
+// === PRIORITY MATRIX ===
+(function(){
+  document.getElementById('hiQuick').innerHTML = '<li>Speckled Stoneware — terrazzo color expansion (extends proven LYCKSELE demand)</li><li>Ribbed/Fluted Ceramic — two-tone (fills texture + two-tone gaps simultaneously)</li>';
+  document.getElementById('hiDev').innerHTML = '<li>Warm Earth Stoneware 4-piece set (fills the entire warm color void)</li><li>Mixed-Material: stoneware + ash wood (zero mixed-material products = no competition)</li>';
+})();
+
+
+// Data integrity log
+console.log('JYSK Bathroom Analysis — Data Integrity');
+console.log('Total SKUs: ' + PRODUCTS.length + ' (expected: 151)');
+console.log('Unique SKUs: ' + (new Set(PRODUCTS.map(function(p){return p.sku;}))).size);
+console.log('With images: ' + PRODUCTS.filter(function(p){return p.imgUrl;}).length);
+console.log('With prices: ' + PRODUCTS.filter(function(p){return p.price!=='NELP';}).length);
+console.log('NELP: ' + PRODUCTS.filter(function(p){return p.price==='NELP';}).length);
+CATS.forEach(function(c){ console.log(c + ': ' + catsByProd[c].length + ' SKUs'); });
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "name": "JYSK",
+  "baseUrl": "https://jysk.co.uk",
+  "type": "woocommerce",
+  "currency": "GBP",
+  "currencySymbol": "£",
+  "dateFormat": "YYYY-MM-DD",
+  "targets": [
+    {
+      "id": "bathroom",
+      "label": "Bathroom Accessories",
+      "path": "/bathroom/bathroom-accessories",
+      "subcategories": [
+        { "url": "https://jysk.co.uk/bathroom/bathroom-accessories/soap-dispensers", "name": "Soap Dispensers" },
+        { "url": "https://jysk.co.uk/bathroom/bathroom-accessories/toothbrush-holder", "name": "Toothbrush Holder" },
+        { "url": "https://jysk.co.uk/bathroom/bathroom-accessories/toilet-brushes", "name": "Toilet Brushes" },
+        { "url": "https://jysk.co.uk/bathroom/bathroom-accessories/toilet-bins", "name": "Toilet Bins" },
+        { "url": "https://jysk.co.uk/bathroom/bathroom-accessories/accessories", "name": "Accessories" },
+        { "url": "https://jysk.co.uk/bathroom/bathroom-accessories/reed-diffusers", "name": "Reed Diffusers" },
+        { "url": "https://jysk.co.uk/bathroom/bathroom-accessories/bathroom-storage", "name": "Bathroom Storage" },
+        { "url": "https://jysk.co.uk/bathroom/bathroom-accessories/towel-rails", "name": "Towel Rails" }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "label": "Kitchen",
+      "path": "/homeware/kitchen",
+      "subcategories": [
+        { "url": "https://jysk.co.uk/homeware/kitchen/drinking-glasses-mugs", "name": "Drinking Glasses & Mugs" },
+        { "url": "https://jysk.co.uk/homeware/kitchen/plates-bowls-cutlery", "name": "Plates, Bowls & Cutlery" },
+        { "url": "https://jysk.co.uk/homeware/kitchen/kitchen-accessories", "name": "Kitchen Accessories" }
+      ]
+    }
+  ],
+  "imageCdn": {
+    "baseUrl": "https://cdn{1-4}.jysk.com/getimage/wd3.medium/{id}",
+    "sizeParam": "wd3.medium"
+  },
+  "materialKeywords": {
+    "glass": ["glass", "recycled glass"],
+    "ceramic": ["stoneware", "ceramic", "porcelain", "dolomite"],
+    "polyresin": ["polyresin", "resin"],
+    "metal": ["steel", "stainless steel", "metal", "chrome", "iron"],
+    "wood": ["wood", "bamboo", "oak", "pine", "birch"],
+    "natural": ["seagrass", "rattan", "water hyacinth", "jute", "cotton", "linen", "paper"],
+    "plastic": ["plastic", "polypropylene", "polyethylene", "abs", "acrylic", "silicone", "pet", "tpr"]
+  },
+  "priceBands": {
+    "currency": "GBP",
+    "ranges": [
+      {"label": "£0–2", "min": 0, "max": 2},
+      {"label": "£2–4", "min": 2.01, "max": 4},
+      {"label": "£4–6", "min": 4.01, "max": 6},
+      {"label": "£6–8", "min": 6.01, "max": 8},
+      {"label": "£8–12", "min": 8.01, "max": 12},
+      {"label": "£12–20", "min": 12.01, "max": 20},
+      {"label": "£20+", "min": 20.01, "max": 999}
+    ]
+  }
+}

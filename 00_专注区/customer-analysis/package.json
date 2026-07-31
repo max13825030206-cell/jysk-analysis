@@ -1,0 +1,15 @@
+{
+  "name": "customer-analysis",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "B2B customer analysis toolkit — scrape, enrich, analyze, visualize",
+  "scripts": {
+    "scrape": "node src/cli.mjs scrape",
+    "enrich": "node src/cli.mjs enrich",
+    "analyze": "node src/cli.mjs analyze",
+    "dashboard": "node src/cli.mjs dashboard",
+    "weekly": "node src/cli.mjs weekly",
+    "diff": "node src/cli.mjs diff"
+  }
+}

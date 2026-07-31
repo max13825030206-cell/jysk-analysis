@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/prompt-sense.mjs",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/session-startup.mjs",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/memory-checkpoint.mjs"
+          }
+        ]
+      }
+    ]
+  }
+}
