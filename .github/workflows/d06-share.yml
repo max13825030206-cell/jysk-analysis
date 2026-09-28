@@ -1,0 +1,29 @@
+name: D06 share gateway
+
+on:
+  push:
+    paths:
+      - 'docs/d06.html'
+      - 'docs/d06-live.json'
+      - '.github/workflows/d06-share.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage gateway files
+        run: |
+          mkdir -p _d06
+          cp docs/d06.html docs/d06-live.json _d06/
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_d06
+          publish_branch: gh-pages
+          keep_files: true
+          exclude_assets: ''
