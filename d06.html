@@ -13,24 +13,9 @@
 </head>
 <body>
   <h1>正在打开 D06 开发 ERP</h1>
-  <p id="msg">固定入口，至少一周有效。正在连接当前在线地址…</p>
-  <p id="err"></p>
+  <p>云端网页，上海电脑关掉也能打开编辑。</p>
   <script>
-  (async function () {
-    const qs = location.search || '';
-    const liveHref = new URL('d06-live.json', location.href).href + '?t=' + Date.now();
-    try {
-      const res = await fetch(liveHref, { cache: 'no-store' });
-      if (!res.ok) throw new Error('live ' + res.status);
-      const data = await res.json();
-      const base = String(data && data.url || '').replace(/\/+$/, '');
-      if (!/^https:\/\//i.test(base)) throw new Error('no live url');
-      location.replace(base + '/d06-dev-erp.html' + qs);
-    } catch (err) {
-      document.getElementById('msg').textContent = '当前在线地址正在更新。请等 10 秒后刷新；上海电脑和机器人窗口需要保持打开。';
-      document.getElementById('err').textContent = String(err && err.message || err);
-    }
-  })();
+    location.replace('d06-dev-erp.html' + (location.search || '') + (location.hash || ''));
   </script>
 </body>
 </html>
