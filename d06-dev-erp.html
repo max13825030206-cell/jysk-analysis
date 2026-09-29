@@ -112,6 +112,36 @@ header .head-row { display: flex; justify-content: space-between; align-items: f
   border: 1px solid #d9d1c7; border-radius: 8px; padding: 8px 12px; font: inherit; background: #fff; min-width: 160px;
 }
 .toolbar .grow { flex: 1; min-width: 200px; }
+.factory-name-dd { position: relative; min-width: 240px; max-width: 380px; flex: 0 1 320px; }
+.factory-name-dd .dd-btn {
+  width: 100%; text-align: left; border: 1px solid #d9d1c7; border-radius: 8px;
+  padding: 8px 28px 8px 12px; font: inherit; background: #fff; cursor: pointer;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative;
+}
+.factory-name-dd .dd-btn::after { content: '▾'; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .8rem; }
+.factory-name-dd.open .dd-btn { border-color: var(--accent); }
+.factory-name-dd .dd-menu {
+  display: none; position: absolute; z-index: 50; left: 0; width: min(720px, 92vw);
+  top: calc(100% + 4px); background: #fff; border: 1px solid #d9d1c7; border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.16); max-height: min(78vh, 640px); overflow: auto; padding: 8px;
+}
+.factory-name-dd.open .dd-menu { display: block; }
+.factory-name-dd .dd-item.all {
+  font-weight: 700; color: var(--accent); padding: 8px 10px; cursor: pointer; border-radius: 8px;
+  position: sticky; top: 0; background: #fff; z-index: 1; margin-bottom: 6px;
+}
+.factory-name-dd .dd-item.all:hover, .factory-name-dd .dd-item.all.on { background: #f7f4ef; }
+.factory-name-dd .dd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 8px; }
+.factory-name-dd .dd-card {
+  border: 1px solid #eee8e0; border-radius: 8px; overflow: hidden; cursor: pointer; background: #fff;
+}
+.factory-name-dd .dd-card:hover, .factory-name-dd .dd-card.on { border-color: var(--accent); box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+.factory-name-dd .dd-card .pic {
+  aspect-ratio: 4/3; background: #f3efe9; display: flex; align-items: center; justify-content: center;
+  overflow: hidden; color: var(--muted); font-size: .72rem;
+}
+.factory-name-dd .dd-card .pic img { width: 100%; height: 100%; object-fit: contain; background: #f8f5f0; }
+.factory-name-dd .dd-card .cap { padding: 6px 8px 8px; font-size: .74rem; font-weight: 650; color: var(--accent); line-height: 1.3; }
 
 /* table */
 table { width: 100%; border-collapse: collapse; font-size: .84rem; }
@@ -510,8 +540,8 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
   </div>
   <div id="shareLoading" class="empty" style="display:none;">
     <div class="big">⏳</div>
-    <div>Loading products from Shanghai…</div>
-    <div class="muted" style="margin:8px 0 14px;">Please wait. Photos load from the live ERP. Keep the Shanghai bot window open.</div>
+    <div>Loading products…</div>
+    <div class="muted" style="margin:8px 0 14px;">Please wait. Photos load from the live ERP.</div>
   </div>
 
   <!-- ============================================================ -->
@@ -525,9 +555,11 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
 
     <div class="toolbar">
       <input class="grow" type="search" id="searchFactory" placeholder="Search factory / city / category / material…">
-      <select id="filterFactoryName" title="All factory names" style="min-width:240px;max-width:360px;">
-        <option value="">All Factory Names</option>
-      </select>
+      <div class="factory-name-dd" id="filterFactoryNameWrap" title="Click to see all factory names">
+        <button type="button" class="dd-btn" id="filterFactoryNameBtn">All Factory Names</button>
+        <div class="dd-menu" id="filterFactoryNameMenu"></div>
+        <input type="hidden" id="filterFactoryName" value="">
+      </div>
       <select id="filterStatus">
         <option value="">All Status</option>
         <option value="audited">Audited</option>
@@ -665,6 +697,7 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
     </div>
     <div id="sampleBatchBar" class="field-grid" style="display:none;margin-bottom:12px;padding:10px 12px;background:#f7f4ef;border:1px solid #eee8e0;border-radius:8px;">
       <div class="field"><label>QA name</label><input id="sm_selQaBy" placeholder="QA evaluator"></div>
+      <div class="field"><label>QA date</label><input id="sm_selQaDate" type="date"></div>
       <div class="field"><label>QA verdict</label>
         <select id="sm_selQaVerdict">
           <option value="">— Don’t change —</option>
@@ -674,6 +707,7 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
         </select>
       </div>
       <div class="field"><label>Sales name</label><input id="sm_selSalesBy" placeholder="Sales evaluator"></div>
+      <div class="field"><label>Sales date</label><input id="sm_selSalesDate" type="date"></div>
       <div class="field"><label>Sales verdict</label>
         <select id="sm_selSalesVerdict">
           <option value="">— Don’t change —</option>
@@ -853,9 +887,10 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
     <div class="modal-body">
       <div class="form-section">
         <div class="title">Batch Upload · Auto-match 3. Design</div>
-        <div class="muted" style="margin-bottom:10px;">Pick many sample photos at once. Filename SKU auto-matches 3. Design. If it does not match, click Pick design photo and choose by looking at the pictures. Use Apply to all for shippable / not shippable and names, then Save.</div>
+        <div class="muted" style="margin-bottom:10px;">Pick many sample photos at once. Filename SKU auto-matches 3. Design. If it does not match, click Pick design photo and choose by looking at the pictures. Use Apply to all for dates, shippable / not shippable and names, then Save.</div>
         <div id="sm_batchApplyAll" class="field-grid" style="margin-bottom:12px;padding:10px 12px;background:#f7f4ef;border:1px solid #eee8e0;border-radius:8px;">
           <div class="field"><label>QA name · apply all</label><input id="sm_allQaBy" placeholder="QA evaluator"></div>
+          <div class="field"><label>QA date · apply all</label><input id="sm_allQaDate" type="date"></div>
           <div class="field"><label>QA verdict · apply all</label>
             <select id="sm_allQaVerdict">
               <option value="">— Don’t change —</option>
@@ -865,6 +900,7 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
             </select>
           </div>
           <div class="field"><label>Sales name · apply all</label><input id="sm_allSalesBy" placeholder="Sales evaluator"></div>
+          <div class="field"><label>Sales date · apply all</label><input id="sm_allSalesDate" type="date"></div>
           <div class="field"><label>Sales verdict · apply all</label>
             <select id="sm_allSalesVerdict">
               <option value="">— Don’t change —</option>
@@ -874,7 +910,7 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
           </div>
           <div class="field" style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
             <button class="btn btn-gold btn-sm" type="button" id="btnApplyAllSampleBatch">Apply to all photos</button>
-            <span class="muted" style="font-size:.75rem;">Fills every card below. You can still change one photo afterwards.</span>
+            <span class="muted" style="font-size:.75rem;">Fills every card below, including dates. You can still change one photo afterwards.</span>
           </div>
         </div>
         <div id="sm_batchItems"></div>
@@ -1237,7 +1273,8 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
   const SELECT_KEY = 'd06_dev_selections_v1';
   const GROUP_PREF_KEY = 'd06_wecom_group_pref_v1';
   const ON_PAGES = /github\.io$/i.test(location.hostname);
-  const WECOM_BOT_API = ON_PAGES ? '' : (/^https?:$/.test(location.protocol) ? '' : 'http://127.0.0.1:3780');
+  let WECOM_BOT_API = ON_PAGES ? '' : (/^https?:$/.test(location.protocol) ? '' : 'http://127.0.0.1:3780');
+  let liveOrigin = '';
   const STABLE_SHARE_PAGE = 'https://max13825030206-cell.github.io/jysk-analysis/docs/d06-dev-erp.html';
   let wecomSharePageUrl = STABLE_SHARE_PAGE;
   const FIREBASE_KEY = 'd06_factory_firebase_v1';
@@ -1373,16 +1410,35 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
       return ids.includes(sampleId);
     });
   }
+  function botApi() {
+    return liveOrigin || WECOM_BOT_API || '';
+  }
+  async function resolveLiveApi() {
+    if (!ON_PAGES) return botApi();
+    try {
+      const res = await fetch('d06-live.json?t=' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) return '';
+      const live = await res.json();
+      const url = String(live && live.url || '').replace(/\/+$/, '');
+      if (!/^https:\/\//i.test(url)) return '';
+      const st = await fetch(url + '/api/status', { cache: 'no-store' });
+      if (!st.ok) return '';
+      liveOrigin = url;
+      WECOM_BOT_API = url;
+      return url;
+    } catch {
+      return '';
+    }
+  }
   function mediaSrc(kind, id, index, fallback) {
     if (fallback && String(fallback).indexOf('data:image') === 0) return fallback;
-    if (ON_PAGES) return fallback || '';
-    if (!id) return fallback || '';
-    return (WECOM_BOT_API || '') + '/api/media/' + encodeURIComponent(kind) + '/' + encodeURIComponent(id) + '/' + Number(index || 0);
+    const api = botApi();
+    if (!api || !id) return fallback || '';
+    return api + '/api/media/' + encodeURIComponent(kind) + '/' + encodeURIComponent(id) + '/' + Number(index || 0);
   }
   function designCover(d) {
     const data = d && d.images && d.images[0] && d.images[0].data;
     if (data && String(data).indexOf('data:image') === 0) return data;
-    if (ON_PAGES) return data || '';
     return d && d.id ? mediaSrc('design', d.id, 0, data) : '';
   }
   function sampleCover(s) {
@@ -1904,7 +1960,7 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
     if (kind === 'factory') body.factories = factories;
     if (kind === 'design') body.designs = designs.filter(d => !SHARE_PROJECT || d.projectId === SHARE_PROJECT);
     if (kind === 'sample') body.samples = samples.filter(s => !SHARE_PROJECT || s.projectId === SHARE_PROJECT);
-    return fetch(WECOM_BOT_API + '/api/inbox', {
+    return fetch(botApi() + '/api/inbox', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -1913,8 +1969,8 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
   function diskSave(key, value) {
     const kind = key === FACTORY_KEY ? 'factory' : (key === DESIGN_KEY ? 'design' : (key === SAMPLE_KEY ? 'sample' : ''));
     scheduleCloudSave();
-    if (ON_PAGES) return;
-    fetch(WECOM_BOT_API + '/api/store', {
+    if (ON_PAGES && !botApi()) return;
+    fetch(botApi() + '/api/store', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ key, value })
@@ -1980,7 +2036,9 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
   }
   async function hydrateFromDisk() {
     try {
-      const res = await fetch(WECOM_BOT_API + '/api/store' + (SHARE_MODE ? '' : '?full=1'));
+      const api = botApi();
+      if (!api) return { changed: false, data: {}, error: 'no live api' };
+      const res = await fetch(api + '/api/store' + (SHARE_MODE || ON_PAGES ? '' : '?full=1'));
       if (!res.ok) return { changed: false, data: {}, error: 'store ' + res.status };
       const payload = await res.json();
       const data = payload.data || {};
@@ -2123,7 +2181,7 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
       cloudEnabled = true;
       setCloudStatus('on', 'Cloud connected');
       if (!ON_PAGES) {
-        fetch((WECOM_BOT_API || '') + '/api/cloud-config', {
+        fetch((botApi() || '') + '/api/cloud-config', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(cfg)
@@ -2273,11 +2331,55 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
   function factoryHasJyskBulk(f) {
     return !!(f && (f.hasJysk === 'yes' || (f.jyskImages && f.jyskImages.length)));
   }
+  function factoryDisplayName(f) {
+    const en = String((f && f.nameEn) || '').trim();
+    const zh = String((f && f.nameZh) || '').trim();
+    if (en && zh && en !== zh) return en + ' / ' + zh;
+    return en || zh || 'Untitled';
+  }
+  function fillFactoryNameMenu() {
+    const menu = $('filterFactoryNameMenu');
+    const btn = $('filterFactoryNameBtn');
+    const hidden = $('filterFactoryName');
+    if (!menu || !btn || !hidden) return;
+    const cur = hidden.value;
+    const named = factories.slice().sort((a, b) =>
+      factoryDisplayName(a).localeCompare(factoryDisplayName(b), undefined, { sensitivity: 'base' })
+    );
+    const allLabel = 'All Factory Names (' + factories.length + ')';
+    const curFactory = named.find(f => f.id === cur);
+    btn.textContent = curFactory ? ((curFactory.starred ? '★ ' : '') + factoryDisplayName(curFactory)) : allLabel;
+    const cards = named.map(f => {
+      const src = factoryCover(f);
+      const pic = src
+        ? `<img src="${src}" alt="">`
+        : `<div>🏭</div>`;
+      const mark = f.starred ? '★ ' : '';
+      return `<div class="dd-card${f.id === cur ? ' on' : ''}" data-id="${escapeAttr(f.id)}" title="${escapeAttr(factoryDisplayName(f))}">
+        <div class="pic">${pic}</div>
+        <div class="cap">${mark}${escapeHtml(factoryDisplayName(f))}</div>
+      </div>`;
+    }).join('');
+    menu.innerHTML = '<div class="dd-item all' + (cur ? '' : ' on') + '" data-id="">' + escapeHtml(allLabel) + '</div>' +
+      '<div class="dd-grid">' + cards + '</div>';
+  }
+  function closeFactoryNameMenu() {
+    const wrap = $('filterFactoryNameWrap');
+    if (wrap) wrap.classList.remove('open');
+  }
+  function factoryCover(f) {
+    if (!f) return '';
+    const img = f.images && f.images[0];
+    if (img) return mediaSrc('factory', f.id, 0, img.data);
+    const jysk = f.jyskImages && f.jyskImages[0];
+    if (jysk) return mediaSrc('jysk', f.id, 0, jysk.data);
+    return '';
+  }
   function factoryCardHtml(f) {
     const cats = factoryCategoryLabels(f);
-    const cover = (f.images && f.images[0]) || (f.jyskImages && f.jyskImages[0]);
-    const thumb = cover
-      ? `<img src="${cover.data}" alt="">`
+    const src = factoryCover(f);
+    const thumb = src
+      ? `<img src="${src}" alt="">`
       : `<div>🏭 ${escapeHtml(cats[0] || 'Factory')}</div>`;
     const jyskTag = factoryHasJyskBulk(f)
       ? `<span class="tag tag-gold">JYSK bulk${f.jyskImages && f.jyskImages.length ? ' · ' + f.jyskImages.length : ''}</span>`
@@ -2341,25 +2443,10 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
       catOptions.map(c => `<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
     sel.value = catOptions.includes(cur) ? cur : '';
 
-    const nameSel = $('filterFactoryName');
-    if (nameSel) {
-      const nameCur = nameSel.value;
-      const named = factories.slice().sort((a, b) =>
-        String(a.nameEn || a.nameZh || '').localeCompare(String(b.nameEn || b.nameZh || ''), undefined, { sensitivity: 'base' })
-      );
-      nameSel.innerHTML = '<option value="">All Factory Names (' + factories.length + ')</option>' +
-        named.map(f => {
-          const en = (f.nameEn || '').trim();
-          const zh = (f.nameZh || '').trim();
-          const label = en && zh && en !== zh ? en + ' / ' + zh : (en || zh || 'Untitled');
-          const mark = f.starred ? '★ ' : '';
-          return `<option value="${escapeAttr(f.id)}">${mark}${escapeHtml(label)}</option>`;
-        }).join('');
-      nameSel.value = named.some(f => f.id === nameCur) ? nameCur : '';
-    }
+    fillFactoryNameMenu();
 
     list.sort((a, b) => (b.starred ? 1 : 0) - (a.starred ? 1 : 0) ||
-      String(a.nameEn || a.nameZh || '').localeCompare(String(b.nameEn || b.nameZh || '')));
+      String(a.nameEn || a.nameZh || '').localeCompare(String(b.nameEn || b.nameZh || ''), undefined, { sensitivity: 'base' }));
 
     const wrap = $('factoryList');
     const empty = $('emptyFactory');
@@ -3467,21 +3554,27 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
       return;
     }
     const qaBy = $('sm_allQaBy') ? $('sm_allQaBy').value.trim() : '';
+    const qaDate = $('sm_allQaDate') ? $('sm_allQaDate').value : '';
     const qaVerdict = $('sm_allQaVerdict') ? $('sm_allQaVerdict').value : '';
     const salesBy = $('sm_allSalesBy') ? $('sm_allSalesBy').value.trim() : '';
+    const salesDate = $('sm_allSalesDate') ? $('sm_allSalesDate').value : '';
     const salesVerdict = $('sm_allSalesVerdict') ? $('sm_allSalesVerdict').value : '';
-    if (!qaBy && !qaVerdict && !salesBy && !salesVerdict) {
-      toast('Enter a name or pick shippable / not shippable first');
+    if (!qaBy && !qaDate && !qaVerdict && !salesBy && !salesDate && !salesVerdict) {
+      toast('Enter a date, name, or pick shippable / not shippable first');
       return;
     }
     editSampleBatch.forEach(item => {
       if (qaBy) item.qaBy = qaBy;
+      if (qaDate) item.qaDate = qaDate;
       if (qaVerdict) item.qaVerdict = qaVerdict;
       if (salesBy) item.salesBy = salesBy;
+      if (salesDate) item.salesDate = salesDate;
       if (salesVerdict) item.salesVerdict = salesVerdict;
     });
     renderSampleBatch();
     const bits = [];
+    if (qaDate) bits.push('QA date ' + qaDate);
+    if (salesDate) bits.push('Sales date ' + salesDate);
     if (qaVerdict === 'pass') bits.push('QA shippable');
     if (qaVerdict === 'fail') bits.push('QA not shippable');
     if (qaVerdict === 'rework') bits.push('QA rework');
@@ -3494,8 +3587,10 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
   function openSampleBatchEditor() {
     editSampleBatch = [];
     if ($('sm_allQaBy')) $('sm_allQaBy').value = '';
+    if ($('sm_allQaDate')) $('sm_allQaDate').value = today();
     if ($('sm_allQaVerdict')) $('sm_allQaVerdict').value = '';
     if ($('sm_allSalesBy')) $('sm_allSalesBy').value = '';
+    if ($('sm_allSalesDate')) $('sm_allSalesDate').value = today();
     if ($('sm_allSalesVerdict')) $('sm_allSalesVerdict').value = '';
     renderSampleBatch();
     openModal('modalSampleBatch');
@@ -3542,10 +3637,12 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
           <select class="img-factory-select sm-batch-factory" data-idx="${i}">${facOpts}</select>
           <div class="eval-label">QA Evaluation (QC)</div>
           <input class="sm-batch-qa-by" data-idx="${i}" placeholder="QA evaluator" value="${escapeAttr(item.qaBy || '')}">
+          <input class="sm-batch-qa-date" data-idx="${i}" type="date" value="${escapeAttr(item.qaDate || '')}" title="QA date">
           <select class="img-factory-select sm-batch-qa" data-idx="${i}">${qaOpts}</select>
           <textarea class="sm-batch-qa-note" data-idx="${i}" placeholder="QA comments">${escapeHtml(item.qaNote || '')}</textarea>
           <div class="eval-label">Sales Evaluation</div>
           <input class="sm-batch-sales-by" data-idx="${i}" placeholder="Sales evaluator" value="${escapeAttr(item.salesBy || '')}">
+          <input class="sm-batch-sales-date" data-idx="${i}" type="date" value="${escapeAttr(item.salesDate || '')}" title="Sales date">
           <select class="img-factory-select sm-batch-sales" data-idx="${i}">${salesOpts}</select>
           <textarea class="sm-batch-sales-note" data-idx="${i}" placeholder="Sales comments">${escapeHtml(item.salesNote || '')}</textarea>
         </div>`;
@@ -3570,9 +3667,11 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
           projectId: pid,
           factoryId: fids.length === 1 ? fids[0] : '',
           qaBy: ($('sm_allQaBy') && $('sm_allQaBy').value.trim()) || '',
+          qaDate: ($('sm_allQaDate') && $('sm_allQaDate').value) || today(),
           qaVerdict: ($('sm_allQaVerdict') && $('sm_allQaVerdict').value) || '',
           qaNote: '',
           salesBy: ($('sm_allSalesBy') && $('sm_allSalesBy').value.trim()) || '',
+          salesDate: ($('sm_allSalesDate') && $('sm_allSalesDate').value) || today(),
           salesVerdict: ($('sm_allSalesVerdict') && $('sm_allSalesVerdict').value) || '',
           salesNote: ''
         });
@@ -3624,8 +3723,10 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
         if (item.salesBy) existing.salesBy = item.salesBy;
         if (item.salesVerdict) existing.salesVerdict = item.salesVerdict;
         if (item.salesNote) existing.salesNote = item.salesNote;
-        if (item.qaVerdict && !existing.qaDate) existing.qaDate = today();
-        if (item.salesVerdict && !existing.salesDate) existing.salesDate = today();
+        if (item.qaDate) existing.qaDate = item.qaDate;
+        else if (item.qaVerdict && !existing.qaDate) existing.qaDate = today();
+        if (item.salesDate) existing.salesDate = item.salesDate;
+        else if (item.salesVerdict && !existing.salesDate) existing.salesDate = today();
         existing.updatedAt = now;
         if (item.designId) matched++;
         syncLinkedDesignSku(existing, name);
@@ -3637,12 +3738,12 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
           factoryId: item.factoryId,
           designId: item.designId || '',
           qaBy: item.qaBy || '',
-          qaDate: item.qaVerdict ? today() : '',
+          qaDate: item.qaDate || (item.qaVerdict ? today() : ''),
           qaVerdict: item.qaVerdict || '',
           qaNote: item.qaNote || '',
           qaImages: [{ name, data: item.data }],
           salesBy: item.salesBy || '',
-          salesDate: item.salesVerdict ? today() : '',
+          salesDate: item.salesDate || (item.salesVerdict ? today() : ''),
           salesVerdict: item.salesVerdict || '',
           salesNote: item.salesNote || '',
           createdAt: now, updatedAt: now
@@ -3884,11 +3985,13 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
       return;
     }
     const qaBy = $('sm_selQaBy') ? $('sm_selQaBy').value.trim() : '';
+    const qaDate = $('sm_selQaDate') ? $('sm_selQaDate').value : '';
     const qaVerdict = $('sm_selQaVerdict') ? $('sm_selQaVerdict').value : '';
     const salesBy = $('sm_selSalesBy') ? $('sm_selSalesBy').value.trim() : '';
+    const salesDate = $('sm_selSalesDate') ? $('sm_selSalesDate').value : '';
     const salesVerdict = $('sm_selSalesVerdict') ? $('sm_selSalesVerdict').value : '';
-    if (!qaBy && !qaVerdict && !salesBy && !salesVerdict) {
-      toast('Enter a name or pick shippable / not shippable first');
+    if (!qaBy && !qaDate && !qaVerdict && !salesBy && !salesDate && !salesVerdict) {
+      toast('Enter a date, name, or pick shippable / not shippable first');
       return;
     }
     materializeSelectedSamples();
@@ -3897,14 +4000,16 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
       if (!selectedSampleIds.has(s.id)) return;
       if (!canEditProject(s.projectId)) return;
       if (qaBy) s.qaBy = qaBy;
+      if (qaDate) s.qaDate = qaDate;
       if (qaVerdict) {
         s.qaVerdict = qaVerdict;
-        if (!s.qaDate) s.qaDate = today();
+        if (!s.qaDate) s.qaDate = qaDate || today();
       }
       if (salesBy) s.salesBy = salesBy;
+      if (salesDate) s.salesDate = salesDate;
       if (salesVerdict) {
         s.salesVerdict = salesVerdict;
-        if (!s.salesDate) s.salesDate = today();
+        if (!s.salesDate) s.salesDate = salesDate || today();
       }
       s.updatedAt = new Date().toISOString();
       n++;
@@ -3915,6 +4020,8 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
     renderDesigns();
     updateKpis();
     const bits = [];
+    if (qaDate) bits.push('QA date ' + qaDate);
+    if (salesDate) bits.push('Sales date ' + salesDate);
     if (qaVerdict === 'pass') bits.push('QA shippable');
     if (qaVerdict === 'fail') bits.push('QA not shippable');
     if (qaVerdict === 'rework') bits.push('QA rework');
@@ -4872,11 +4979,35 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
 
   // Factory
   $('searchFactory').addEventListener('input', renderFactories);
-  $('filterFactoryName').addEventListener('change', renderFactories);
   $('filterStatus').addEventListener('change', renderFactories);
   $('filterCategory').addEventListener('change', renderFactories);
   $('filterStar').addEventListener('change', renderFactories);
   $('filterJysk').addEventListener('change', renderFactories);
+  (function bindFactoryNameMenu() {
+    const wrap = $('filterFactoryNameWrap');
+    const btn = $('filterFactoryNameBtn');
+    const menu = $('filterFactoryNameMenu');
+    const hidden = $('filterFactoryName');
+    if (!wrap || !btn || !menu || !hidden) return;
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const willOpen = !wrap.classList.contains('open');
+      wrap.classList.toggle('open', willOpen);
+      if (willOpen) fillFactoryNameMenu();
+    });
+    menu.addEventListener('click', e => {
+      const item = e.target.closest('.dd-card, .dd-item.all');
+      if (!item) return;
+      const id = item.dataset.id || '';
+      hidden.value = id;
+      closeFactoryNameMenu();
+      renderFactories();
+      if (id) openFactoryEditor(id);
+    });
+    document.addEventListener('click', e => {
+      if (!wrap.contains(e.target)) closeFactoryNameMenu();
+    });
+  })();
   $('btnAddFactory').addEventListener('click', () => openFactoryEditor());
   $('btnAddFirstFactory').addEventListener('click', () => openFactoryEditor());
   $('btnSaveFactory').addEventListener('click', saveFactory);
@@ -5251,6 +5382,8 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
     if (e.target.classList.contains('sm-batch-factory')) editSampleBatch[idx].factoryId = e.target.value;
     if (e.target.classList.contains('sm-batch-qa')) editSampleBatch[idx].qaVerdict = e.target.value;
     if (e.target.classList.contains('sm-batch-sales')) editSampleBatch[idx].salesVerdict = e.target.value;
+    if (e.target.classList.contains('sm-batch-qa-date')) editSampleBatch[idx].qaDate = e.target.value;
+    if (e.target.classList.contains('sm-batch-sales-date')) editSampleBatch[idx].salesDate = e.target.value;
   });
   $('sm_batchItems').addEventListener('input', e => {
     const idx = parseInt(e.target.dataset.idx, 10);
@@ -5263,8 +5396,10 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
       }
     }
     if (e.target.classList.contains('sm-batch-qa-by')) editSampleBatch[idx].qaBy = e.target.value;
+    if (e.target.classList.contains('sm-batch-qa-date')) editSampleBatch[idx].qaDate = e.target.value;
     if (e.target.classList.contains('sm-batch-qa-note')) editSampleBatch[idx].qaNote = e.target.value;
     if (e.target.classList.contains('sm-batch-sales-by')) editSampleBatch[idx].salesBy = e.target.value;
+    if (e.target.classList.contains('sm-batch-sales-date')) editSampleBatch[idx].salesDate = e.target.value;
     if (e.target.classList.contains('sm-batch-sales-note')) editSampleBatch[idx].salesNote = e.target.value;
   });
   $('modalSampleBatch').addEventListener('paste', e => {
@@ -5330,7 +5465,7 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
   }
   async function refreshWeComGroups() {
     try {
-      const res = await fetch(WECOM_BOT_API + '/api/contacts');
+      const res = await fetch(botApi() + '/api/contacts');
       if (!res.ok) return;
       const data = await res.json();
       fillRemindGroupSelect('factoryRemindGroup', 'factory', data.groups || []);
@@ -5354,7 +5489,7 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
   }
   async function pingWeComBot() {
     try {
-      const res = await fetch(WECOM_BOT_API + '/api/status');
+      const res = await fetch(botApi() + '/api/status');
       const data = await res.json();
       if (data.sharePageUrl && isStableShareHost(data.sharePageUrl)) {
         wecomSharePageUrl = String(data.sharePageUrl).replace(/\/+$/, '');
@@ -5372,8 +5507,10 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
       setBotStatus(false);
     }
   }
-  pingWeComBot();
-  setInterval(pingWeComBot, 8000);
+  if (!ON_PAGES) {
+    pingWeComBot();
+    setInterval(pingWeComBot, 8000);
+  }
   $('factoryRemindGroup').addEventListener('change', () => saveGroupPref({ factory: $('factoryRemindGroup').value }));
   $('designRemindGroup').addEventListener('change', () => saveGroupPref({ design: $('designRemindGroup').value }));
   $('sampleRemindGroup').addEventListener('change', () => saveGroupPref({ sample: $('sampleRemindGroup').value }));
@@ -5454,7 +5591,7 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
       }
     }
     try {
-      const res = await fetch(WECOM_BOT_API + '/api/remind', {
+      const res = await fetch(botApi() + '/api/remind', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -5667,9 +5804,6 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
   loadAll();
   renderAll();
   applyShareMode();
-  startCloudSync().then(() => {
-    if (ON_PAGES && cloudEnabled) afterHydrate();
-  });
   if (SHARE_MODE || ON_PAGES) {
     const loader = $('shareLoading');
     if (loader) {
@@ -5685,24 +5819,37 @@ body.share-mode .toolbar select[id$="Project"] { pointer-events: none; backgroun
     renderAll();
     applyShareMode();
   };
-  if (ON_PAGES) {
-    setTimeout(() => {
-      if (shareHydrating) afterHydrate();
-      if (!cloudEnabled) toast('❌ Cloud sync is off. Open ERP on the Shanghai PC, connect Firebase in Factory Library, then refresh this link.');
-    }, 2500);
+  async function bootShare() {
+    if (ON_PAGES) await resolveLiveApi();
+    await startCloudSync();
+    if (botApi()) {
+      const result = await hydrateFromDisk();
+      const data = result && result.data;
+      if (data) {
+        applyStoreData(data, { persist: false });
+        try { expandDesignRecords(); } catch (err) { console.warn('expandDesignRecords', err); }
+      } else if (result && result.error && !designs.length && !samples.length && !projects.length && !cloudEnabled) {
+        toast('❌ Could not load products. Keep the Shanghai bot window open, then refresh this link.');
+      }
+      afterHydrate();
+      if (ON_PAGES) {
+        pingWeComBot();
+        setInterval(pingWeComBot, 8000);
+      }
+      if (cloudEnabled && (factories.length || designs.length || samples.length || projects.length)) scheduleCloudSave();
+      return;
+    }
+    afterHydrate();
+    if (ON_PAGES && !cloudEnabled && !designs.length && !samples.length) {
+      toast('❌ Could not load products. Keep the Shanghai bot window open, then refresh this link.');
+    }
+  }
+  if (ON_PAGES || SHARE_MODE) {
+    bootShare();
   } else {
+    startCloudSync();
     hydrateFromDisk().then(result => {
       const data = result && result.data;
-      if (SHARE_MODE) {
-        if (result && result.error && !designs.length && !samples.length && !projects.length && !cloudEnabled) {
-          toast('❌ Could not load products. Connect Cloud sync, or keep the Shanghai bot window open.');
-        } else if (data) {
-          applyStoreData(data, { persist: false });
-          try { expandDesignRecords(); } catch (err) { console.warn('expandDesignRecords', err); }
-        }
-        afterHydrate();
-        return;
-      }
       const changed = !!(result && result.changed);
       const diskFactories = data && data[FACTORY_KEY];
       if (changed) {
