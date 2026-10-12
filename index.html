@@ -209,14 +209,23 @@ header .meta { margin-top: 16px; font-size: .82rem; opacity: .65; }
 
 <div class="section" id="weeklyChanges">
   <h2>Changes since July — 2026-07-31 → 2026-10-10</h2>
-  <p style="color:var(--muted);margin-bottom:16px;">Live scrape of jysk.co.uk bathroom accessories vs the archived 31 Jul snapshot. Previous page kept as <a href="jysk_bathroom_opportunity_2026-07-31.html">2026-07-31 snapshot</a>.</p>
-  <div class="kpi-row" style="margin:0 0 20px;">
-    <div class="kpi" style="cursor:default;"><div class="val">157</div><div class="lbl">Current SKUs</div></div>
-    <div class="kpi" style="cursor:default;"><div class="val">+32</div><div class="lbl">Added since July</div></div>
-    <div class="kpi" style="cursor:default;"><div class="val">-26</div><div class="lbl">Removed since July</div></div>
-    <div class="kpi" style="cursor:default;"><div class="val">80</div><div class="lbl">Price changes</div></div>
-    <div class="kpi" style="cursor:default;"><div class="val">29</div><div class="lbl">JYSK New flag</div></div>
-    <div class="kpi" style="cursor:default;"><div class="val">6</div><div class="lbl">Clearance now</div></div>
+  <p style="color:var(--muted);margin-bottom:16px;">Live scrape of jysk.co.uk bathroom accessories vs the archived 31 Jul snapshot. Previous page kept as <a href="jysk_bathroom_opportunity_2026-07-31.html">2026-07-31 snapshot</a>. Click a number card for the detail.</p>
+  <div class="kpi-row" style="margin:0 0 20px;" id="weeklyKpis">
+    <div class="kpi" role="button" tabindex="0" data-weekly="0"><div class="val">157</div><div class="lbl">Current SKUs</div></div>
+    <div class="kpi" role="button" tabindex="0" data-weekly="1"><div class="val">+32</div><div class="lbl">Added since July</div></div>
+    <div class="kpi" role="button" tabindex="0" data-weekly="2"><div class="val">-26</div><div class="lbl">Removed since July</div></div>
+    <div class="kpi" role="button" tabindex="0" data-weekly="3"><div class="val">80</div><div class="lbl">Price changes</div></div>
+    <div class="kpi" role="button" tabindex="0" data-weekly="4"><div class="val">29</div><div class="lbl">JYSK New flag</div></div>
+    <div class="kpi" role="button" tabindex="0" data-weekly="5"><div class="val">6</div><div class="lbl">Clearance now</div></div>
+  </div>
+  <div id="weeklyKpiModal" onclick="if(event.target===this)closeWeeklyModal()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);align-items:center;justify-content:center;">
+    <div style="background:#fff;max-width:760px;width:92%;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.2);overflow:hidden;" onclick="event.stopPropagation()">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #eee;">
+        <div id="weeklyModalTitle" style="font-weight:700;font-size:1.05rem;color:#1a4a3e;"></div>
+        <button type="button" onclick="closeWeeklyModal()" style="border:none;background:none;font-size:1.4rem;color:#999;cursor:pointer;line-height:1;">×</button>
+      </div>
+      <div id="weeklyModalBody" style="padding:20px 24px;max-height:60vh;overflow:auto;font-size:.88rem;line-height:1.6;color:#333;"></div>
+    </div>
   </div>
   <div class="opp-grid">
     <div class="opp-card" style="border-left-color:#1a4a3e;">
@@ -386,6 +395,45 @@ var CORE_CATS = ['Soap Dispensers','Toothbrush Holder','Toilet Brushes','Accesso
   });
   document.getElementById('kpiRow').innerHTML = html;
   window._kpis = kpis;
+})();
+
+// === WEEKLY KPI MODAL (Changes since July cards) ===
+window._weeklyData = [
+  {val:'157', lbl:'Current SKUs', body:'<p>10 Oct live scrape: 157 SKUs across 8 subcategories. 31 July was 151 SKUs. Net +6 after +32 added / −26 removed.</p><p>Core 4 categories (Soap, Holder, Brush, Acc) now hold 93 SKUs; the rest are in Toilet Bins, Reed Diffusers, Bathroom Storage and Towel Rails.</p>'},
+  {val:'+32', lbl:'Added since July', body:'<p><strong>New families:</strong> RONNEBY (4-pc recycled polyresin, natural), STENSELE (3-pc stone-look polyresin), GENARP (recycled glass 2-pc), MOLKOM (steel dispenser £7.50 first in £7–£12 gap), TIERP (mango-wood accessories), OVESHOLM (stoneware dish only).</p><p>29 SKUs carry JYSK "New" flag. These are the first new arrivals since the July 31 snapshot.</p>'},
+  {val:'-26', lbl:'Removed since July', body:'<p><strong>Range exits:</strong> STENINGE (ceramic), GESUNDA (mat glazed), KARLSKRONA (glass) fully removed. KATTARP green remains only as one clearance tray.</p><p>Also removed: GENEVAD jars, STENSTORP dish, ENERYDA/SUNNEMO reed diffusers, several accessories and storage items that were single-SKU series.</p>'},
+  {val:'80', lbl:'Price changes', body:'<p>57 SKUs marked down, 23 increased. Largest drops: GENEVAD dispenser £5.99→£3.50 (−42%), KUNGSBACKA £5→£3.50 (−30%), EKBY white £6.49→£3.25 (−50%).</p><p>New families launch already on promo vs before-price (RONNEBY/STENSELE/GENARP −25% to −32%). Entry ceramic/glass band above £7 remains empty except MOLKOM steel and TORESTORP XL.</p>'},
+  {val:'29', lbl:'JYSK New flag', body:'<p>29 SKUs carry JYSK "New" tag. All are post-July arrivals: RONNEBY, GENARP, STENSELE, MOLKOM, TIERP, OVESHOLM, HISHULT, HAGGE, DUVED, TOSSERYD, STRIBERG, VANSBRO, MOHEDA, HOVID, LJUNGA, TRANSTRAND, RYD, MALMBERGET, VINDELN, ULLATTI 12L.</p><p>These are the SKUs JYSK itself flags as new since the July 31 snapshot.</p>'},
+  {val:'6', lbl:'Clearance now', body:'<p>Only 6 SKUs remain on "While stocks last". EKBY white dispenser, LEKERYD cotton-bud holder, MAKARYD dish, KATTARP tray, KRAMFORS hot water bottle, STOCKA basket.</p><p>July core clearance (GESUNDA, STENINGE, KARLSKRONA) is completely gone. The replacement window is now a live competitor set, not an empty slot.</p>'}
+];
+function showWeeklyModal(i){
+  var d = window._weeklyData[i];
+  if (!d) return;
+  document.getElementById('weeklyModalTitle').innerHTML = d.lbl;
+  document.getElementById('weeklyModalBody').innerHTML = d.body;
+  document.getElementById('weeklyKpiModal').style.display = 'flex';
+}
+function closeWeeklyModal(){
+  document.getElementById('weeklyKpiModal').style.display = 'none';
+}
+(function(){
+  var row = document.getElementById('weeklyKpis');
+  if (!row) return;
+  row.addEventListener('click', function(e){
+    var card = e.target.closest('[data-weekly]');
+    if (!card) return;
+    showWeeklyModal(parseInt(card.getAttribute('data-weekly'), 10));
+  });
+  row.addEventListener('keydown', function(e){
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var card = e.target.closest('[data-weekly]');
+    if (!card) return;
+    e.preventDefault();
+    showWeeklyModal(parseInt(card.getAttribute('data-weekly'), 10));
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeWeeklyModal();
+  });
 })();
 
 function kpiFilter(idx, el) {
