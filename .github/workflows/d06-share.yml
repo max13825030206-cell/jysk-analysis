@@ -7,6 +7,7 @@ on:
       - 'docs/d06-live.json'
       - 'docs/d06-cloud.json'
       - 'docs/d06-dev-erp.html'
+      - 'docs/jysk-homeware-dashboard.html'
       - '.github/workflows/d06-share.yml'
   workflow_dispatch:
 
@@ -22,6 +23,10 @@ jobs:
         run: |
           mkdir -p _d06
           cp docs/d06.html docs/d06-live.json docs/d06-cloud.json docs/d06-dev-erp.html _d06/
+          if [ -f docs/jysk-homeware-dashboard.html ]; then
+            cp docs/jysk-homeware-dashboard.html _d06/jysk-homeware-dashboard.html
+            cp docs/jysk-homeware-dashboard.html _d06/homeware.html
+          fi
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
