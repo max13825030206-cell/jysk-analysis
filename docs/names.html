@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fffefb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="名字库" />
+  <title>名字库</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #fffefb;
+      --ink: #1a1a1a;
+      --ink-2: #3a3a3a;
+      --mute: #8a8378;
+      --blue: #8eade3;
+      --blue-deep: #6b8fc4;
+      --blue-soft: #e8f0fb;
+      --mark: #f4e6a3;
+      --sand: #c4b49a;
+      --card: #f5f6f8;
+      --line: #efeae2;
+      --ok: #6f8f6c;
+      --ok-soft: #e7f0e4;
+      --cut: #c17b7b;
+      --cut-soft: #f8ecec;
+      --warn: #c4a15a;
+      --warn-soft: #f8f1de;
+      --shadow: 0 10px 30px rgba(40, 30, 10, 0.04);
+      --radius: 16px;
+      --max: 640px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+      color: inherit;
+    }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: 0.45; }
+
+    .app {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 20px 22px 140px;
+    }
+
+    .brand {
+      text-align: center;
+      color: var(--sand);
+      font-family: Caveat, "Segoe Script", cursive;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      margin: 8px 0 18px;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+    }
+    h1 .blue { color: var(--blue); }
+    h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    p { margin: 0 0 14px; color: var(--ink-2); }
+    mark {
+      background: var(--mark);
+      color: inherit;
+      padding: 0.05em 0.18em;
+      border-radius: 2px;
+    }
+
+    .coach {
+      margin: 0 0 22px;
+      padding: 12px 14px;
+      background: var(--blue-soft);
+      color: #4d6490;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: 0 -22px 26px;
+      padding: 0 22px 4px;
+      scrollbar-width: none;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: linear-gradient(var(--paper) 70%, rgba(255,254,251,0));
+      padding-top: 8px;
+      padding-bottom: 14px;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav button {
+      flex: 0 0 auto;
+      border: 0;
+      background: transparent;
+      color: var(--mute);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .nav button.on {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .paper-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .muted { color: var(--mute); }
+    .small { font-size: 13px; line-height: 1.65; }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .stack { display: grid; gap: 12px; }
+    .gap-lg { margin-top: 22px; }
+    .gap-xl { margin-top: 32px; }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+    .field label {
+      font-size: 12px;
+      color: var(--mute);
+      letter-spacing: 0.08em;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      outline: none;
+    }
+    .field textarea { min-height: 88px; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--blue);
+    }
+
+    .chip {
+      border: 0;
+      background: #fff;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 14px;
+      box-shadow: 0 0 0 1px var(--line) inset;
+    }
+    .chip.on {
+      background: var(--blue-soft);
+      box-shadow: 0 0 0 1px var(--blue) inset;
+      color: var(--blue-deep);
+    }
+    .chip.used {
+      background: var(--ok-soft);
+      box-shadow: 0 0 0 1px #c3d7bf inset;
+    }
+    .chip.warn {
+      background: var(--warn-soft);
+    }
+    .chip.cut {
+      text-decoration: line-through;
+      opacity: 0.55;
+    }
+
+    .btn {
+      border: 0;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .btn.ghost {
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 0 0 1px var(--line) inset;
+    }
+    .btn.soft {
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+    }
+    .btn.danger {
+      background: var(--cut-soft);
+      color: var(--cut);
+    }
+    .btn.ok {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+    .btn.wide { width: 100%; }
+
+    .char-tile {
+      width: 52px;
+      height: 64px;
+      border: 0;
+      background: #fff;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      box-shadow: 0 0 0 1px var(--line) inset;
+      padding: 0;
+      line-height: 1;
+    }
+    .char-tile b {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .char-tile span {
+      font-size: 10px;
+      color: var(--mute);
+      margin-top: 4px;
+    }
+    .char-tile.on {
+      background: var(--blue-soft);
+      box-shadow: 0 0 0 1.5px var(--blue) inset;
+    }
+    .char-tile.ban {
+      background: var(--cut-soft);
+    }
+
+    .preview {
+      text-align: center;
+      padding: 28px 10px 18px;
+    }
+    .preview .surname {
+      color: var(--mute);
+      letter-spacing: 0.45em;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .preview .given {
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      line-height: 1.1;
+    }
+    .preview .py {
+      margin-top: 8px;
+      color: var(--blue-deep);
+      letter-spacing: 0.18em;
+      font-size: 14px;
+    }
+
+    .name-card.cut .given-line {
+      text-decoration: line-through;
+      opacity: 0.45;
+    }
+    .given-line {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      line-height: 1.2;
+    }
+
+    .q {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .q:last-child { border-bottom: 0; }
+    .q .ask {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    .seg {
+      display: flex;
+      gap: 6px;
+    }
+    .seg button {
+      flex: 1;
+      border: 0;
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px 0;
+      font-size: 13px;
+      box-shadow: 0 0 0 1px var(--line) inset;
+    }
+    .seg button.on-yes { background: var(--ok-soft); color: var(--ok); box-shadow: none; }
+    .seg button.on-ok { background: var(--warn-soft); color: #8a7040; box-shadow: none; }
+    .seg button.on-no { background: var(--cut-soft); color: var(--cut); box-shadow: none; }
+
+    .dots { letter-spacing: 0.15em; font-size: 14px; }
+    .dots .yes { color: var(--ok); }
+    .dots .empty { color: #d9d3c8; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 92px;
+      transform: translateX(-50%);
+      background: var(--ink);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      z-index: 50;
+      max-width: calc(100% - 40px);
+      display: none;
+    }
+    .toast.show { display: block; }
+
+    .dock {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      background: rgba(255,254,251,0.92);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--line);
+      padding: 10px 18px calc(10px + env(safe-area-inset-bottom));
+      z-index: 30;
+    }
+    .dock-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--mute);
+    }
+    .dock b { color: var(--ink); font-weight: 600; }
+
+    .wish {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.7;
+      padding: 18px;
+      background: linear-gradient(#fff, #fff), linear-gradient(var(--mark), var(--mark));
+      background-clip: padding-box, border-box;
+    }
+
+    .quote {
+      padding: 8px 0 4px;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    details.method {
+      margin: 18px 0;
+      color: var(--mute);
+      font-size: 13px;
+    }
+    details.method summary { cursor: pointer; }
+
+    .hidden { display: none !important; }
+    .center { text-align: center; }
+    .danger-text { color: var(--cut); }
+    .ok-text { color: var(--ok); }
+    .warn-text { color: #8a7040; }
+
+    .life-bar {
+      height: 6px;
+      background: #ece8e0;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .life-bar i {
+      display: block;
+      height: 100%;
+      background: var(--blue);
+      width: 0;
+    }
+
+    @media (min-width: 720px) {
+      h1 { font-size: 40px; }
+      .app { padding-top: 36px; }
+    }
+
+    @media print {
+      .nav, .dock, .toast, .no-print { display: none !important; }
+      .app { padding: 0; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app"></div>
+  <div class="toast" id="toast"></div>
+  <div class="dock" id="dock"></div>
+
+  <script>
+    const KEY = "abby_name_notebook_v1";
+    const COOL_MS = 72 * 3600 * 1000;
+    const VOTE_MAX = 5;
+
+    const CATS = [
+      { id: "nature", emoji: "🌿", name: "自然" },
+      { id: "plant", emoji: "🌸", name: "植物" },
+      { id: "light", emoji: "☀️", name: "光和时间" },
+      { id: "virtue", emoji: "💛", name: "品格" },
+      { id: "other", emoji: "✨", name: "其他" }
+    ];
+
+    const INSPIRE = {
+      nature: [
+        ["川", "chuān", "河流，开阔而有方向"],
+        ["野", "yě", "郊野，自在"],
+        ["岚", "lán", "山间的雾气"],
+        ["禾", "hé", "谷物，踏实"],
+        ["溪", "xī", "山溪，清而活"],
+        ["山", "shān", "安稳，有依靠"],
+        ["林", "lín", "树木成片，安静"],
+        ["泉", "quán", "源头，清澈"],
+        ["涧", "jiàn", "山间流水"],
+        ["汐", "xī", "晚潮"],
+        ["汀", "tīng", "水边平地"],
+        ["澄", "chéng", "水清，心静"],
+        ["溯", "sù", "逆流而上"],
+        ["岩", "yán", "沉稳"],
+        ["原", "yuán", "开阔的平地"]
+      ],
+      plant: [
+        ["栀", "zhī", "栀子，香而白"],
+        ["槿", "jǐn", "木槿"],
+        ["棠", "táng", "海棠"],
+        ["竹", "zhú", "清而有节"],
+        ["兰", "lán", "幽而远"],
+        ["荷", "hé", "出水而净"],
+        ["苇", "wěi", "芦苇，柔软却能过冬"],
+        ["松", "sōng", "长青"],
+        ["梅", "méi", "冷处开花"],
+        ["桐", "tóng", "梧桐"],
+        ["茗", "míng", "茶"],
+        ["芷", "zhǐ", "香草"],
+        ["莲", "lián", "出于泥而不染"],
+        ["薇", "wēi", "轻而细"],
+        ["芽", "yá", "新的开始"]
+      ],
+      light: [
+        ["晞", "xī", "破晓的阳光"],
+        ["曜", "yào", "日光照耀"],
+        ["晨", "chén", "清早"],
+        ["星", "xīng", "夜里的光"],
+        ["昕", "xīn", "黎明"],
+        ["晓", "xiǎo", "天明"],
+        ["暮", "mù", "傍晚"],
+        ["夕", "xī", "黄昏"],
+        ["晴", "qíng", "明朗"],
+        ["朗", "lǎng", "开阔明亮"],
+        ["昭", "zhāo", "明亮"],
+        ["晖", "huī", "阳光"],
+        ["晏", "yàn", "晴朗、从容"],
+        ["月", "yuè", "夜里柔和的光"],
+        ["光", "guāng", "亮，也指时光"]
+      ],
+      virtue: [
+        ["宁", "níng", "安定，不喧闹"],
+        ["知", "zhī", "明白"],
+        ["恒", "héng", "长久"],
+        ["诚", "chéng", "不欺"],
+        ["安", "ān", "平安，也是安住"],
+        ["清", "qīng", "干净"],
+        ["远", "yuǎn", "目光长"],
+        ["宽", "kuān", "有余地"],
+        ["厚", "hòu", "不薄"],
+        ["简", "jiǎn", "不复杂"],
+        ["真", "zhēn", "不假"],
+        ["谦", "qiān", "不满盈"],
+        ["澹", "dàn", "淡，不浓"],
+        ["默", "mò", "不急着出声"],
+        ["予", "yǔ", "给予"]
+      ]
+    };
+
+    const HOT_CHARS = "沐浩宇轩宸子墨奕诺诗涵雨桐欣怡梓然阳昊俊杰琪婷萌".split("");
+    const HOT_COMBOS = ["浩宇","子轩","宇轩","浩然","子墨","沐宸","浩轩","俊杰","诗涵","雨涵","梓涵","欣怡","一诺","雨桐","诗雨","美琪","雅婷","沐阳","奕辰"];
+    const POLY = {
+      "乐": "yuè / lè", "行": "xíng / háng", "长": "cháng / zhǎng", "朝": "zhāo / cháo",
+      "重": "zhòng / chóng", "和": "hé / hè / huó", "应": "yīng / yìng", "单": "shàn / dān",
+      "解": "xiè / jiě", "区": "ōu / qū", "仇": "qiú / chóu", "查": "zhā / chá",
+      "朴": "piáo / pǔ", "翟": "zhái / dí", "覃": "qín / tán", "华": "huà / huá",
+      "奇": "jī / qí", "艾": "yì / ài", "藏": "zàng / cáng", "降": "xiáng / jiàng",
+      "会": "kuài / huì", "干": "gān / gàn", "少": "shǎo / shào", "盖": "gě / gài",
+      "任": "rén / rèn", "纪": "jǐ / jì", "曾": "zēng / céng", "燕": "yān / yàn"
+    };
+
+    const LIFE_QS = [
+      { k: "age5", emoji: "🧒", q: "五岁的时候，会不会很可爱？" },
+      { k: "age18", emoji: "🧑", q: "十八岁的时候，会不会自然？" },
+      { k: "age30", emoji: "👩", q: "三十岁的时候，会不会成熟？" },
+      { k: "age60", emoji: "👵", q: "六十岁的时候，会不会依然舒服？" },
+      { k: "resume", emoji: "📄", q: "写在简历上，会不会大方？" },
+      { k: "called", emoji: "💬", q: "被喜欢的人叫出来，会不会很温柔？" }
+    ];
+
+    const READS = [
+      { k: "withSurname", label: "连着姓一起念", how: "full" },
+      { k: "alone", label: "单独念", how: "given" },
+      { k: "fast", label: "快一点念", how: "full", rate: 1.18 },
+      { k: "slow", label: "慢一点念", how: "full", rate: 0.62 },
+      { k: "teacher", label: "模拟老师点名", how: "roll" },
+      { k: "friend", label: "朋友叫名字", how: "friend" },
+      { k: "intro", label: "自我介绍", how: "intro" }
+    ];
+
+    const TRIALS = [
+      { k: "rollCall", emoji: "👩‍🏫", q: "如果老师点名，会不会顺口？" },
+      { k: "email", emoji: "✉️", q: "如果未来写邮件署名，会不会自然？" },
+      { k: "firstRead", emoji: "💬", q: "别人第一次见到，知道怎么读吗？" }
+    ];
+
+    const WISH_CHIPS = ["温柔","好奇","勇敢","自由","平静","有生命力","坚定","安静","松弛","清澈","辽阔","明亮","沉稳","简单","真诚","轻盈","笃定","开阔","细水长流","温暖","克制","有力量"];
+
+    const VIEWS = [
+      { id: "feel", name: "感觉" },
+      { id: "lib", name: "字库" },
+      { id: "ban", name: "反向" },
+      { id: "mix", name: "组合" },
+      { id: "cands", name: "候选" },
+      { id: "vote", name: "五票" },
+      { id: "kept", name: "留下的" }
+    ];
+
+    function uid(p) { return p + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+    function isComposingEvent(e) { return !!(e.isComposing || e.keyCode === 229); }
+    function isHanChar(ch) { return /^\p{Script=Han}$/u.test(ch); }
+    function hanOnly(s) { return Array.from(String(s || "")).filter(isHanChar).join(""); }
+    function firstHan(s) { return Array.from(String(s || "")).find(isHanChar) || ""; }
+    function isHan(s) {
+      const t = String(s || "").trim();
+      return t.length > 0 && Array.from(t).length === 1 && isHanChar(t);
+    }
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
+    }
+    function catMeta(id) { return CATS.find(c => c.id === id) || CATS[4]; }
+    function today() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+    }
+    function daysBetween(a, b) {
+      const ms = (new Date(b + "T00:00:00")).getTime() - (new Date(a + "T00:00:00")).getTime();
+      return Math.max(0, Math.round(ms / 86400000));
+    }
+
+    function defaultState() {
+      return {
+        version: 1,
+        surname: "",
+        ta: "Ta",
+        people: { a: "妈妈", b: "爸爸" },
+        wish: "",
+        keywords: { a: [], b: [] },
+        chars: [],
+        reverse: [],
+        names: [],
+        view: "feel",
+        mix: ["", ""],
+        candFilter: "alive",
+        expanded: null
+      };
+    }
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return defaultState();
+        return Object.assign(defaultState(), JSON.parse(raw));
+      } catch (e) {
+        return defaultState();
+      }
+    }
+
+    let state = load();
+    let saveTimer = 0;
+    function save() {
+      const copy = Object.assign({}, state);
+      localStorage.setItem(KEY, JSON.stringify(copy));
+    }
+    function commit() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(save, 80);
+      render();
+    }
+
+    function pyOf(ch) {
+      const rec = state.chars.find(x => x.char === ch);
+      if (rec && rec.py) return rec.py;
+      for (const arr of Object.values(INSPIRE)) {
+        const hit = arr.find(x => x[0] === ch);
+        if (hit) return hit[1];
+      }
+      return "";
+    }
+    function meaningOf(ch) {
+      const rec = state.chars.find(x => x.char === ch);
+      if (rec && rec.meaning) return rec.meaning;
+      for (const arr of Object.values(INSPIRE)) {
+        const hit = arr.find(x => x[0] === ch);
+        if (hit) return hit[2];
+      }
+      return "";
+    }
+    function catOf(ch) {
+      const rec = state.chars.find(x => x.char === ch);
+      return rec ? rec.cat : "other";
+    }
+    function fullName(given) { return (state.surname || "姓") + given; }
+    function pinyinName(given) {
+      return given.split("").map(pyOf).filter(Boolean).join("  ");
+    }
+    function inLib(ch) { return state.chars.some(x => x.char === ch); }
+    function inBan(ch) { return state.reverse.find(x => x.char === ch); }
+    function hotNotes(given) {
+      const notes = [];
+      if (HOT_COMBOS.includes(given)) notes.push("这是近几年常被提到的热门组合，可以再坐一会儿。");
+      const n = given.split("").filter(c => HOT_CHARS.includes(c)).length;
+      if (n >= 2 && !HOT_COMBOS.includes(given)) notes.push("这两个字近几年都比较常见。不是不能用，只是想提醒一句：流行往往只有几年。");
+      const poly = given.split("").filter(c => POLY[c]);
+      if (poly.length) notes.push(poly.map(c => "「" + c + "」有多种读音（" + POLY[c] + "），想好要读哪一个。").join(""));
+      return notes;
+    }
+    function lifeFilled(n) { return LIFE_QS.filter(q => n.lifeTest && n.lifeTest[q.k]).length; }
+    function lifeYes(n) { return LIFE_QS.filter(q => n.lifeTest && n.lifeTest[q.k] === "yes").length; }
+    function readFilled(n) { return READS.filter(q => n.read && n.read[q.k]).length; }
+    function cooling(n) {
+      if (!n.likedAt) return null;
+      const until = n.likedAt + COOL_MS;
+      return { until, left: until - Date.now(), done: Date.now() >= until };
+    }
+    function aliveNames() { return state.names.filter(n => !n.cut); }
+    function votesOf(who) { return aliveNames().filter(n => n.votes && n.votes[who]).length; }
+    function person(who) { return state.people[who] || who; }
+
+    function coach() {
+      const ta = state.ta || "Ta";
+      if (!state.keywords.a.length && !state.keywords.b.length)
+        return "先不要想具体的名字。两个人各自只想三个关键词——希望别人听到这个名字，会想到什么。";
+      if (!state.chars.length)
+        return "开始建立字库：把平时看到喜欢的字放进来。没有马上组合，也没有从零开始。";
+      if (!state.reverse.length)
+        return "也可以先列一张反向清单。知道不要什么，比知道要什么更容易。";
+      if (!state.names.length)
+        return "字库有了，可以从里面轻轻拼一拼。";
+      const untested = aliveNames().filter(n => lifeFilled(n) < 6);
+      if (untested.length)
+        return "给还没问完的名字做一次人生测试。一个名字要陪伴" + ta + "一生。";
+      const unread = aliveNames().filter(n => readFilled(n) < 3);
+      if (unread.length)
+        return "名字真正使用的时候，是被叫出来。试着多读、多念。";
+      const unpinned = aliveNames().filter(n => !n.trial || !n.trial.pinnedAt);
+      if (unpinned.length)
+        return "千万不要只在纸上看名字。挑一个写进手机备注，看几天。";
+      const coolingNow = aliveNames().filter(n => n.likedAt && !cooling(n).done);
+      if (coolingNow.length)
+        return "特别喜欢的先放一放。很多名字第一次惊艳，其实只是新鲜感。";
+      if (!aliveNames().some(n => n.votes && (n.votes.a || n.votes.b)))
+        return "每人只有 5 票。当必须取舍的时候，真正喜欢的才会浮现。";
+      return "最后留下的，不必是寓意最丰富、也不必是评分最高的。是叫出口时觉得温柔、舒服的那个。";
+    }
+
+    function toast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => el.classList.remove("show"), 2400);
+    }
+
+    function addChar(ch, cat, py, meaning, by) {
+      ch = firstHan(ch) || (ch || "").trim();
+      if (!isHan(ch)) { toast("一次放进一个汉字。"); return false; }
+      if (inLib(ch)) { toast("「" + ch + "」已经在字库里了。"); return false; }
+      const ban = inBan(ch);
+      if (ban) { toast("「" + ch + "」在反向清单里：" + (ban.reason || "绝对不会用")); return false; }
+      state.chars.push({
+        id: uid("c"),
+        char: ch,
+        cat: cat || "other",
+        py: (py || pyOf(ch) || "").trim(),
+        meaning: (meaning || meaningOf(ch) || "").trim(),
+        by: by || "a",
+        at: Date.now()
+      });
+      return true;
+    }
+
+    function speak(text, rate) {
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = "zh-CN";
+        u.rate = rate || 0.92;
+        u.pitch = 1;
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
+    }
+
+    function speakStyle(name, style) {
+      const given = name.given;
+      const full = fullName(given);
+      const ta = state.ta || "Ta";
+      if (style.how === "full") speak(full, style.rate);
+      else if (style.how === "given") speak(given, style.rate);
+      else if (style.how === "roll") speak(full + "。", 0.88);
+      else if (style.how === "friend") speak(given, 0.9);
+      else if (style.how === "intro") speak("你好，我叫" + full, 0.9);
+      else speak(full);
+    }
+
+    /* ---------- views ---------- */
+
+    function header(black, blue, emoji) {
+      return `<div class="brand">Abby's maternity notes</div>
+        <h1>${esc(black)}${blue ? `<br><span class="blue">${esc(blue)}</span>` : ""}${emoji ? " " + emoji : ""}</h1>`;
+    }
+
+    function nav() {
+      return `<nav class="nav">${VIEWS.map(v =>
+        `<button data-act="view" data-id="${v.id}" class="${state.view===v.id?"on":""}">${v.name}</button>`
+      ).join("")}</nav>`;
+    }
+
+    function viewFeel() {
+      const kw = (who) => state.keywords[who].map((k,i) =>
+        `<button class="chip on" data-act="del-kw" data-who="${who}" data-i="${i}">${esc(k)} ×</button>`
+      ).join("");
+      const pool = (who) => WISH_CHIPS.map(k => {
+        const on = state.keywords[who].includes(k);
+        const full = state.keywords[who].length >= 3 && !on;
+        return `<button class="chip ${on?"on":""}" ${full?"disabled":""} data-act="add-kw" data-who="${who}" data-k="${esc(k)}">${esc(k)}</button>`;
+      }).join("");
+
+      return `
+        ${header("比起寓意，我更想", "先想清楚一件事", "💭")}
+        <p>我觉得一个名字真正留下印象的，不只是某个字的寓意，而是它整体给人的感觉。是温柔一点？坚定一点？自由一点？还是安静、松弛、充满生命力？</p>
+        <p><mark>先不想具体的名字，每个人只想三个关键词。</mark>比起查找「吉祥的寓意」，这样带着期许再选字，方向一下子就清晰很多。</p>
+        <div class="stack gap-lg">
+          <div class="field">
+            <label>希望以后，${esc(state.ta)}会成为一个怎样的人</label>
+            <textarea data-bind="wish" placeholder="用一句自己的话写下来。这比任何字义都重要。">${esc(state.wish)}</textarea>
+          </div>
+          <div class="paper-card">
+            <div class="between"><strong>${esc(person("a"))}的三个词</strong><span class="small muted">${state.keywords.a.length}/3</span></div>
+            <div class="wrap gap-lg">${kw("a") || `<span class="small muted">还没有写</span>`}</div>
+            <div class="field gap-lg">
+              <input data-kw-who="a" placeholder="自己写一个，回车加入" autocomplete="off" />
+            </div>
+            <div class="wrap gap-lg">${pool("a")}</div>
+          </div>
+          <div class="paper-card">
+            <div class="between"><strong>${esc(person("b"))}的三个词</strong><span class="small muted">${state.keywords.b.length}/3</span></div>
+            <div class="wrap gap-lg">${kw("b") || `<span class="small muted">还没有写</span>`}</div>
+            <div class="field gap-lg">
+              <input data-kw-who="b" placeholder="自己写一个，回车加入" autocomplete="off" />
+            </div>
+            <div class="wrap gap-lg">${pool("b")}</div>
+          </div>
+          <div class="paper-card stack">
+            <div class="small muted">家庭</div>
+            <div class="row" style="flex-wrap:wrap">
+              <div class="field" style="flex:1;min-width:120px">
+                <label>姓</label>
+                <input data-bind="surname" placeholder="例如 陈" value="${esc(state.surname)}" autocomplete="off" spellcheck="false" lang="zh-CN" />
+              </div>
+              <div class="field" style="flex:1;min-width:120px">
+                <label>怎么称呼孩子</label>
+                <select data-bind="ta">
+                  <option value="他" ${state.ta==="他"?"selected":""}>他</option>
+                  <option value="她" ${state.ta==="她"?"selected":""}>她</option>
+                  <option value="Ta" ${state.ta==="Ta"?"selected":""}>Ta</option>
+                </select>
+              </div>
+            </div>
+            <div class="row" style="flex-wrap:wrap">
+              <div class="field" style="flex:1;min-width:120px">
+                <label>一位</label>
+                <input data-person="a" value="${esc(state.people.a)}" autocomplete="off" />
+              </div>
+              <div class="field" style="flex:1;min-width:120px">
+                <label>另一位</label>
+                <input data-person="b" value="${esc(state.people.b)}" autocomplete="off" />
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function viewLib() {
+      const grouped = CATS.map(cat => ({
+        cat,
+        items: state.chars.filter(c => c.cat === cat.id)
+      })).filter(g => g.items.length || ["nature","plant","light","virtue"].includes(g.cat.id));
+
+      const tiles = (items) => items.map(c => `
+        <button class="char-tile" data-act="char-info" data-id="${c.id}" title="${esc(c.meaning || "")}">
+          <b>${esc(c.char)}</b>
+          <span>${esc(c.py || "")}</span>
+        </button>`).join("");
+
+      const inspire = CATS.filter(c => INSPIRE[c.id]).map(cat => {
+        const cells = INSPIRE[cat.id].map(([ch, py, m]) => {
+          const used = inLib(ch);
+          const ban = inBan(ch);
+          return `<button class="char-tile ${used?"on":""} ${ban?"ban":""}" data-act="inspire" data-ch="${ch}" data-cat="${cat.id}" title="${esc(m)}">
+            <b>${ch}</b><span>${used ? "已在库" : py}</span>
+          </button>`;
+        }).join("");
+        return `<div class="gap-lg"><div class="small" style="margin-bottom:8px">${cat.emoji} ${cat.name}</div><div class="wrap">${cells}</div></div>`;
+      }).join("");
+
+      return `
+        ${header("不急着想名字", "先建立「名字库」", "📁")}
+        <p>这是我们做的第一件事。<mark>没有马上开始组合名字，而是先把所有喜欢的字收集起来。</mark>平时看到喜欢的字，都放进来。</p>
+        <p>这样整理以后，会发现我们喜欢的风格其实很明显。后来再组合的时候，也不会一直从零开始。</p>
+        <div class="paper-card stack">
+          <div class="row" style="flex-wrap:wrap">
+            <div class="field" style="width:88px">
+              <label>一个字</label>
+              <input id="new-char" placeholder="川" autocomplete="off" spellcheck="false" lang="zh-CN" />
+            </div>
+            <div class="field" style="flex:1;min-width:120px">
+              <label>类别</label>
+              <select id="new-cat">${CATS.map(c => `<option value="${c.id}">${c.emoji} ${c.name}</option>`).join("")}</select>
+            </div>
+            <div class="field" style="flex:1;min-width:120px">
+              <label>谁看到的</label>
+              <select id="new-by">
+                <option value="a">${esc(person("a"))}</option>
+                <option value="b">${esc(person("b"))}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" style="flex-wrap:wrap">
+            <div class="field" style="flex:1;min-width:120px">
+              <label>拼音（可空）</label>
+              <input id="new-py" placeholder="chuān" />
+            </div>
+            <div class="field" style="flex:2;min-width:160px">
+              <label>为什么喜欢（可空）</label>
+              <input id="new-m" placeholder="河流，开阔而有方向" />
+            </div>
+          </div>
+          <button class="btn" data-act="add-char">放进字库</button>
+        </div>
+        <div class="between gap-xl">
+          <h2>我们的字</h2>
+          <span class="small muted">${state.chars.length} 个</span>
+        </div>
+        ${state.chars.length ? grouped.map(g => `
+          <div class="gap-lg">
+            <div class="small" style="margin-bottom:8px">${g.cat.emoji} ${g.cat.name} · ${g.items.length}</div>
+            <div class="wrap">${tiles(g.items) || `<span class="small muted">还没有</span>`}</div>
+          </div>`).join("") : `<div class="card small muted">字库还是空的。可以从下面这些安静的字开始，也可以把自己看到的放进来。</div>`}
+        <h2 class="gap-xl">可以先看看这些</h2>
+        <p class="small muted">点一下就放进字库。它们只是灵感，不是答案。</p>
+        ${inspire}`;
+    }
+
+    function viewBan() {
+      const list = state.reverse.map(r => `
+        <div class="paper-card between">
+          <div>
+            <div style="font-size:24px;font-weight:700">${esc(r.char)}</div>
+            <div class="small muted">${esc(r.reason || "绝对不会用")}</div>
+          </div>
+          <button class="btn ghost" data-act="del-ban" data-id="${r.id}">去掉</button>
+        </div>`).join("");
+      return `
+        ${header("列一张", "「反向清单」", "🚫")}
+        <p>除了喜欢什么，我们还列了一张：绝对不会用的字。比如容易读错的，谐音尴尬的，笔画复杂的，和亲友重名的，小时候不喜欢的类型。</p>
+        <p><mark>知道不要什么，比知道要什么更容易。</mark></p>
+        <div class="paper-card stack">
+          <div class="row" style="flex-wrap:wrap">
+            <div class="field" style="width:88px">
+              <label>不用这个字</label>
+              <input id="ban-char" placeholder="字" autocomplete="off" spellcheck="false" lang="zh-CN" />
+            </div>
+            <div class="field" style="flex:1;min-width:160px">
+              <label>为什么</label>
+              <input id="ban-reason" placeholder="谐音、难写、重名、不喜欢……" />
+            </div>
+          </div>
+          <button class="btn" data-act="add-ban">加入反向清单</button>
+        </div>
+        <div class="stack gap-lg">${list || `<div class="card small muted">还没有。想到绝对不会用的，就先记下来。</div>`}</div>`;
+    }
+
+    function viewMix() {
+      const [s1, s2] = state.mix;
+      const given = (s1 + s2);
+      const notes = given ? hotNotes(given) : [];
+      const bans = given.split("").map(inBan).filter(Boolean);
+      const cats = [...new Set(given.split("").filter(Boolean).map(catOf))].map(id => catMeta(id).emoji + catMeta(id).name);
+
+      const tiles = CATS.map(cat => {
+        const items = state.chars.filter(c => c.cat === cat.id);
+        if (!items.length) return "";
+        return `<div class="gap-lg"><div class="small" style="margin-bottom:8px">${cat.emoji} ${cat.name}</div>
+          <div class="wrap">${items.map(c => {
+            const on = state.mix.includes(c.char);
+            return `<button class="char-tile ${on?"on":""}" data-act="pick" data-ch="${c.char}">
+              <b>${esc(c.char)}</b><span>${esc(c.py || "")}</span>
+            </button>`;
+          }).join("")}</div></div>`;
+      }).join("");
+
+      return `
+        ${header("从字库里", "轻轻拼一拼")}
+        <p>不要从零开始。点一个字放进左边，再点一个放进右边。单字名只放左边即可。</p>
+        <div class="paper-card preview">
+          <div class="surname">${esc(state.surname || "姓")}</div>
+          <div class="given">${esc(s1 || "　")}${esc(s2 || "")}</div>
+          <div class="py">${esc(pinyinName(given)) || " "}</div>
+          <div class="small muted">${cats.join(" · ") || "从下面选字"}</div>
+        </div>
+        <div class="row gap-lg" style="justify-content:center">
+          <button class="btn ghost" data-act="clear-slot" data-i="0">${s1 || "左"} ×</button>
+          <button class="btn ghost" data-act="clear-slot" data-i="1">${s2 || "右"} ×</button>
+          <button class="btn ghost" data-act="swap-slots">对调</button>
+        </div>
+        ${bans.map(b => `<p class="small danger-text gap-lg">「${esc(b.char)}」在反向清单里：${esc(b.reason || "绝对不会用")}</p>`).join("")}
+        ${notes.map(n => `<p class="small warn-text">${esc(n)}</p>`).join("")}
+        <button class="btn wide gap-lg" data-act="save-mix" ${(!s1 || bans.length)?"disabled":""}>放入候选</button>
+        ${state.chars.length ? tiles : `<div class="card small muted gap-lg">字库还是空的，先去收集喜欢的字。</div>`}`;
+    }
+
+    function dots(n, total, filled) {
+      let s = "";
+      for (let i = 0; i < total; i++) s += `<span class="${i<n?"yes":"empty"}">${filled || "●"}</span>`;
+      return `<span class="dots">${s}</span>`;
+    }
+
+    function nameCard(n, mode) {
+      const cool = cooling(n);
+      const py = pinyinName(n.given);
+      const cats = [...new Set(n.given.split("").map(catOf))].map(id => catMeta(id).emoji + " " + catMeta(id).name);
+      const open = state.expanded === n.id;
+      const pinnedDays = n.trial && n.trial.pinnedAt ? daysBetween(n.trial.pinnedAt, today()) : null;
+      const notes = hotNotes(n.given);
+      const meanings = n.given.split("").map(ch => "「" + ch + "」" + (meaningOf(ch) || "")).filter(s => s.length > 3);
+
+      let coolLine = "还没有特别喜欢到要冷静一下";
+      if (cool && !cool.done) {
+        const h = Math.floor(cool.left / 3600000);
+        const m = Math.floor((cool.left % 3600000) / 60000);
+        coolLine = "冷静期还剩 " + h + " 小时 " + m + " 分。第一次惊艳，先别立刻决定。";
+      } else if (cool && cool.done) {
+        coolLine = "72 小时过了。现在再读一遍，还觉得舒服吗？真正喜欢的，通常会越看越顺眼。";
+      }
+
+      const body = open ? `
+        <div class="gap-lg">
+          ${meanings.length ? `<p class="small muted">${esc(meanings.join(" · "))}</p>` : ""}
+          ${notes.map(t => `<p class="small warn-text">${esc(t)}</p>`).join("")}
+          <div class="small muted">人生测试 · 不是评分，只是问自己</div>
+          ${LIFE_QS.map(q => {
+            const v = (n.lifeTest && n.lifeTest[q.k]) || "";
+            return `<div class="q">
+              <div class="ask">${q.emoji} ${esc(q.q)}</div>
+              <div class="seg">
+                <button class="${v==="yes"?"on-yes":""}" data-act="life" data-id="${n.id}" data-k="${q.k}" data-v="yes">会</button>
+                <button class="${v==="ok"?"on-ok":""}" data-act="life" data-id="${n.id}" data-k="${q.k}" data-v="ok">还好</button>
+                <button class="${v==="no"?"on-no":""}" data-act="life" data-id="${n.id}" data-k="${q.k}" data-v="no">不太会</button>
+              </div>
+            </div>`;
+          }).join("")}
+          <p class="small muted">${lifeYes(n) ? "这六个瞬间里，此刻觉得舒服的有 " + lifeYes(n) + " 件。这不是分数。" : "有些名字小时候很好听，长大以后却容易觉得幼态。有些很诗意，放到真实生活里反而不好用。"}</p>
+
+          <div class="small muted gap-lg">读很多很多遍 · Processing Fluency</div>
+          <p class="small">发音越自然、越顺口，大脑越容易记住，也更容易留下舒服的第一印象。一个真正耐听的名字，通常都不会特别绕口。</p>
+          <div class="stack">
+            ${READS.map(r => {
+              const done = n.read && n.read[r.k];
+              return `<div class="between">
+                <span>${done ? "✅" : "○"} ${esc(r.label)}</span>
+                <span class="row">
+                  <button class="btn ghost" data-act="speak" data-id="${n.id}" data-k="${r.k}">读</button>
+                  <button class="btn ${done?"ok":"ghost"}" data-act="read" data-id="${n.id}" data-k="${r.k}">${done?"读过了":"我读了"}</button>
+                </span>
+              </div>`;
+            }).join("")}
+          </div>
+
+          <div class="small muted gap-lg">放进真实生活里试一遍</div>
+          ${TRIALS.map(q => {
+            const v = (n.trial && n.trial[q.k]) || "";
+            return `<div class="q">
+              <div class="ask">${q.emoji} ${esc(q.q)}</div>
+              <div class="seg">
+                <button class="${v==="yes"?"on-yes":""}" data-act="trial" data-id="${n.id}" data-k="${q.k}" data-v="yes">会</button>
+                <button class="${v==="ok"?"on-ok":""}" data-act="trial" data-id="${n.id}" data-k="${q.k}" data-v="ok">还好</button>
+                <button class="${v==="no"?"on-no":""}" data-act="trial" data-id="${n.id}" data-k="${q.k}" data-v="no">不太会</button>
+              </div>
+            </div>`;
+          }).join("")}
+          <div class="between gap-lg">
+            <div>
+              <div>📦 写进备忘录 / 手机备注</div>
+              <div class="small muted">${pinnedDays==null ? "还没有放进生活" : "已经在生活里待了 " + pinnedDays + " 天"}</div>
+            </div>
+            <button class="btn ${n.trial&&n.trial.pinnedAt?"ok":"soft"}" data-act="pin" data-id="${n.id}">${n.trial&&n.trial.pinnedAt?"已钉住 · 复制":"钉住并复制"}</button>
+          </div>
+
+          <div class="small muted gap-lg">72 小时冷静期</div>
+          <p class="small">${esc(coolLine)}</p>
+          ${!n.likedAt ? `<button class="btn soft" data-act="like" data-id="${n.id}">特别喜欢，先放两天</button>` : ""}
+          ${cool && cool.done && !n.cooledOk ? `<div class="row"><button class="btn ok" data-act="still" data-id="${n.id}">再读一遍，还舒服</button><button class="btn danger" data-act="cut" data-id="${n.id}">划掉</button></div>` : ""}
+
+          <div class="field gap-lg">
+            <label>一点备注</label>
+            <textarea data-note="${n.id}" placeholder="读起来的感觉、家人的反应、忽然想到的……">${esc(n.note || "")}</textarea>
+          </div>
+        </div>` : "";
+
+      return `
+        <article class="paper-card name-card ${n.cut?"cut":""}" data-name="${n.id}">
+          <div class="between">
+            <div>
+              <div class="small muted">${esc(fullName(n.given))}</div>
+              <div class="given-line">${esc(n.given)}</div>
+              <div class="small muted">${esc(py)} ${cats.length ? " · " + cats.join(" "): ""}</div>
+            </div>
+            <button class="btn ghost" data-act="toggle" data-id="${n.id}">${open ? "收起" : "展开"}</button>
+          </div>
+          <div class="small muted gap-lg" style="display:grid;gap:4px">
+            <div>人生测试 ${dots(lifeFilled(n), 6)}</div>
+            <div>朗读 ${dots(readFilled(n), 7)}</div>
+            <div>${esc(coolLine)}</div>
+            ${pinnedDays!=null ? `<div>在生活里 ${pinnedDays} 天</div>` : ""}
+            ${n.cut ? `<div class="danger-text">已划掉${n.cutReason ? " · " + esc(n.cutReason) : ""}</div>` : ""}
+          </div>
+          ${body}
+          <div class="row gap-lg no-print" style="flex-wrap:wrap">
+            ${n.cut
+              ? `<button class="btn ghost" data-act="restore" data-id="${n.id}">放回来</button>`
+              : `<button class="btn danger" data-act="cut" data-id="${n.id}">划掉</button>`}
+          </div>
+        </article>`;
+    }
+
+    function viewCands() {
+      const filter = state.candFilter;
+      let list = state.names.slice().sort((a,b) => (a.cut - b.cut) || (b.createdAt - a.createdAt));
+      if (filter === "alive") list = list.filter(n => !n.cut);
+      if (filter === "cut") list = list.filter(n => n.cut);
+      if (filter === "cool") list = list.filter(n => !n.cut && n.likedAt && cooling(n) && !cooling(n).done);
+      if (filter === "pin") list = list.filter(n => !n.cut && n.trial && n.trial.pinnedAt);
+
+      return `
+        ${header("一个名字", "要做一次「人生测试」", "💡")}
+        <p>每想好一个名字，都问自己那几个问题。有些名字小时候很好听，长大以后却容易觉得幼态；有些很诗意，放到真实生活里反而不好用。</p>
+        <p><mark>一个名字要陪伴${esc(state.ta)}的一生，我们也希望它能够陪孩子一起长大。</mark>真正使用的时候，其实是被叫出来——连着姓一起念，单独念，快一点，慢一点，甚至模拟老师点名、朋友叫、自我介绍。</p>
+        <p>然后把它写进备忘录，看几天。<mark>真正进入生活以后，有些原本很喜欢的名字，慢慢就被划掉了。</mark></p>
+        <div class="wrap">
+          ${[["alive","还在看"],["cool","冷静中"],["pin","在生活里"],["cut","已划掉"],["all","全部"]].map(([id,l]) =>
+            `<button class="chip ${filter===id?"on":""}" data-act="filter" data-id="${id}">${l}</button>`
+          ).join("")}
+        </div>
+        <div class="stack gap-lg">${list.map(n => nameCard(n)).join("") || `<div class="card small muted">还没有候选。去「组合」里从字库拼一个。</div>`}</div>`;
+    }
+
+    function viewVote() {
+      const pool = aliveNames();
+      const slot = (who) => {
+        const picked = pool.filter(n => n.votes && n.votes[who]);
+        const rest = VOTE_MAX - picked.length;
+        return `
+          <div class="paper-card">
+            <div class="between">
+              <strong>${esc(person(who))}</strong>
+              <span class="small muted">还剩 ${rest} 票</span>
+            </div>
+            <div style="margin:8px 0">${dots(picked.length, VOTE_MAX, "●")}</div>
+            <div class="stack">
+              ${picked.map(n => `<div class="between">
+                <span style="font-weight:700;letter-spacing:0.12em">${esc(n.given)}</span>
+                <button class="btn ghost" data-act="unvote" data-id="${n.id}" data-who="${who}">收回</button>
+              </div>`).join("") || `<div class="small muted">还没有投票。每个人最终只能保留 5 个。</div>`}
+            </div>
+          </div>`;
+      };
+      const both = pool.filter(n => n.votes && n.votes.a && n.votes.b);
+      const voteBtns = pool.map(n => {
+        const cool = cooling(n);
+        const waiting = n.likedAt && cool && !cool.done;
+        return `<div class="paper-card">
+          <div class="between">
+            <div>
+              <div class="given-line" style="font-size:24px">${esc(n.given)}</div>
+              <div class="small muted">${esc(fullName(n.given))}${waiting ? " · 还在冷静期" : ""}</div>
+            </div>
+          </div>
+          <div class="row gap-lg" style="flex-wrap:wrap">
+            <button class="btn ${n.votes&&n.votes.a?"ok":"ghost"}" data-act="vote" data-id="${n.id}" data-who="a">${esc(person("a"))}${n.votes&&n.votes.a?" 已留":""}</button>
+            <button class="btn ${n.votes&&n.votes.b?"ok":"ghost"}" data-act="vote" data-id="${n.id}" data-who="b">${esc(person("b"))}${n.votes&&n.votes.b?" 已留":""}</button>
+          </div>
+        </div>`;
+      }).join("");
+
+      return `
+        ${header("每个人只有", "5 票", "✋")}
+        <p>选择太多，反而容易陷入「决策瘫痪」。<mark>当必须取舍的时候，真正喜欢的名字会浮现出来。</mark></p>
+        <p class="small muted">特别喜欢的，最好过了 72 小时再决定。这里不拦你投票，只是会提醒还在冷静期的名字。</p>
+        <div class="stack">${slot("a")}${slot("b")}</div>
+        <h2 class="gap-xl">两人都留下的</h2>
+        <div class="stack">${both.map(n => `<div class="paper-card center"><div class="given-line">${esc(n.given)}</div><div class="small muted">${esc(fullName(n.given))} · ${esc(pinyinName(n.given))}</div></div>`).join("") || `<div class="card small muted">还没有交集。这很正常。</div>`}</div>
+        <h2 class="gap-xl">从候选里选</h2>
+        <div class="stack">${voteBtns || `<div class="card small muted">还没有候选名字。</div>`}</div>`;
+    }
+
+    function viewKept() {
+      const both = aliveNames().filter(n => n.votes && n.votes.a && n.votes.b);
+      const one = aliveNames().filter(n => n.votes && (n.votes.a || n.votes.b) && !(n.votes.a && n.votes.b));
+      const ta = state.ta || "Ta";
+      return `
+        ${header("", "")}
+        <div class="brand">Abby's maternity notes</div>
+        <div class="quote">
+          我发现起名字其实不像是在寻找一个标准答案，而更像是我们第一次认真坐下来讨论：
+        </div>
+        <div class="wish paper-card">${state.wish ? esc(state.wish) : "希望以后，" + esc(ta) + "会成为一个怎样的人。"}</div>
+        <div class="quote gap-lg">
+          最后留下的那个名字，也许不是寓意最丰富的，不是诗词出处最多的，更不是评分最高的。
+        </div>
+        <p><mark>但它一定是我们叫出口的时候，会觉得温柔、舒服，也愿意陪伴${esc(ta)}很多很多的名字。</mark></p>
+        <p>名字是父母送给孩子的第一份礼物，它不需要满分。真正重要的是，它藏着妈妈和爸爸认真思考过的爱。</p>
+        <h2 class="gap-xl">两人都愿意留下的</h2>
+        <div class="stack">
+          ${both.map(n => `
+            <div class="paper-card center">
+              <div class="small muted">${esc(state.surname || "")}</div>
+              <div class="given-line" style="font-size:48px">${esc(n.given)}</div>
+              <div class="py" style="color:var(--blue-deep);letter-spacing:0.18em">${esc(pinyinName(n.given))}</div>
+              <p class="small muted">${esc(n.note || "")}</p>
+            </div>`).join("") || `<div class="card small muted">还没有两人都留下的名字。不着急。</div>`}
+        </div>
+        ${one.length ? `<h2 class="gap-xl">只有一个人留下的</h2><div class="stack">${one.map(n => `
+          <div class="paper-card between">
+            <div><div class="given-line" style="font-size:24px">${esc(n.given)}</div>
+            <div class="small muted">${n.votes.a?esc(person("a")):""}${n.votes.a&&n.votes.b?" · ":""}${n.votes.b?esc(person("b")):""}</div></div>
+          </div>`).join("")}</div>` : ""}
+        <div class="gap-xl paper-card small">
+          <p><strong>也不追热门，尽量选择「耐时间」。</strong>一个名字会陪孩子几十年，但流行只有几年。真正耐得住时间的，往往都不过分追赶流行。偶尔去翻翻十年前电视剧里的名字、民国作家的名字、电影角色的名字，问自己：现在再读一遍，还觉得舒服吗？</p>
+        </div>
+        <div class="row gap-lg no-print" style="flex-wrap:wrap">
+          <button class="btn" data-act="export">导出备份</button>
+          <button class="btn ghost" data-act="export-text">复制文字版</button>
+          <label class="btn ghost" style="display:inline-block">导入<input type="file" accept="application/json,.json" id="import-file" hidden /></label>
+        </div>
+        <p class="small muted">数据只存在这台设备的浏览器里。换手机前请先导出备份，发给对方也可以继续。</p>`;
+    }
+
+    function dock() {
+      return `<div class="dock-inner">
+        <div>字库 <b>${state.chars.length}</b></div>
+        <div>候选 <b>${aliveNames().length}</b></div>
+        <div>${esc(person("a"))} <b>${votesOf("a")}/${VOTE_MAX}</b></div>
+        <div>${esc(person("b"))} <b>${votesOf("b")}/${VOTE_MAX}</b></div>
+      </div>`;
+    }
+
+    function render() {
+      const root = document.getElementById("app");
+      const main = {
+        feel: viewFeel,
+        lib: viewLib,
+        ban: viewBan,
+        mix: viewMix,
+        cands: viewCands,
+        vote: viewVote,
+        kept: viewKept
+      }[state.view] || viewFeel;
+      root.innerHTML = nav() + `<div class="coach">${esc(coach())}</div>` + main();
+      document.getElementById("dock").innerHTML = dock();
+      bindAfter();
+    }
+
+    function bindAfter() {
+      document.querySelectorAll("[data-bind]").forEach(el => {
+        const write = () => {
+          let v = el.value;
+          if (el.dataset.bind === "surname") {
+            const han = hanOnly(v).slice(0, 2);
+            if (han) {
+              v = han;
+              if (el.value !== han) el.value = han;
+            }
+          }
+          state[el.dataset.bind] = v;
+          save();
+        };
+        el.addEventListener("compositionstart", () => { el.dataset.composing = "1"; });
+        el.addEventListener("compositionend", () => {
+          el.dataset.composing = "";
+          write();
+        });
+        el.addEventListener("input", () => {
+          if (el.dataset.composing === "1") return;
+          if (el.dataset.bind === "surname") {
+            state.surname = el.value;
+            save();
+            return;
+          }
+          write();
+        });
+        el.addEventListener("blur", () => {
+          if (el.dataset.bind === "surname") write();
+        });
+        if (el.dataset.bind === "ta") {
+          el.addEventListener("change", () => {
+            state.ta = el.value;
+            save();
+            render();
+          });
+        }
+      });
+      document.querySelectorAll("[data-person]").forEach(el => {
+        el.addEventListener("compositionstart", () => { el.dataset.composing = "1"; });
+        el.addEventListener("compositionend", () => {
+          el.dataset.composing = "";
+          state.people[el.dataset.person] = el.value || (el.dataset.person === "a" ? "妈妈" : "爸爸");
+          save();
+        });
+        el.addEventListener("input", () => {
+          if (el.dataset.composing === "1") return;
+          state.people[el.dataset.person] = el.value || (el.dataset.person === "a" ? "妈妈" : "爸爸");
+          save();
+        });
+      });
+      document.querySelectorAll("[data-kw-who]").forEach(el => {
+        el.addEventListener("compositionstart", () => { el.dataset.composing = "1"; });
+        el.addEventListener("compositionend", () => { el.dataset.composing = ""; });
+        el.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && !isComposingEvent(e) && el.dataset.composing !== "1") {
+            e.preventDefault();
+            addKw(el.dataset.kwWho, el.value);
+            el.value = "";
+          }
+        });
+      });
+      document.querySelectorAll("[data-note]").forEach(el => {
+        el.addEventListener("compositionstart", () => { el.dataset.composing = "1"; });
+        el.addEventListener("compositionend", () => {
+          el.dataset.composing = "";
+          const n = state.names.find(x => x.id === el.dataset.note);
+          if (n) { n.note = el.value; save(); }
+        });
+        el.addEventListener("input", () => {
+          if (el.dataset.composing === "1") return;
+          const n = state.names.find(x => x.id === el.dataset.note);
+          if (n) { n.note = el.value; save(); }
+        });
+      });
+      const file = document.getElementById("import-file");
+      if (file) file.addEventListener("change", importFile);
+      const nc = document.getElementById("new-char");
+      if (nc) {
+        nc.addEventListener("compositionstart", () => { nc.dataset.composing = "1"; });
+        nc.addEventListener("compositionend", () => {
+          nc.dataset.composing = "";
+          const one = firstHan(nc.value);
+          if (one) nc.value = one;
+        });
+        nc.addEventListener("keydown", e => {
+          if (e.key === "Enter" && !isComposingEvent(e) && nc.dataset.composing !== "1") {
+            e.preventDefault();
+            document.querySelector("[data-act=add-char]").click();
+          }
+        });
+      }
+      const bc = document.getElementById("ban-char");
+      if (bc) {
+        bc.addEventListener("compositionstart", () => { bc.dataset.composing = "1"; });
+        bc.addEventListener("compositionend", () => {
+          bc.dataset.composing = "";
+          const one = firstHan(bc.value);
+          if (one) bc.value = one;
+        });
+        bc.addEventListener("keydown", e => {
+          if (e.key === "Enter" && !isComposingEvent(e) && bc.dataset.composing !== "1") {
+            e.preventDefault();
+            document.querySelector("[data-act=add-ban]").click();
+          }
+        });
+      }
+    }
+
+    function addKw(who, raw) {
+      const k = (raw || "").trim();
+      if (!k) return;
+      if (state.keywords[who].includes(k)) return;
+      if (state.keywords[who].length >= 3) { toast("每个人只想三个关键词。"); return; }
+      state.keywords[who].push(k);
+      commit();
+    }
+
+    function getName(id) { return state.names.find(n => n.id === id); }
+
+    document.addEventListener("click", (e) => {
+      const el = e.target.closest("[data-act]");
+      if (!el) return;
+      const act = el.dataset.act;
+      const id = el.dataset.id;
+
+      if (act === "view") { state.view = id; commit(); return; }
+
+      if (act === "add-kw") { addKw(el.dataset.who, el.dataset.k); return; }
+      if (act === "del-kw") {
+        state.keywords[el.dataset.who].splice(+el.dataset.i, 1);
+        commit(); return;
+      }
+
+      if (act === "add-char") {
+        const ch = document.getElementById("new-char").value;
+        const ok = addChar(
+          ch,
+          document.getElementById("new-cat").value,
+          document.getElementById("new-py").value,
+          document.getElementById("new-m").value,
+          document.getElementById("new-by").value
+        );
+        if (ok) { toast("「" + ch.trim() + "」进字库了"); commit(); }
+        return;
+      }
+      if (act === "inspire") {
+        const ch = el.dataset.ch;
+        if (inBan(ch)) { toast("这个字在反向清单里"); return; }
+        if (inLib(ch)) { toast("已经在字库里"); return; }
+        addChar(ch, el.dataset.cat, pyOf(ch), meaningOf(ch), "a");
+        toast("「" + ch + "」进字库了");
+        commit(); return;
+      }
+      if (act === "char-info") {
+        const c = state.chars.find(x => x.id === id);
+        if (!c) return;
+        const used = state.names.filter(n => n.given.includes(c.char) && !n.cut).map(n => n.given);
+        const msg = "「" + c.char + "」" + (c.py ? " " + c.py : "") + (c.meaning ? " · " + c.meaning : "") + (used.length ? " · 用在 " + used.join("、") : "");
+        if (confirm(msg + "\n\n要从字库拿掉这个字吗？（已经组合好的名字还在）")) {
+          state.chars = state.chars.filter(x => x.id !== id);
+          commit();
+        }
+        return;
+      }
+
+      if (act === "add-ban") {
+        const ch = firstHan(document.getElementById("ban-char").value);
+        const reason = (document.getElementById("ban-reason").value || "").trim();
+        if (!isHan(ch)) { toast("一次记一个汉字。"); return; }
+        if (inBan(ch)) { toast("已经在反向清单里了。"); return; }
+        state.reverse.push({ id: uid("r"), char: ch, reason, at: Date.now() });
+        toast("「" + ch + "」不会用");
+        commit(); return;
+      }
+      if (act === "del-ban") {
+        state.reverse = state.reverse.filter(x => x.id !== id);
+        commit(); return;
+      }
+
+      if (act === "pick") {
+        const ch = el.dataset.ch;
+        if (state.mix[0] === ch) { state.mix[0] = ""; commit(); return; }
+        if (state.mix[1] === ch) { state.mix[1] = ""; commit(); return; }
+        if (!state.mix[0]) state.mix[0] = ch;
+        else if (!state.mix[1]) state.mix[1] = ch;
+        else { state.mix[1] = ch; }
+        commit(); return;
+      }
+      if (act === "clear-slot") { state.mix[+el.dataset.i] = ""; commit(); return; }
+      if (act === "swap-slots") { state.mix = [state.mix[1], state.mix[0]]; commit(); return; }
+      if (act === "save-mix") {
+        const given = state.mix[0] + state.mix[1];
+        if (!state.mix[0]) return;
+        if (state.names.some(n => n.given === given && !n.cut)) { toast("这个已经在候选里了"); return; }
+        if (given.split("").some(ch => inBan(ch))) { toast("碰到反向清单了"); return; }
+        state.names.push({
+          id: uid("n"),
+          given,
+          createdAt: Date.now(),
+          likedAt: null,
+          cooledOk: false,
+          lifeTest: {},
+          read: {},
+          trial: {},
+          votes: { a: false, b: false },
+          cut: false,
+          note: ""
+        });
+        toast(fullName(given) + " 放入候选");
+        state.mix = ["", ""];
+        state.view = "cands";
+        state.expanded = state.names[state.names.length - 1].id;
+        commit(); return;
+      }
+
+      if (act === "toggle") {
+        state.expanded = state.expanded === id ? null : id;
+        commit(); return;
+      }
+      if (act === "filter") { state.candFilter = id; commit(); return; }
+      if (act === "life") {
+        const n = getName(id); if (!n) return;
+        n.lifeTest = n.lifeTest || {};
+        n.lifeTest[el.dataset.k] = n.lifeTest[el.dataset.k] === el.dataset.v ? "" : el.dataset.v;
+        commit(); return;
+      }
+      if (act === "trial") {
+        const n = getName(id); if (!n) return;
+        n.trial = n.trial || {};
+        n.trial[el.dataset.k] = n.trial[el.dataset.k] === el.dataset.v ? "" : el.dataset.v;
+        commit(); return;
+      }
+      if (act === "read") {
+        const n = getName(id); if (!n) return;
+        n.read = n.read || {};
+        n.read[el.dataset.k] = !n.read[el.dataset.k];
+        commit(); return;
+      }
+      if (act === "speak") {
+        const n = getName(id); if (!n) return;
+        const style = READS.find(r => r.k === el.dataset.k);
+        speakStyle(n, style);
+        n.read = n.read || {};
+        n.read[el.dataset.k] = true;
+        commit(); return;
+      }
+      if (act === "pin") {
+        const n = getName(id); if (!n) return;
+        n.trial = n.trial || {};
+        if (!n.trial.pinnedAt) n.trial.pinnedAt = today();
+        const text = fullName(n.given) + (pinyinName(n.given) ? "  " + pinyinName(n.given) : "") + "\n先在生活里待几天，不要立刻决定。";
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => toast("已复制，去贴进备忘录或微信备注")).catch(() => toast(text));
+        } else toast(text);
+        commit(); return;
+      }
+      if (act === "like") {
+        const n = getName(id); if (!n) return;
+        n.likedAt = Date.now();
+        toast("先放两天。真正喜欢的，通常会越看越顺眼。");
+        commit(); return;
+      }
+      if (act === "still") {
+        const n = getName(id); if (!n) return;
+        n.cooledOk = true;
+        toast("还舒服，就留着。");
+        commit(); return;
+      }
+      if (act === "cut") {
+        const n = getName(id); if (!n) return;
+        const reason = prompt("划掉「" + n.given + "」。可以写一句为什么（也可以留空）。", n.cutReason || "") ;
+        if (reason === null) return;
+        n.cut = true;
+        n.cutReason = reason;
+        n.cutAt = Date.now();
+        n.votes = { a: false, b: false };
+        if (state.expanded === n.id) state.expanded = null;
+        toast("划掉了。进入生活以后，有些原本喜欢的名字会慢慢离开。");
+        commit(); return;
+      }
+      if (act === "restore") {
+        const n = getName(id); if (!n) return;
+        n.cut = false; n.cutReason = ""; n.cutAt = null;
+        commit(); return;
+      }
+
+      if (act === "vote") {
+        const n = getName(id); if (!n) return;
+        const who = el.dataset.who;
+        n.votes = n.votes || { a:false, b:false };
+        if (n.votes[who]) { n.votes[who] = false; commit(); return; }
+        if (votesOf(who) >= VOTE_MAX) {
+          toast("每个人只有 5 票。取舍的时候，真正喜欢的才会浮现。");
+          return;
+        }
+        const cool = cooling(n);
+        if (n.likedAt && cool && !cool.done) toast("还在冷静期。可以先留，过两天再看仍不仍舒服。");
+        n.votes[who] = true;
+        commit(); return;
+      }
+      if (act === "unvote") {
+        const n = getName(id); if (!n) return;
+        n.votes[el.dataset.who] = false;
+        commit(); return;
+      }
+
+      if (act === "export") {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "名字库-" + today() + ".json";
+        a.click();
+        toast("备份已下载");
+        return;
+      }
+      if (act === "export-text") {
+        const lines = [];
+        lines.push("名字库");
+        lines.push("希望以后，" + (state.ta||"Ta") + "会成为一个怎样的人：");
+        lines.push(state.wish || "（还没写）");
+        lines.push("");
+        lines.push(person("a") + "的关键词：" + (state.keywords.a.join("、") || "无"));
+        lines.push(person("b") + "的关键词：" + (state.keywords.b.join("、") || "无"));
+        lines.push("");
+        lines.push("字库：");
+        CATS.forEach(cat => {
+          const items = state.chars.filter(c => c.cat === cat.id).map(c => c.char);
+          if (items.length) lines.push(cat.emoji + " " + cat.name + "：" + items.join("、"));
+        });
+        lines.push("反向：" + (state.reverse.map(r => r.char + (r.reason?("("+r.reason+")"):"")).join("、") || "无"));
+        lines.push("");
+        lines.push("候选：");
+        aliveNames().forEach(n => {
+          lines.push("- " + fullName(n.given) + " " + pinyinName(n.given) +
+            (n.votes && n.votes.a ? " · " + person("a") + "留" : "") +
+            (n.votes && n.votes.b ? " · " + person("b") + "留" : "") +
+            (n.note ? " · " + n.note : ""));
+        });
+        const both = aliveNames().filter(n => n.votes && n.votes.a && n.votes.b).map(n => n.given);
+        lines.push("");
+        lines.push("两人都留下的：" + (both.join("、") || "还没有"));
+        lines.push("");
+        lines.push("最后留下的不必是寓意最丰富、也不必是评分最高的。是叫出口时觉得温柔、舒服的那个。");
+        const text = lines.join("\n");
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => toast("文字版已复制，可以发到微信")).catch(() => prompt("复制下面这些", text));
+        } else prompt("复制下面这些", text);
+        return;
+      }
+    });
+
+    function importFile(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!data || typeof data !== "object") throw new Error("bad");
+          const next = Object.assign(defaultState(), data);
+          if (!Array.isArray(next.chars) || !Array.isArray(next.names)) throw new Error("bad");
+          if (!confirm("导入会覆盖这台设备上当前的名字库，确定吗？")) return;
+          state = next;
+          save();
+          toast("导入好了");
+          render();
+        } catch (err) {
+          toast("这份备份读不出来");
+        }
+      };
+      reader.readAsText(file, "utf-8");
+      e.target.value = "";
+    }
+
+    setInterval(() => {
+      if (state.view === "cands" && aliveNames().some(n => n.likedAt && cooling(n) && !cooling(n).done)) {
+        const a = document.activeElement;
+        if (a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA")) return;
+        render();
+      }
+    }, 60000);
+
+    render();
+  </script>
+</body>
+</html>
